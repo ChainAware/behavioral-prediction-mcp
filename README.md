@@ -30,6 +30,7 @@ All tools follow the [Model Context Protocol (MCP)](https://github.com/modelcont
 ### 1. Predictive Fraud Detection Tool
 
 **ID:** `predictive_fraud`
+
 **Description:**
 This AI‑powered algorithm forecasts the likelihood of fraudulent activity on a given wallet address *before* it happens (≈98% accuracy), and performs AML/Anti‑Money‑Laundering checks. 
 Use this when your user wants a risk assessment or early‑warning on a blockchain address.
@@ -78,6 +79,7 @@ Error cases:
 ### 2. Predictive Behaviour Analysis Tool
 
 **ID:** `predictive_behaviour`
+
 **Description:**
     This AI‑driven engine projects what a wallet address intentions or what address is likely to do next,
     profiles its past on‑chain history, and recommends personalized actions.
@@ -142,6 +144,7 @@ Error cases:
 ### 3. Predictive Rug‑Pull Detection Tool
 
 **ID:** `predictive_rug_pull`
+
 **Description:**
 This AI‑powered engine forecasts which liquidity pools or contracts are likely to perform a “rug pull” in the future. Use this when you need to warn users before they deposit into risky pools or to monitor smart‑contract security on-chain.
 
@@ -178,7 +181,7 @@ Error cases:
     • `403 Unauthorized` → invalid `apiKey`  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
-    
+
 ---
 
 ## 🧠 Example Client Usage
