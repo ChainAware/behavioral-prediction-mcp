@@ -132,6 +132,7 @@ Error cases:
 ```
 
 Error cases:
+
     • `403 Unauthorized` → invalid `apiKey`  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
@@ -172,6 +173,12 @@ This AI‑powered engine forecasts which liquidity pools or contracts are likely
 }
 ```
 
+Error cases:
+
+    • `403 Unauthorized` → invalid `apiKey`  
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+    
 ---
 
 ## 🧠 Example Client Usage
