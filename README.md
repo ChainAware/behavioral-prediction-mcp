@@ -215,6 +215,33 @@ print(res)
 
 ---
 
+Service Configuration:
+```{
+  "type": "http",
+  "config": {
+    "mcpServers": {
+      "behavioural_prediction_mcp": {
+        "type": "http",
+        "url": "https://prediction.mcp.chainaware.ai/sse",
+        "description": "The Behavioural Prediction MCP Server provides AI-powered tools to analyze wallet behaviour prediction,fraud detection and rug pull prediction.",
+        "headers":{
+          "x-api-key":""
+        },
+        "params":{
+          "walletAddress":"",
+          "network":""
+        },
+        "auth": {
+          "type": "api_key",
+          "header": "X-API-Key"
+        }
+      }
+    }
+  }
+}
+```
+---
+
 ## 🔌 Integration Notes
 
 * Compatible with all MCP clients (Node, Python, Browser)
