@@ -1,6 +1,6 @@
 # 🧠 Behavioural Prediction MCP Server
 
-**MCP Server Name:** Behavioural Prediction MCP
+**MCP Server Name:** ChainaAware Behavioural Prediction MCP
 
 **Category:** Web3 / Security / DeFi Analytics
 
@@ -11,6 +11,10 @@
 **Server URL:** [https://prediction.mcp.chainaware.ai/]
 
 **Repository:** [https://github.com/ChainAware/behavioral-prediction-mcp]
+
+**Website:** [https://chainaware.ai/]
+
+**Twitter:** [https://x.com/ChainAware/]
 
 
 ---
