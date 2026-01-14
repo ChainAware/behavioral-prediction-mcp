@@ -1,6 +1,6 @@
-# 🧠 Behavioural Prediction MCP Server
+# 🧠 ChainAware Behavioural Prediction MCP Server
 
-**MCP Server Name:** ChainaAware Behavioural Prediction MCP
+**MCP Server Name:** ChainAware Behavioural Prediction MCP
 
 **Category:** Web3 / Security / DeFi Analytics
 
