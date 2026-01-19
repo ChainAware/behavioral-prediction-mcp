@@ -1,0 +1,12 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-10-17/server.schema.json",
+  "name": "io.github.ChainAware/chainaware-behavioral-prediction-mcp",
+  "description": " AI-powered tools to analyze wallet behaviour prediction,fraud detection and rug pull prediction.",
+  "version": "1.0.0",
+  "remotes": [
+    {
+      "type": "sse",
+      "url": "https://prediction.mcp.chainaware.ai/sse"
+    }
+  ]
+}

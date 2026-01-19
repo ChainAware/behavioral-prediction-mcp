@@ -16,6 +16,8 @@
 
 **Twitter:** [https://x.com/ChainAware/]
 
+<!-- MCP -->
+mcp-name: io.github.ChainAware/chainaware-behavioral-prediction-mcp
 
 ---
 
