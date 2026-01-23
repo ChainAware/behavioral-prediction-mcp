@@ -8,7 +8,7 @@
 
 **Access:** By request (API key)
 
-**Server URL:** [https://prediction.mcp.chainaware.ai/]
+**Server URL:** [https://prediction.mcp.chainaware.ai/sse]
 
 **Repository:** [https://github.com/ChainAware/behavioral-prediction-mcp]
 
@@ -223,11 +223,11 @@ print(res)
 
 Service Configuration:
 ```{
-  "type": "http",
+  "type": "sse",
   "config": {
     "mcpServers": {
-      "behavioural_prediction_mcp": {
-        "type": "http",
+      "chainaware-behavioural_prediction_mcp": {
+        "type": "sse",
         "url": "https://prediction.mcp.chainaware.ai/sse",
         "description": "The Behavioural Prediction MCP Server provides AI-powered tools to analyze wallet behaviour prediction,fraud detection and rug pull prediction.",
         "headers":{
@@ -250,11 +250,113 @@ Service Configuration:
 
 ## 🔌 Integration Notes
 
-* Compatible with all MCP clients (Node, Python, Browser)
-* Uses Server-Sent Events (SSE) for real-time responses
-* JSON schemas match MCP spec
-* Rate limits may apply
-* API key required for production endpoints
+* ✅ Compatible with MCP clients across **Node.js**, **Python**, and **browser-based** environments
+* 🔁 Uses **Server-Sent Events (SSE)** for streaming / real-time responses
+* 📐 JSON schemas conform to the **MCP specification**
+* 🚦 Rate limits may apply depending on usage tier
+* 🔑 **API key required** for production endpoints
+
+---
+
+## Claude Code (CLI) Configuration
+
+Use the Claude CLI to register the MCP server via SSE transport:
+
+```bash
+claude mcp add --transport sse chainaware-behavioural-prediction-mcp-server https://prediction.mcp.chainaware.ai/sse \
+  --header "X-API-Key: your-key-here"
+```
+
+📚 Documentation:
+[https://code.claude.com/docs/en/mcp](https://code.claude.com/docs/en/mcp)
+
+---
+
+## ChatGPT Connector Configuration
+
+> Available in ChatGPT environments that support **Connectors / MCP** (Developer Mode).
+
+### Steps
+
+1. Open **ChatGPT Settings**
+2. Navigate to **Apps / Connectors**
+3. Click **Add Connector**
+4. Enter the integration name and URL below
+5. Save the configuration
+
+### Integration Details
+
+**Name**
+
+```
+ChainAware Behavioural Prediction MCP Server
+```
+
+**Integration URL**
+
+```
+https://prediction.mcp.chainaware.ai/sse?apiKey=your-key-here
+```
+
+---
+
+## Claude Web & Claude Desktop Configuration
+
+### Steps
+
+1. Open **Claude Web** or **Claude Desktop**
+2. Go to **Settings → Integrations**
+3. Click **Add integration**
+4. Enter the name and URL below
+5. Click **Add** to complete setup
+
+### Integration Details
+
+**Name**
+
+```
+ChainAware Behavioural Prediction MCP Server
+```
+
+**Integration URL**
+
+```
+https://prediction.mcp.chainaware.ai/sse?apiKey=your-key-here
+```
+
+📚 Documentation:
+[https://platform.claude.com/docs/en/agents-and-tools/remote-mcp-servers](https://platform.claude.com/docs/en/agents-and-tools/remote-mcp-servers)
+
+---
+
+## Cursor Configuration
+
+Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
+
+```json
+{
+  "mcpServers": {
+    "chainaware-behavioural-prediction-mcp-server": {
+      "url": "https://prediction.mcpbeta.chainaware.ai/sse",
+      "transport": "sse",
+      "headers": {
+        "X-API-Key": "your-key-here"
+      }
+    }
+  }
+}
+```
+
+📚 Documentation:
+[https://cursor.com/docs/context/mcp](https://cursor.com/docs/context/mcp)
+
+---
+
+## 🔐 Security Notes
+
+* Do **not** hard-code API keys in public repositories
+* Prefer environment variables or secret managers when supported
+* Rotate keys regularly in production environments
 
 ---
 
