@@ -106,11 +106,11 @@ Error cases:
 
 **Inputs:**
 
-| Name            | Type   | Required | Description                                                               |
-| --------------- | ------ | -------- | ------------------------------------------------------------------------- |
-| `apiKey`        | string | ✅        | API key for authentication                                               |
-| `network`       | string | ✅        | Blockchain network (`ETH`, `BNB`,`BASE`,`HAQQ`)                          |
-| `walletAddress` | string | ✅        | The wallet address to evaluate                                           |
+| Name            | Type   | Required           | Description                                                               |
+| --------------- | ------ | ------------------ | ------------------------------------------------------------------------- |
+| `apiKey`        | string | ✅                 | API key for authentication                                                |
+| `network`       | string | ✅                 | Blockchain network (`ETH`, `BNB`,`BASE`,`HAQQ`,`SOLANA`)                  |
+| `walletAddress` | string | ✅                 | The wallet address to evaluate                                            |
 
 
 
