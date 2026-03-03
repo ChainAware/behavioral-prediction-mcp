@@ -190,6 +190,134 @@ Error cases:
 
 ---
 
+
+### 4. Token Rank List Tool
+
+**ID:** `token_rank_list`
+
+**Description:**
+TokenRank analyzes the community of token holders and ranks every token by the strength of its holders. The stronger the token holders, the stronger the token! 
+Use this when you need to know token rank of a token or tokens or compare between different categories and chains.
+You can use search,filter and sort and pagination which returns a list of tokens.
+
+➡️ Example Use Cases:
+  – “Which is the best token on AI Token category?”  
+  – “Compare x token in ETH chain and BNB chain?”  
+
+**Inputs:**
+
+| Name            | Type   | Required | Description                                                                                                     |
+| --------------- | ------ | -------- | --------------------------------------------------------------------------------------------------------------  |
+| `limit`         | string | ✅       | Number of items ot fetch during pagination                                                                      |
+| `offset`        | string | ✅       | Page number(offset) during pagination                                                                           |
+| `network`       | string |          | Blockchain network to filter (`ETH`, `BNB`, `BASE`, `SOLANA`)                                                   |
+| `sort_by`       | string |          | Sort the returnet tokens based on (e.g.: 'communityRank')                                                       |
+| `sort_order`    | string |          | 'ASC' or 'DESC' sorting the value of sort_by                                                                    |
+| `category`      | string |          | Filter based on category of the token (e.g. 'AI Token','RWA Token','DeFi Token','DeFAI Token','DePIN Token')    |
+| `contract_name` | string |          | Search based on contract name                                                                                   |
+
+
+**Outputs (JSON):**
+
+```json
+  {
+    "message": "string",                    // e.g. “Successfully fetched records” or error description
+    "data": {
+      "total": 0,                           // integer — total number of matching contracts
+      "contracts": [
+        {
+          "contractAddress": "string",       // unique contract or mint address (chain-specific format)
+          "contractName": "string",          // human-readable token name
+          "ticker": "string",                // token symbol (usually uppercase, but not guaranteed)
+          "chain": "string",                 // blockchain network (e.g. SOLANA | ETH | BNB | BASE)
+          "category": "string",              // primary category label (e.g. 'AI Token','RWA Token','DeFi Token','DeFAI Token','DePIN Token') 
+          "type": "string",                  // asset classification (e.g. “token” | “nft”)
+          "communityRank": 0,                // integer — raw ranking based on community metrics
+          "normalizedRank": 0,               // integer — normalized or scaled ranking score
+          "totalHolders": 0,                 // integer — total unique wallet holders
+          "lastProcessedAt": "ISO-8601",     // timestamp when analytics were last computed
+          "createdAt": "ISO-8601",           // record creation timestamp
+          "updatedAt": "ISO-8601"            // record last update timestamp
+        }
+      ]
+    }
+  }
+```
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
+### 5. Token Rank Single Tool
+
+**ID:** `token_rank_single`
+
+**Description:**
+  Similar to TokenRank List,Token Rank analyzes the community of token holders and ranks every token by the strength of its holders.
+  Except the token rank and token details the token rank single tool fetches the best holders their details and its globalRank alongside others in same network.
+  Use this when you need to know token rank of a single token based on contract address and exeact chain or network or when you need best holders of specific token in specifc network or chain
+
+➡️ Example Use Cases:
+  – “What is the token rank for token in ETH network?”  
+  – "Which are the best holders of this contract token address?”
+  – “What is the token rank and its best holders?”
+
+**Inputs:**
+
+| Name              | Type   | Required  | Description                                                    |
+| ------------------| ------ | --------- | -------------------------------------------------------------  |
+| `contract_address`| string | ✅        | The contract address of the token to evaluate                  |
+| `network`         | string | ✅        | Blockchain network to filter (`ETH`, `BNB`, `BASE`, `SOLANA`)  |
+
+
+**Outputs (JSON):**
+
+```json
+ {
+      "message": "string",                      // e.g. “Successfully fetched records” or error description
+      "data": {
+        "contract": {
+            "contractAddress": "string",       // unique contract or mint address (chain-specific format)
+            "contractName": "string",          // human-readable token name
+            "ticker": "string",                // token symbol (usually uppercase, but not guaranteed)
+            "chain": "string",                 // blockchain network (e.g. SOLANA | ETH | BNB | BASE)
+            "category": "string",              // primary category label (e.g. 'AI Token','RWA Token','DeFi Token','DeFAI Token','DePIN Token') 
+            "type": "string",                  // asset classification (e.g. “token” | “nft”)
+            "communityRank": 0,                // integer — raw ranking based on community metrics
+            "normalizedRank": 0,               // integer — normalized or scaled ranking score
+            "totalHolders": 0,                 // integer — total unique wallet holders
+            "lastProcessedAt": "ISO-8601",     // timestamp when analytics were last computed
+            "createdAt": "ISO-8601",           // record creation timestamp
+            "updatedAt": "ISO-8601"            // record last update timestamp
+        },
+        "topHolders": [
+          {
+            "contractAddress": "string",        // associated contract address
+            "Holder": {
+              "walletAddress": "string",        // holder wallet address
+              "chain": "string",                // blockchain network of the wallet
+              "balance": "string",              // token balance (string to preserve precision)
+              "walletAgeInDays": 0,             // integer — age of wallet in days
+              "transactionsNumber": 0,          // integer — total transaction count
+              "totalPoints": 0.0,               // float — computed wallet scoring metric
+              "globalRank": 0                   // integer — wallet rank across entire system
+            }
+          }
+        ]
+      }
+    }
+```
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
 ## 🧠 Example Client Usage
 
 ### Node.js Example
