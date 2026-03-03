@@ -1,0 +1,38 @@
+interface:
+  display_name: "ChainAware Behavioral Prediction"
+  short_description: "AI-powered fraud detection, wallet behavior analysis & rug pull prediction for Web3 — across 8 blockchains, 14M+ wallets."
+  icon_small: "./assets/logo-small.png"
+  icon_large: "./assets/logo-large.png"
+  brand_color: "#0066FF"
+  default_prompt: "Analyze this wallet address for fraud risk on Ethereum"
+
+policy:
+  # Allow Codex to invoke this skill automatically when wallet addresses,
+  # fraud risk, rug pull, or DeFi personalization topics are detected.
+  allow_implicit_invocation: true
+
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "chainaware-behavioral-prediction"
+      description: "ChainAware Behavioral Prediction MCP — real-time fraud detection, wallet behavioral profiling, and rug pull risk scoring via SSE."
+      transport: "sse"
+      url: "https://prediction.mcp.chainaware.ai/sse"
+
+metadata:
+  author: "ChainAware.ai"
+  homepage: "https://chainaware.ai"
+  repository: "https://github.com/ChainAware/behavioral-prediction-mcp"
+  pricing: "https://chainaware.ai/pricing"
+  category: "Web3 / Security / DeFi Analytics"
+  tags:
+    - web3
+    - blockchain
+    - fraud-detection
+    - rug-pull
+    - wallet-analytics
+    - defi
+    - mcp
+    - ai-agents
+    - personalization
+    - aml
