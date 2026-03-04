@@ -480,6 +480,84 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ---
 
+## 🤖 Claude Code Subagents
+
+This repository includes **12 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+
+| Agent | Purpose |
+|-------|---------|
+| `chainaware-analyst` | Full due diligence — fraud + behavior + rug pull |
+| `chainaware-fraud-detector` | Fast wallet fraud screening |
+| `chainaware-rug-pull-detector` | Smart contract / LP safety checks |
+| `chainaware-trust-scorer` | Trust score (0.00–1.00) |
+| `chainaware-reputation-scorer` | Reputation score (0–4000) |
+| `chainaware-aml-scorer` | AML compliance scoring (0–100) |
+| `chainaware-wallet-ranker` | Wallet experience rank + leaderboard |
+| `chainaware-wallet-marketer` | Personalized marketing messages |
+| `chainaware-token-ranker` | Discover/rank tokens by holder community strength |
+| `chainaware-token-analyzer` | Single token deep-dive + top holders |
+| `chainaware-onboarding-router` | Route wallets to beginner/intermediate/skip onboarding |
+| `chainaware-whale-detector` | Classify wallets into whale tiers (Mega/Whale/Emerging) |
+
+### Setup
+
+**Step 1 — Connect the MCP server**
+
+The agents call ChainAware tools via MCP. Register the server first:
+
+```bash
+claude mcp add --transport sse chainaware-behavioral-prediction \
+  https://prediction.mcp.chainaware.ai/sse \
+  --header "X-API-Key: YOUR_KEY"
+```
+
+For Cursor / Windsurf, add to `mcp.json`:
+
+```json
+{
+  "mcpServers": {
+    "chainaware-behavioral-prediction": {
+      "url": "https://prediction.mcp.chainaware.ai/sse",
+      "transport": "sse",
+      "headers": { "X-API-Key": "YOUR_KEY" }
+    }
+  }
+}
+```
+
+**Step 2 — Copy the agent files**
+
+Clone this repo and copy the agents into your project:
+
+```bash
+git clone https://github.com/ChainAware/behavioral-prediction-mcp.git
+cp -r behavioral-prediction-mcp/.claude/agents/ your-project/.claude/agents/
+```
+
+Or cherry-pick only the agents you need:
+
+```bash
+mkdir -p your-project/.claude/agents
+cp behavioral-prediction-mcp/.claude/agents/chainaware-fraud-detector.md \
+   your-project/.claude/agents/
+```
+
+**Step 3 — Set the API key**
+
+```bash
+export CHAINAWARE_API_KEY="your-key-here"
+```
+
+Get a key at [https://chainaware.ai/pricing](https://chainaware.ai/pricing)
+
+### Important Notes
+
+* The `tools:` line in each agent's frontmatter references the MCP server by its registered name. If you register the server under a different name, update the `tools:` lines to match.
+* Agents specify a `model:` in their frontmatter (`claude-haiku-4-5-20251001` or `claude-sonnet-4-6`). You need access to those models.
+* The `references/` folder contains detailed tool documentation that gives agents richer context. Copying it alongside the agents is recommended but optional.
+
+---
+
 ## 🔐 Security Notes
 
 * Do **not** hard-code API keys in public repositories

@@ -2,12 +2,21 @@
 name: chainaware-behavioral-prediction
 description: >
   Use this skill whenever a user asks about wallet safety, fraud risk, rug pull detection,
-  wallet behavior analysis, DeFi personalization, or on-chain reputation scoring. Triggers on
-  questions like "is this wallet safe?", "will this pool rug pull?", "what will this address do
-  next?", "score this wallet", "detect fraud for address", "personalize my DeFi agent", or any
-  request to analyze a blockchain wallet address or smart contract for risk, behavior, or intent.
-  Also use when integrating the ChainAware MCP server into Claude Code, Cursor, ChatGPT, or any
-  MCP-compatible AI agent framework.
+  wallet behavior analysis, DeFi personalization, on-chain reputation scoring, or token ranking
+  by holder quality. Triggers on questions like "is this wallet safe?", "will this pool rug pull?",
+  "what will this address do next?", "score this wallet", "detect fraud for address",
+  "personalize my DeFi agent", "rank this token", "top AI tokens", "best holders of this token",
+  or any request to analyze a blockchain wallet address, smart contract, or token for risk,
+  behavior, intent, or community strength. Also use when integrating the ChainAware MCP server
+  into Claude Code, Cursor, ChatGPT, or any MCP-compatible AI agent framework.
+version: 1.0.0
+metadata:
+  openclaw:
+    requires:
+      env: [CHAINAWARE_API_KEY]
+    primaryEnv: CHAINAWARE_API_KEY
+    emoji: "🔮"
+    homepage: https://github.com/ChainAware/behavioral-prediction-mcp
 ---
 
 # ChainAware Behavioral Prediction MCP
@@ -22,6 +31,7 @@ endpoint:
 1. **Fraud Detection** — predict fraudulent wallet behavior before it happens (~98% accuracy on ETH)
 2. **Behavioral Analysis** — profile wallet intent, risk tolerance, experience, and next likely actions
 3. **Rug Pull Detection** — forecast whether a smart contract or liquidity pool will rug pull
+4. **Token Ranking** — rank tokens by holder community strength and surface top holders with wallet-level intelligence
 
 Unlike forensic blockchain tools that describe the past, this MCP is **predictive** — it tells your
 agent what is *about to happen*.
@@ -40,6 +50,8 @@ agent what is *about to happen*.
 | Fraud Detection       | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ         |
 | Behavioral Analysis   | ETH, BNB, BASE, HAQQ, SOLANA                     |
 | Rug Pull Detection    | ETH, BNB, BASE, HAQQ                             |
+| Token Rank List       | ETH, BNB, BASE, SOLANA                            |
+| Token Rank Single     | ETH, BNB, BASE, SOLANA                            |
 
 ---
 
@@ -119,6 +131,72 @@ protect users before they deposit capital into risky contracts.
 
 ---
 
+### 4. `token_rank_list` — Token Ranking by Holder Strength
+
+Ranks tokens by the quality and strength of their holder community. Use when a user wants to
+discover, compare, or filter tokens across chains and categories based on holder behavior — not
+just market cap or price.
+
+**Inputs:**
+- `limit` (string, required) — Number of items to return per page
+- `offset` (string, required) — Page number for pagination
+- `network` (string, required) — e.g. `ETH`, `BNB`, `BASE`, `SOLANA`
+- `sort_by` (string, required) — Field to sort by, e.g. `communityRank`
+- `sort_order` (string, required) — `ASC` or `DESC`
+- `category` (string, required) — Token category filter: `AI Token`, `RWA Token`, `DeFi Token`, `DeFAI Token`, `DePIN Token`
+- `contract_name` (string, required) — Search by contract/token name (use empty string for no filter)
+
+**Key output fields:**
+- `data.total` — total number of matching tokens
+- `data.contracts[]` — array of token objects, each with:
+  - `contractAddress`, `contractName`, `ticker`, `chain`
+  - `category` — token category label
+  - `communityRank` — raw ranking based on community holder metrics
+  - `normalizedRank` — normalized/scaled ranking score
+  - `totalHolders` — total unique wallet holders
+
+**Example prompts that trigger this tool:**
+- *"What are the top AI tokens on Ethereum?"*
+- *"Rank DeFi tokens on BNB by community strength."*
+- *"Which RWA tokens have the strongest holder base on BASE?"*
+- *"Compare DePIN tokens across Solana and Ethereum."*
+- *"Show me the top 10 tokens by community rank on ETH."*
+
+---
+
+### 5. `token_rank_single` — Single Token Rank & Top Holders
+
+Returns the rank and top holders for a specific token by contract address. Use when a user wants
+to deep-dive into a single token's community quality, see who the strongest holders are, and
+understand the token's global standing.
+
+**Inputs:**
+- `contract_address` (string, required) — The token contract or mint address
+- `network` (string, required) — e.g. `ETH`, `BNB`, `BASE`, `SOLANA`
+
+**Key output fields:**
+- `data.contract` — token details including:
+  - `contractName`, `ticker`, `chain`, `category`
+  - `communityRank` — raw community-based ranking
+  - `normalizedRank` — normalized ranking score
+  - `totalHolders` — total unique holders
+- `data.topHolders[]` — array of top holder objects, each with:
+  - `Holder.walletAddress` — holder's wallet address
+  - `Holder.balance` — token balance held
+  - `Holder.walletAgeInDays` — wallet age in days
+  - `Holder.transactionsNumber` — total transaction count
+  - `Holder.totalPoints` — computed wallet scoring metric
+  - `Holder.globalRank` — wallet rank across the entire ChainAware network
+
+**Example prompts that trigger this tool:**
+- *"What is the token rank for USDT on Ethereum?"*
+- *"Who are the top holders of this token: 0xdAC17F958D2ee523a2206206994597C13D831ec7 on ETH?"*
+- *"Show me the best holders and community rank for this Solana token."*
+- *"How strong is the holder base of this contract on BNB?"*
+- *"What's the global rank of wallets holding this BASE token?"*
+
+---
+
 ## Integration Setup
 
 ### Claude Code (CLI)
@@ -183,6 +261,23 @@ const rugPull = await client.call("predictive_rug_pull", {
   network: "BNB",
   walletAddress: "0xContractAddress"
 });
+
+// Token rank list
+const topTokens = await client.call("token_rank_list", {
+  limit: "10",
+  offset: "0",
+  network: "ETH",
+  sort_by: "communityRank",
+  sort_order: "DESC",
+  category: "AI Token",
+  contract_name: ""
+});
+
+// Single token rank + top holders
+const tokenDetail = await client.call("token_rank_single", {
+  contract_address: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+  network: "ETH"
+});
 ```
 
 ### Python
@@ -198,6 +293,25 @@ result = client.call("predictive_fraud", {
     "walletAddress": "0xYourWalletAddress"
 })
 print(result)
+
+# Token rank list
+top_tokens = client.call("token_rank_list", {
+    "limit": "10",
+    "offset": "0",
+    "network": "ETH",
+    "sort_by": "communityRank",
+    "sort_order": "DESC",
+    "category": "AI Token",
+    "contract_name": ""
+})
+print(top_tokens)
+
+# Single token rank + top holders
+token_detail = client.call("token_rank_single", {
+    "contract_address": "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    "network": "ETH"
+})
+print(token_detail)
 ```
 
 ---

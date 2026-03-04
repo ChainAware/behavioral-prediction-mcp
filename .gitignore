@@ -1,0 +1,19 @@
+# Local Claude Code config
+CLAUDE.local.md
+
+# Environment / secrets
+.env
+.env.*
+credentials.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Node
+node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
