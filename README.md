@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **12 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **17 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -498,6 +498,11 @@ This repository includes **12 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-token-analyzer` | Single token deep-dive + top holders |
 | `chainaware-onboarding-router` | Route wallets to beginner/intermediate/skip onboarding |
 | `chainaware-whale-detector` | Classify wallets into whale tiers (Mega/Whale/Emerging) |
+| `chainaware-defi-advisor` | Personalized DeFi product recommendations by experience + risk tier |
+| `chainaware-airdrop-screener` | Batch screen wallets for airdrop eligibility, filter bots/fraud |
+| `chainaware-lending-risk-assessor` | Borrower risk grade (A–F), collateral ratio, interest rate tier |
+| `chainaware-token-launch-auditor` | Pre-listing launch safety audit — APPROVED/CONDITIONAL/REJECTED |
+| `chainaware-agent-screener` | AI agent trust score 0–10 via agent + feeder wallet checks |
 
 ### Setup
 
