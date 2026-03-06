@@ -28,7 +28,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 ```
 behavioral-prediction-mcp/
 ├── .claude/
-│   └── agents/              # 12 Claude Code subagents
+│   └── agents/              # 17 Claude Code subagents
 ├── agents/
 │   └── openai.yaml          # Codex/OpenAI metadata
 ├── references/              # Deep tool documentation
@@ -63,6 +63,11 @@ behavioral-prediction-mcp/
 | `chainaware-token-analyzer` | Haiku | `token_rank_single` + `predictive_fraud` | Single token deep-dive + top holders |
 | `chainaware-onboarding-router` | Haiku | `predictive_behaviour` + `predictive_fraud` | Route wallets to beginner/intermediate/skip onboarding |
 | `chainaware-whale-detector` | Haiku | `predictive_behaviour` + `predictive_fraud` | Classify wallets into whale tiers (Mega/Whale/Emerging) |
+| `chainaware-defi-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Personalized DeFi product recommendations by experience + risk tier |
+| `chainaware-airdrop-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Batch screen wallets for airdrop eligibility, filter bots/fraud, rank by reputation |
+| `chainaware-lending-risk-assessor` | Haiku | `predictive_fraud` + `predictive_behaviour` | Borrower risk grade (A–F), collateral ratio, and interest rate tier for DeFi lending |
+| `chainaware-token-launch-auditor` | Haiku | `predictive_rug_pull` + `predictive_fraud` + `predictive_behaviour` | Pre-listing launch safety audit — composite LSS, APPROVED/CONDITIONAL/REJECTED verdict, badge copy |
+| `chainaware-agent-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Screens AI agent wallet + feeder wallet; returns Agent Trust Score 0–10 (0=fraud, 1=new, 2–10=reputation) |
 
 ### Key Scoring Formulas
 
@@ -107,6 +112,7 @@ behavioral-prediction-mcp/
 - [Forensic Crypto Analytics vs AI-Based Crypto Analytics](https://chainaware.ai/blog/forensic-crypto-analytics-versus-ai-based-crypto-analytics/) — Comparison of traditional forensic tools vs ChainAware's predictive AI approach
 
 ### Developer Integration
+- [12 Blockchain Capabilities Any AI Agent Can Use — MCP Integration Guide](https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/) — All 12 agent capabilities explained with MCP setup for Claude, ChatGPT, Cursor, and multi-agent architectures
 - [Prediction MCP for AI Agents: Personalize Decisions from Wallet Behavior](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Full MCP integration guide with code examples
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
 - [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
@@ -122,9 +128,7 @@ behavioral-prediction-mcp/
 
 ## Next Tasks (from SUBAGENT-IDEAS.md)
 
-High priority subagents not yet built:
-1. `chainaware-airdrop-screener` — batch filters bots/fraud for fair airdrop allocation
-2. `chainaware-lending-risk-assessor` — recommends collateral ratio + interest rate tier
+All high-priority subagents have been built. See SUBAGENT-IDEAS.md for future ideas.
 
 Also pending:
 - Update `agents/openai.yaml` to include `token_rank_list` and `token_rank_single`
