@@ -229,6 +229,18 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-lead-scorer
+**File:** `.claude/agents/chainaware-lead-scorer.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Purpose:** Sales lead qualification engine. Scores a wallet 0–100 as a conversion prospect, assigns a lead tier, estimates conversion probability, and recommends a specific outreach angle.
+**Tiers:** 🔥 Hot (75–100) / 🟡 Warm (50–74) / 🔵 Cold (25–49) / ⚫ Dead (0–24 or disqualified)
+**Triggers:** "is this a good lead?", "score this wallet as a prospect", "lead quality for this address", "which wallets are worth pursuing?", "hot leads in this list", "sales qualification for this address", "conversion potential for 0x...", "rank these wallets by sales potential"
+**Input:** wallet address + network. Optional: product context, outreach goal (acquisition / upsell / reactivation), batch list
+**Output:** Lead score (0–100), tier, conversion probability, outreach angle, channel fit, timing signal, batch ranked list
+
+---
+
 ### chainaware-transaction-monitor
 **File:** `.claude/agents/chainaware-transaction-monitor.md`
 **Model:** claude-haiku-4-5-20251001

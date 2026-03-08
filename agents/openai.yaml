@@ -242,6 +242,13 @@ subagents:
     tools: [predictive_behaviour, predictive_fraud]
     file: .claude/agents/chainaware-governance-screener.md
 
+  - id: chainaware-lead-scorer
+    display_name: "Lead Scorer"
+    description: "Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_behaviour, predictive_fraud]
+    file: .claude/agents/chainaware-lead-scorer.md
+
   - id: chainaware-transaction-monitor
     display_name: "Transaction Monitor"
     description: "Real-time transaction risk scoring for autonomous agents — composite score (0–100) and pipeline action (ALLOW / FLAG / HOLD / BLOCK)."
