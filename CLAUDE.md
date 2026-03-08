@@ -28,7 +28,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 ```
 behavioral-prediction-mcp/
 ├── .claude/
-│   └── agents/              # 20 Claude Code subagents
+│   └── agents/              # 21 Claude Code subagents
 ├── agents/
 │   └── openai.yaml          # Codex/OpenAI metadata
 ├── references/              # Deep tool documentation
@@ -47,7 +47,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-20 specialist subagents in `.claude/agents/`. Use the right one for the task:
+21 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -71,6 +71,7 @@ behavioral-prediction-mcp/
 | `chainaware-cohort-analyzer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Segments a batch of wallets into behavioral cohorts (Power DeFi, NFT, Trader, Dormant, etc.) with per-cohort engagement strategies |
 | `chainaware-counterparty-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
 | `chainaware-governance-screener` | Haiku | `predictive_behaviour` + `predictive_fraud` | DAO voter screening — Sybil detection, governance tier (Core/Active/Participant/Observer), and voting weight multiplier |
+| `chainaware-transaction-monitor` | Haiku | `predictive_fraud` + `predictive_rug_pull` + `predictive_behaviour` | Real-time transaction risk scoring for autonomous agents — composite score (0–100), per-address fraud signals, and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 
 ### Key Scoring Formulas
 

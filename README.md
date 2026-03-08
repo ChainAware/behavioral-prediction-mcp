@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **20 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **21 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -506,6 +506,7 @@ This repository includes **20 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-cohort-analyzer` | Segment a batch of wallets into behavioral cohorts with per-cohort engagement strategies |
 | `chainaware-counterparty-screener` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
 | `chainaware-governance-screener` | DAO voter screening — Sybil detection, governance tier, and voting weight multiplier (supports token-weighted, reputation-weighted, and quadratic models) |
+| `chainaware-transaction-monitor` | Real-time transaction risk scoring for autonomous agents — composite score (0–100) and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 
 ### Setup
 

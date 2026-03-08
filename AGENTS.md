@@ -229,6 +229,18 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-transaction-monitor
+**File:** `.claude/agents/chainaware-transaction-monitor.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_fraud`, `predictive_rug_pull`, `predictive_behaviour`
+**Purpose:** Real-time transaction risk scoring for autonomous AI agents and automated pipelines. Screens sender, receiver, and contract; returns a composite risk score (0–100) and a machine-actionable pipeline action.
+**Actions:** ✅ ALLOW / ⚠️ FLAG / 🔶 HOLD / 🛑 BLOCK
+**Triggers:** "should my agent execute this transaction?", "risk score for this tx", "monitor this transaction", "flag or allow this transfer?", "pipeline risk signal for this event", "autonomous transaction screening", "compliance check for this transaction"
+**Input:** sender address + receiver address + network. Optional: contract address, transaction value, action type (transfer / swap / stake / bridge / mint / approve / liquidity)
+**Output:** Composite risk score (0–100), per-address risk levels, pipeline action, operator note. Compact mode available for programmatic consumption.
+
+---
+
 ### chainaware-governance-screener
 **File:** `.claude/agents/chainaware-governance-screener.md`
 **Model:** claude-haiku-4-5-20251001
@@ -255,7 +267,8 @@ export CHAINAWARE_API_KEY="your-key-here"
 ## Composability Map
 
 ```
-Transaction safety check     → chainaware-counterparty-screener
+Autonomous transaction pipeline  → chainaware-transaction-monitor
+Transaction safety check         → chainaware-counterparty-screener
   └─ needs more detail       → chainaware-analyst
   └─ is a contract address   → chainaware-rug-pull-detector
 
