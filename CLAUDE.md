@@ -28,7 +28,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 ```
 behavioral-prediction-mcp/
 ├── .claude/
-│   └── agents/              # 17 Claude Code subagents
+│   └── agents/              # 20 Claude Code subagents
 ├── agents/
 │   └── openai.yaml          # Codex/OpenAI metadata
 ├── references/              # Deep tool documentation
@@ -47,7 +47,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-12 specialist subagents in `.claude/agents/`. Use the right one for the task:
+20 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -68,6 +68,9 @@ behavioral-prediction-mcp/
 | `chainaware-lending-risk-assessor` | Haiku | `predictive_fraud` + `predictive_behaviour` | Borrower risk grade (A–F), collateral ratio, and interest rate tier for DeFi lending |
 | `chainaware-token-launch-auditor` | Haiku | `predictive_rug_pull` + `predictive_fraud` + `predictive_behaviour` | Pre-listing launch safety audit — composite LSS, APPROVED/CONDITIONAL/REJECTED verdict, badge copy |
 | `chainaware-agent-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Screens AI agent wallet + feeder wallet; returns Agent Trust Score 0–10 (0=fraud, 1=new, 2–10=reputation) |
+| `chainaware-cohort-analyzer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Segments a batch of wallets into behavioral cohorts (Power DeFi, NFT, Trader, Dormant, etc.) with per-cohort engagement strategies |
+| `chainaware-counterparty-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
+| `chainaware-governance-screener` | Haiku | `predictive_behaviour` + `predictive_fraud` | DAO voter screening — Sybil detection, governance tier (Core/Active/Participant/Observer), and voting weight multiplier |
 
 ### Key Scoring Formulas
 
@@ -95,6 +98,7 @@ behavioral-prediction-mcp/
 ### Product Overviews
 - [ChainAware Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and what ChainAware does
 - [Web3 Business Potential](https://chainaware.ai/blog/web3-business-potential/) — Business case and market opportunity for Web3 intelligence
+- [Use ChainAware as a Business](https://chainaware.ai/blog/use-chainaware-as-business/) — How to build commercial products and services on top of ChainAware
 
 ### Tool-Specific Guides
 - [Fraud Detector Guide](https://chainaware.ai/blog/chainaware-fraud-detector-guide/) — How to use `predictive_fraud`: inputs, outputs, thresholds, use cases
@@ -116,6 +120,8 @@ behavioral-prediction-mcp/
 - [Prediction MCP for AI Agents: Personalize Decisions from Wallet Behavior](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Full MCP integration guide with code examples
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
 - [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
+- [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/) — Onboarding conversion problem and AI-driven solutions
+- [The Web3 Agentic Economy: How AI Agents Are Replacing Human Teams in DeFi](https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/) — How autonomous AI agents are taking over DeFi operations and decision-making
 
 ### Tool Reference Docs (this repo)
 - `references/tools-fraud.md` — `predictive_fraud` full schema, thresholds, forensic flags
@@ -131,6 +137,5 @@ behavioral-prediction-mcp/
 All high-priority subagents have been built. See SUBAGENT-IDEAS.md for future ideas.
 
 Also pending:
-- Update `agents/openai.yaml` to include `token_rank_list` and `token_rank_single`
 - Publish skill to OpenClaw ClawHub (`clawhub publish`)
 - Submit to OpenAI skill registry

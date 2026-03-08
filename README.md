@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **17 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **20 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -503,6 +503,9 @@ This repository includes **17 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-lending-risk-assessor` | Borrower risk grade (A–F), collateral ratio, interest rate tier |
 | `chainaware-token-launch-auditor` | Pre-listing launch safety audit — APPROVED/CONDITIONAL/REJECTED |
 | `chainaware-agent-screener` | AI agent trust score 0–10 via agent + feeder wallet checks |
+| `chainaware-cohort-analyzer` | Segment a batch of wallets into behavioral cohorts with per-cohort engagement strategies |
+| `chainaware-counterparty-screener` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
+| `chainaware-governance-screener` | DAO voter screening — Sybil detection, governance tier, and voting weight multiplier (supports token-weighted, reputation-weighted, and quadratic models) |
 
 ### Setup
 
@@ -586,6 +589,11 @@ To request access:
 - [Prediction MCP for AI Agents: Personalize Decisions from Wallet Behavior](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Deep-dive integration guide with code examples
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
 - [ChainAware Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and coverage
+- [Web3 Business Potential](https://chainaware.ai/blog/web3-business-potential/) — Business case and market opportunity for Web3 intelligence
+- [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
+- [Use ChainAware as a Business](https://chainaware.ai/blog/use-chainaware-as-business/) — How to build commercial products and services on top of ChainAware
+- [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/) — Onboarding conversion problem and AI-driven solutions
+- [The Web3 Agentic Economy: How AI Agents Are Replacing Human Teams in DeFi](https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/) — How autonomous AI agents are taking over DeFi operations and decision-making
 
 ---
 
