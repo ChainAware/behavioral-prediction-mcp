@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.ChainAware/chainaware-behavioral-prediction-mcp",
   "title": "ChainAware Behavioural Prediction MCP Server",
-  "description": " AI-powered tools to analyze wallet behaviour prediction,fraud detection and rug pull prediction.",
+  "description": "Web3 Agentic Growth Infrastructure layer — AI-powered fraud detection, wallet behavioural analysis, rug pull prediction, and token ranking across 8 blockchains and 14M+ wallets. Includes 20 ready-to-use Claude Code subagents.",
   "version": "1.0.0",
   "remotes": [
     {
