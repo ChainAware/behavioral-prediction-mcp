@@ -28,7 +28,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 ```
 behavioral-prediction-mcp/
 ├── .claude/
-│   └── agents/              # 23 Claude Code subagents
+│   └── agents/              # 24 Claude Code subagents
 ├── agents/
 │   └── openai.yaml          # Codex/OpenAI metadata
 ├── references/              # Deep tool documentation
@@ -47,7 +47,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-23 specialist subagents in `.claude/agents/`. Use the right one for the task:
+24 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -74,6 +74,7 @@ behavioral-prediction-mcp/
 | `chainaware-transaction-monitor` | Haiku | `predictive_fraud` + `predictive_rug_pull` + `predictive_behaviour` | Real-time transaction risk scoring for autonomous agents — composite score (0–100), per-address fraud signals, and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 | `chainaware-lead-scorer` | Haiku | `predictive_behaviour` + `predictive_fraud` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
 | `chainaware-upsell-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Upsell path for existing users — upgrade readiness score, next product recommendation, conversion probability, trigger event, and ready-to-use upsell message |
+| `chainaware-platform-greeter` | Haiku | `predictive_behaviour` + `predictive_fraud` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
 
 ### Key Scoring Formulas
 

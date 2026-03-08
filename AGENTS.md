@@ -229,6 +229,18 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-platform-greeter
+**File:** `.claude/agents/chainaware-platform-greeter.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Purpose:** Generates a personalised welcome message for a specific wallet when it connects to a specific platform. The same wallet gets a different message on Aave vs 1inch vs OpenSea — platform context + wallet behaviour = hyper-relevant in-app copy.
+**Platform types supported:** DEX/Swap, Lending/Borrowing, Yield/Staking, Bridge, NFT, Derivatives/Perps, Portfolio/Analytics, Launchpad, Governance/DAO, Unknown/Custom
+**Triggers:** "what should we show 0x... when they connect to Aave?", "welcome message for this wallet on 1inch", "personalised greeting on our dapp", "in-app message when this user lands", "contextual welcome for 0x... on [platform]", "personalise the landing experience for this wallet"
+**Input:** wallet address + network + platform name. Optional: platform type, feature to highlight, tone (friendly / professional / bold)
+**Output:** Personalised welcome message (max 2 sentences, max 35 words) + rationale + alternate versions. Batch mode produces a message per wallet for platform launches or feature rollouts.
+
+---
+
 ### chainaware-upsell-advisor
 **File:** `.claude/agents/chainaware-upsell-advisor.md`
 **Model:** claude-haiku-4-5-20251001

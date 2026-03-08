@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **23 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **24 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -509,6 +509,7 @@ This repository includes **23 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-transaction-monitor` | Real-time transaction risk scoring for autonomous agents — composite score (0–100) and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 | `chainaware-lead-scorer` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
 | `chainaware-upsell-advisor` | Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message |
+| `chainaware-platform-greeter` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
 
 ### Setup
 

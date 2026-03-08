@@ -242,6 +242,13 @@ subagents:
     tools: [predictive_behaviour, predictive_fraud]
     file: .claude/agents/chainaware-governance-screener.md
 
+  - id: chainaware-platform-greeter
+    display_name: "Platform Greeter"
+    description: "Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_behaviour, predictive_fraud]
+    file: .claude/agents/chainaware-platform-greeter.md
+
   - id: chainaware-upsell-advisor
     display_name: "Upsell Advisor"
     description: "Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message."
