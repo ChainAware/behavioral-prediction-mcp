@@ -229,6 +229,17 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-upsell-advisor
+**File:** `.claude/agents/chainaware-upsell-advisor.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Purpose:** Identifies the best upsell opportunity for an existing user. Scores upgrade readiness (0–100), recommends the specific next product, calculates conversion probability, identifies the optimal trigger event, and generates a ready-to-use upsell message.
+**Triggers:** "what should I upsell to 0x...", "next product for this user", "is this wallet ready to upgrade?", "upgrade path for this wallet", "when should I offer the next tier?", "best upsell for this wallet", "next-best-product for 0x...", "upgrade readiness check"
+**Input:** wallet address + network + current product/tier. Optional: product catalogue, upsell goal (revenue / engagement / retention)
+**Output:** Upgrade readiness score (0–100), conversion probability, recommended next product, trigger event, ready-to-use upsell message, "what NOT to do" warning. Batch mode ranks full user lists by upsell readiness.
+
+---
+
 ### chainaware-lead-scorer
 **File:** `.claude/agents/chainaware-lead-scorer.md`
 **Model:** claude-haiku-4-5-20251001
