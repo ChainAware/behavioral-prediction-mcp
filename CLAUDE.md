@@ -47,7 +47,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-24 specialist subagents in `.claude/agents/`. Use the right one for the task:
+25 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -75,6 +75,7 @@ behavioral-prediction-mcp/
 | `chainaware-lead-scorer` | Haiku | `predictive_behaviour` + `predictive_fraud` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
 | `chainaware-upsell-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Upsell path for existing users — upgrade readiness score, next product recommendation, conversion probability, trigger event, and ready-to-use upsell message |
 | `chainaware-platform-greeter` | Haiku | `predictive_behaviour` + `predictive_fraud` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
+| `chainaware-marketing-director` | Sonnet | `Agent` + `predictive_fraud` (orchestrator) | Full-cycle campaign orchestrator — segments audience, scores leads, detects whales, builds per-cohort message playbook, surfaces upsell opportunities, and routes new wallets; all messages tailored to a caller-supplied platform description |
 
 ### Key Scoring Formulas
 
