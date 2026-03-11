@@ -47,7 +47,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-26 specialist subagents in `.claude/agents/`. Use the right one for the task:
+28 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -77,6 +77,8 @@ behavioral-prediction-mcp/
 | `chainaware-platform-greeter` | Haiku | `predictive_behaviour` + `predictive_fraud` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
 | `chainaware-marketing-director` | Sonnet | `Agent` + `predictive_fraud` (orchestrator) | Full-cycle campaign orchestrator — segments audience, scores leads, detects whales, builds per-cohort message playbook, surfaces upsell opportunities, and routes new wallets; all messages tailored to a caller-supplied platform description |
 | `chainaware-compliance-screener` | Haiku | `Agent` + `predictive_fraud` (orchestrator) | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a structured Compliance Report with verdict (PASS / EDD / REJECT), risk rating, and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi) |
+| `chainaware-gamefi-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Web3 game and P2E platform wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers (Casual/Active/Veteran/Pro) for matchmaking; outputs P2E reward eligibility and multiplier |
+| `chainaware-portfolio-risk-advisor` | Sonnet | `predictive_rug_pull` + `token_rank_single` | Portfolio-level rug pull and community health assessment — scans every token via predictive_rug_pull (universal), enriches with token_rank_single where available (2,500–3,000 token index), produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 
 ### Key Scoring Formulas
 
@@ -120,13 +122,16 @@ behavioral-prediction-mcp/
 - [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth
 - [AI-Powered Blockchain Analysis: Machine Learning for Crypto Security](https://chainaware.ai/blog/ai-powered-blockchain-analysis-machine-learning-for-crypto-security-2026/) — ML approaches to on-chain security and fraud detection
 - [Forensic Crypto Analytics vs AI-Based Crypto Analytics](https://chainaware.ai/blog/forensic-crypto-analytics-versus-ai-based-crypto-analytics/) — Comparison of traditional forensic tools vs ChainAware's predictive AI approach
+- [MiCA Compliance DeFi Screener](https://chainaware.ai/blog/mica-compliance-defi-screener-chainaware/) — How ChainAware covers ~70–75% of DeFi MiCA obligations at pay-per-use pricing; positions compliance-screener vs Chainalysis/Elliptic; Travel Rule does not apply to pure DeFi
+- [Web3 Growth Platforms Compared 2026](https://chainaware.ai/blog/web3-growth-platforms-compared-2026/) — Three-stage funnel framework (Find / Understand / Convert); ChainAware is the only platform operating at Stage 3 (post-connection, in-DApp personalization); relevant to onboarding-router, wallet-marketer, whale-detector, marketing-director
+- [Web3 Analytics Tools for DApps Comparison 2026](https://chainaware.ai/blog/web3-analytics-tools-dapps-comparison-2026/) — Maps 10 analytics platforms across four job categories; ChainAware is the sole "predictive intelligence" platform vs attribution/product analytics tools; covers behavioral analytics, fraud detector, growth agents
 
 ### Developer Integration
 - [12 Blockchain Capabilities Any AI Agent Can Use — MCP Integration Guide](https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/) — All 12 agent capabilities explained with MCP setup for Claude, ChatGPT, Cursor, and multi-agent architectures
 - [Prediction MCP for AI Agents: Personalize Decisions from Wallet Behavior](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Full MCP integration guide with code examples
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
 - [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
-- [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/) — Onboarding conversion problem and AI-driven solutions
+- [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact/) — Onboarding conversion problem and AI-driven solutions
 - [The Web3 Agentic Economy: How AI Agents Are Replacing Human Teams in DeFi](https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/) — How autonomous AI agents are taking over DeFi operations and decision-making
 
 ### Tool Reference Docs (this repo)
