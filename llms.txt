@@ -17,7 +17,7 @@
 - `token_rank_list` — Ranked list of tokens by holder community strength, with search, filter, sort, and pagination. Networks: ETH, BNB, BASE, SOLANA.
 - `token_rank_single` — Token community rank + top holders for a specific contract address. Networks: ETH, BNB, BASE, SOLANA.
 
-## Claude Code Subagents (28)
+## Claude Code Subagents (29)
 
 Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project after registering the MCP server.
 
@@ -49,6 +49,7 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-compliance-screener` — First-layer MiCA-aligned compliance screening: orchestrates fraud, AML, transaction, and counterparty checks into a structured Compliance Report with PASS / EDD / REJECT verdict and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi).
 - `chainaware-gamefi-screener` — Web3 game and P2E wallet screening: detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility and multiplier.
 - `chainaware-portfolio-risk-advisor` — Portfolio-level rug pull and community health assessment: scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan.
+- `chainaware-rwa-investor-screener` — RWA investor suitability screening: assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap.
 
 ## Key Scoring Formulas
 
@@ -72,7 +73,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Key Files
 
-- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 28 subagents with triggers, tools, inputs, and outputs
+- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 29 subagents with triggers, tools, inputs, and outputs
 - [SKILL.md](./SKILL.md) — Full skill definition for Claude Code, Cursor, and OpenClaw ClawHub
 - [CLAUDE.md](./CLAUDE.md) — Project conventions, subagent table, scoring formulas, and blog references
 - [README.md](./README.md) — Full documentation, tool schemas, and integration guides

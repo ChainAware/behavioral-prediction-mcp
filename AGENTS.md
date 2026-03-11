@@ -1,6 +1,6 @@
 # ChainAware Subagent Index
 
-Machine-readable index of all 28 Claude Code subagents in `.claude/agents/`.
+Machine-readable index of all 29 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 
@@ -330,6 +330,17 @@ export CHAINAWARE_API_KEY="your-key-here"
 **Triggers:** "how risky is my portfolio?", "check these tokens for rug pulls", "which of my positions are dangerous?", "portfolio rug pull scan", "which tokens should I exit?", "rebalancing recommendations based on risk", "are any of my tokens about to rug?"
 **Input:** list of token contract addresses + networks. Optional: position sizes or USD values (for weighted scoring), risk tolerance (conservative / standard / aggressive)
 **Output:** Portfolio Risk Score, grade (A–F), per-token risk table, concentration flags, prioritised rebalancing plan
+
+---
+
+### chainaware-rwa-investor-screener
+**File:** `.claude/agents/chainaware-rwa-investor-screener.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_fraud`, `predictive_behaviour`
+**Purpose:** RWA investor suitability screening. Assesses AML compliance, fraud risk, on-chain experience (proxy for investor sophistication), and risk profile alignment against the RWA's declared risk tier. Distinct from `compliance-screener` (MiCA/AML) — this is about investor suitability and experience matching.
+**Triggers:** "is this wallet suitable for our RWA?", "RWA suitability check for 0x...", "can this wallet invest in tokenized real estate?", "investor qualification for our tokenized fund", "whitelist these wallets for our RWA pre-sale", "is this wallet accredited enough?", "batch screen investors for our token round"
+**Input:** wallet address + network. Optional: RWA risk tier (conservative / moderate / aggressive), investment cap policy
+**Output:** Suitability Tier (QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED), Suitability Score (0–100), recommended investment cap, investor profile, risk flags
 
 ---
 

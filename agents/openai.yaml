@@ -298,6 +298,13 @@ subagents:
     tools: [predictive_rug_pull, token_rank_single]
     file: .claude/agents/chainaware-portfolio-risk-advisor.md
 
+  - id: chainaware-rwa-investor-screener
+    display_name: "RWA Investor Screener"
+    description: "RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_fraud, predictive_behaviour]
+    file: .claude/agents/chainaware-rwa-investor-screener.md
+
 dependencies:
   tools:
     - type: "mcp"

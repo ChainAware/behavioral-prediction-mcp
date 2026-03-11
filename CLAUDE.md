@@ -79,6 +79,7 @@ behavioral-prediction-mcp/
 | `chainaware-compliance-screener` | Haiku | `Agent` + `predictive_fraud` (orchestrator) | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a structured Compliance Report with verdict (PASS / EDD / REJECT), risk rating, and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi) |
 | `chainaware-gamefi-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Web3 game and P2E platform wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers (Casual/Active/Veteran/Pro) for matchmaking; outputs P2E reward eligibility and multiplier |
 | `chainaware-portfolio-risk-advisor` | Sonnet | `predictive_rug_pull` + `token_rank_single` | Portfolio-level rug pull and community health assessment — scans every token via predictive_rug_pull (universal), enriches with token_rank_single where available (2,500–3,000 token index), produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
+| `chainaware-rwa-investor-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap |
 
 ### Key Scoring Formulas
 

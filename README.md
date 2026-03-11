@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **28 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **29 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -514,6 +514,7 @@ This repository includes **28 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-compliance-screener` | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a Compliance Report with verdict (PASS / EDD / REJECT) |
 | `chainaware-gamefi-screener` | Web3 game and P2E wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility |
 | `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull and community health assessment — scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
+| `chainaware-rwa-investor-screener` | RWA investor suitability screening — assesses fraud risk, experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with investment cap |
 
 ### Setup
 
