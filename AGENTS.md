@@ -1,6 +1,6 @@
 # ChainAware Subagent Index
 
-Machine-readable index of all 20 Claude Code subagents in `.claude/agents/`.
+Machine-readable index of all 28 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 
@@ -286,6 +286,50 @@ export CHAINAWARE_API_KEY="your-key-here"
 **Triggers:** "should this wallet be allowed to vote?", "voting weight for 0x...", "screen our DAO members", "Sybil check for governance", "filter fake voters", "governance health check"
 **Input:** wallet address (or list) + network. Optional: governance model, voting power pool, participation threshold
 **Output:** Governance tier, voting weight multiplier, Sybil risk verdict, batch leaderboard, governance health score
+
+---
+
+### chainaware-marketing-director
+**File:** `.claude/agents/chainaware-marketing-director.md`
+**Model:** claude-sonnet-4-6
+**Tools:** `Agent` (orchestrator), `predictive_fraud`
+**Purpose:** Full-cycle campaign orchestrator. Takes wallet list + platform description + campaign goal and delegates to specialist subagents to produce a complete Marketing Campaign Brief: segmented audience, prioritised leads, whale roster, per-cohort message playbook, upsell opportunities, and onboarding routes.
+**Triggers:** "plan a campaign for these wallets", "marketing brief for our platform", "how do we engage these users?", "full marketing strategy for this address list", "who should we target and what should we say?", "build me a campaign"
+**Input:** wallet address(es) + network + platform description. Optional: campaign goal (acquisition / retention / monetization / re-engagement), current product/tier
+**Output:** Marketing Campaign Brief — cohort breakdown, lead tier list, whale roster, per-cohort message playbook, upsell targets, onboarding routes
+
+---
+
+### chainaware-compliance-screener
+**File:** `.claude/agents/chainaware-compliance-screener.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `Agent` (orchestrator), `predictive_fraud`
+**Purpose:** First-layer MiCA-aligned compliance screening. Orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a structured Compliance Report with verdict (PASS / ENHANCED DUE DILIGENCE / REJECT) and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi).
+**Triggers:** "is this wallet compliant?", "compliance check for 0x...", "should we onboard this wallet?", "AML screening for this address", "MiCA screening for these wallets", "flag this wallet for EDD", "onboarding compliance batch"
+**Input:** wallet address(es) + network. Optional: counterparty address, transaction value, transaction type (onboarding / transaction / batch)
+**Output:** Compliance Report — verdict (PASS / EDD / REJECT), risk rating, per-check results, scope disclaimer
+
+---
+
+### chainaware-gamefi-screener
+**File:** `.claude/agents/chainaware-gamefi-screener.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_fraud`, `predictive_behaviour`
+**Purpose:** Web3 game and P2E wallet screening. Detects bot farms, multi-account cheaters, and reward abusers; classifies legitimate players into experience tiers for matchmaking; calculates P2E reward eligibility.
+**Triggers:** "is this wallet a real player or a bot?", "P2E eligibility for 0x...", "bot detection for my game", "what matchmaking tier for this wallet?", "is this a farm wallet?", "detect cheaters in my P2E platform", "reward eligibility for this address"
+**Input:** wallet address + network. Optional: game name/type, P2E reward cap per tier, minimum legitimacy score threshold
+**Output:** Player verdict (ALLOW / FLAG / BLOCK), legitimacy score, experience tier, P2E reward eligibility and multiplier, matchmaking bracket
+
+---
+
+### chainaware-portfolio-risk-advisor
+**File:** `.claude/agents/chainaware-portfolio-risk-advisor.md`
+**Model:** claude-sonnet-4-6
+**Tools:** `predictive_rug_pull`, `token_rank_single`
+**Purpose:** Portfolio-level rug pull and community health assessment. Scans every token via `predictive_rug_pull`, enriches with `token_rank_single` where available, produces a weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritised rebalancing plan.
+**Triggers:** "how risky is my portfolio?", "check these tokens for rug pulls", "which of my positions are dangerous?", "portfolio rug pull scan", "which tokens should I exit?", "rebalancing recommendations based on risk", "are any of my tokens about to rug?"
+**Input:** list of token contract addresses + networks. Optional: position sizes or USD values (for weighted scoring), risk tolerance (conservative / standard / aggressive)
+**Output:** Portfolio Risk Score, grade (A–F), per-token risk table, concentration flags, prioritised rebalancing plan
 
 ---
 

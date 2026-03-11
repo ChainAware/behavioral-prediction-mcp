@@ -270,6 +270,34 @@ subagents:
     tools: [predictive_fraud, predictive_rug_pull, predictive_behaviour]
     file: .claude/agents/chainaware-transaction-monitor.md
 
+  - id: chainaware-marketing-director
+    display_name: "Marketing Director"
+    description: "Full-cycle campaign orchestrator — segments audience, scores leads, detects whales, builds per-cohort message playbook, surfaces upsell opportunities, and routes new wallets."
+    model: claude-sonnet-4-6
+    tools: [Agent, predictive_fraud]
+    file: .claude/agents/chainaware-marketing-director.md
+
+  - id: chainaware-compliance-screener
+    display_name: "Compliance Screener"
+    description: "First-layer MiCA-aligned compliance screening — orchestrates fraud, AML, transaction, and counterparty checks into a Compliance Report with PASS / EDD / REJECT verdict (~70–75% MiCA coverage for pure DeFi)."
+    model: claude-haiku-4-5-20251001
+    tools: [Agent, predictive_fraud]
+    file: .claude/agents/chainaware-compliance-screener.md
+
+  - id: chainaware-gamefi-screener
+    display_name: "GameFi Screener"
+    description: "Web3 game and P2E wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility and multiplier."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_fraud, predictive_behaviour]
+    file: .claude/agents/chainaware-gamefi-screener.md
+
+  - id: chainaware-portfolio-risk-advisor
+    display_name: "Portfolio Risk Advisor"
+    description: "Portfolio-level rug pull and community health assessment — scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritised rebalancing plan."
+    model: claude-sonnet-4-6
+    tools: [predictive_rug_pull, token_rank_single]
+    file: .claude/agents/chainaware-portfolio-risk-advisor.md
+
 dependencies:
   tools:
     - type: "mcp"
@@ -301,3 +329,7 @@ metadata:
     - lending
     - airdrop
     - cohort-analysis
+    - gamefi
+    - compliance
+    - portfolio-risk
+    - p2e

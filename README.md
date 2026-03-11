@@ -482,7 +482,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **24 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **28 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -510,6 +510,10 @@ This repository includes **24 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-lead-scorer` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
 | `chainaware-upsell-advisor` | Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message |
 | `chainaware-platform-greeter` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
+| `chainaware-marketing-director` | Full-cycle campaign orchestrator — segments audience, scores leads, detects whales, builds per-cohort message playbook, surfaces upsell opportunities, and routes new wallets |
+| `chainaware-compliance-screener` | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a Compliance Report with verdict (PASS / EDD / REJECT) |
+| `chainaware-gamefi-screener` | Web3 game and P2E wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility |
+| `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull and community health assessment — scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 
 ### Setup
 
@@ -589,13 +593,34 @@ To request access:
 
 ## 📖 Further Reading
 
+### Product Overviews
+- [ChainAware Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and coverage
+- [Web3 Business Potential](https://chainaware.ai/blog/web3-business-potential/) — Business case and market opportunity for Web3 intelligence
+- [Use ChainAware as a Business](https://chainaware.ai/blog/use-chainaware-as-business/) — How to build commercial products and services on top of ChainAware
+
+### Tool-Specific Guides
+- [Fraud Detector Guide](https://chainaware.ai/blog/chainaware-fraud-detector-guide/) — How to use `predictive_fraud`: inputs, outputs, thresholds, use cases
+- [Rug Pull Detector Guide](https://chainaware.ai/blog/chainaware-rugpull-detector-guide/) — How to use `predictive_rug_pull`: contract scoring, deployer risk, LP analysis
+- [Token Rank Guide](https://chainaware.ai/blog/chainaware-token-rank-guide/) — How to use `token_rank_list` and `token_rank_single`: community strength scoring
+- [Wallet Rank Guide](https://chainaware.ai/blog/chainaware-wallet-rank-guide/) — Wallet ranking system: experience tiers, global rank, points
+- [Wallet Auditor Guide](https://chainaware.ai/blog/chainaware-wallet-auditor-how-to-use/) — Full wallet audit workflow combining multiple tools
+- [Transaction Monitoring Guide](https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/) — Real-time transaction risk monitoring patterns
+- [Web3 Behavioral User Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — Using `predictive_behaviour` for user analytics and segmentation
+- [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
+
+### Analytics & Strategy
+- [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth
+- [AI-Powered Blockchain Analysis: Machine Learning for Crypto Security](https://chainaware.ai/blog/ai-powered-blockchain-analysis-machine-learning-for-crypto-security-2026/) — ML approaches to on-chain security and fraud detection
+- [Forensic Crypto Analytics vs AI-Based Crypto Analytics](https://chainaware.ai/blog/forensic-crypto-analytics-versus-ai-based-crypto-analytics/) — Comparison of traditional forensic tools vs ChainAware's predictive AI approach
+- [MiCA Compliance DeFi Screener](https://chainaware.ai/blog/mica-compliance-defi-screener-chainaware/) — How ChainAware covers ~70–75% of DeFi MiCA obligations; positions compliance-screener vs Chainalysis/Elliptic
+- [Web3 Growth Platforms Compared 2026](https://chainaware.ai/blog/web3-growth-platforms-compared-2026/) — Three-stage funnel framework; ChainAware operates at Stage 3 (post-connection, in-DApp personalization)
+- [Web3 Analytics Tools for DApps Comparison 2026](https://chainaware.ai/blog/web3-analytics-tools-dapps-comparison-2026/) — Maps 10 analytics platforms across four job categories; ChainAware is the sole predictive intelligence platform
+- [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
+
+### Developer Integration
 - [12 Blockchain Capabilities Any AI Agent Can Use — MCP Integration Guide](https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/) — All capabilities explained, with setup instructions for Claude, ChatGPT, Cursor, and multi-agent systems
 - [Prediction MCP for AI Agents: Personalize Decisions from Wallet Behavior](https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/) — Deep-dive integration guide with code examples
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
-- [ChainAware Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and coverage
-- [Web3 Business Potential](https://chainaware.ai/blog/web3-business-potential/) — Business case and market opportunity for Web3 intelligence
-- [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
-- [Use ChainAware as a Business](https://chainaware.ai/blog/use-chainaware-as-business/) — How to build commercial products and services on top of ChainAware
 - [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/) — Onboarding conversion problem and AI-driven solutions
 - [The Web3 Agentic Economy: How AI Agents Are Replacing Human Teams in DeFi](https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/) — How autonomous AI agents are taking over DeFi operations and decision-making
 
