@@ -216,7 +216,7 @@ If missing, respond:
 
 - Need a **marketing message** for a scored wallet? → `chainaware-wallet-marketer`
 - Need to **verify safety** before scoring? → `chainaware-fraud-detector`
-- Need **full behavioral intelligence**? → `chainaware-analyst`
+- Need **full behavioral intelligence**? → `chainaware-wallet-auditor`
 
 ---
 

@@ -147,7 +147,7 @@ Token analysis feeds into other ChainAware agents:
 
 ```
 Discover tokens first       → chainaware-token-ranker    (find by category/chain)
-Full holder behavior        → chainaware-analyst          (profile any holder wallet)
+Full holder behavior        → chainaware-wallet-auditor          (profile any holder wallet)
 Holder reputation scoring   → chainaware-reputation-scorer (score any holder)
 Holder trust scoring        → chainaware-trust-scorer     (trust score any holder)
 Marketing to top holders    → chainaware-wallet-marketer  (convert top holders)

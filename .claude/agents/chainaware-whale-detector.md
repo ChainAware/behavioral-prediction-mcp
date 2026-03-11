@@ -131,7 +131,7 @@ Determine the whale's primary domain from categories:
 | Whale | Dormant | Loyalty incentive, personalized re-engagement, check for competitor migration |
 | Emerging Whale | Active | Fast-track to loyalty program, monitor for tier upgrade, nurture with premium content |
 | Emerging Whale | Dormant | Light re-engagement, low-cost retention offer |
-| Not a Whale | — | Standard user treatment; escalate to `chainaware-analyst` if context requires deeper profiling |
+| Not a Whale | — | Standard user treatment; escalate to `chainaware-wallet-auditor` if context requires deeper profiling |
 
 ---
 
@@ -197,7 +197,7 @@ Whale detection feeds into other ChainAware agents:
 Marketing to whales          → chainaware-wallet-marketer
 Reputation scoring           → chainaware-reputation-scorer
 AML compliance on whales     → chainaware-aml-scorer
-Full behavioral profile      → chainaware-analyst
+Full behavioral profile      → chainaware-wallet-auditor
 Onboarding for new whales    → chainaware-onboarding-router
 ```
 

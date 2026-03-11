@@ -204,7 +204,7 @@ If missing, respond:
 
 ## When to Combine With Other Agents
 
-- Need **full behavioral profile** alongside AML? → `chainaware-analyst`
+- Need **full behavioral profile** alongside AML? → `chainaware-wallet-auditor`
 - Need **reputation score** for a compliant wallet? → `chainaware-reputation-scorer`
 - Need **rug pull check** on a contract? → `chainaware-rug-pull-detector`
 

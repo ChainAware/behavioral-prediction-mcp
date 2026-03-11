@@ -146,7 +146,7 @@ In these cases respond:
 Fraud probability: [score]
 Reason: This wallet shows high fraud risk. Generating conversion messages
 for potentially fraudulent wallets is not recommended.
-Suggest: Run full analysis with chainaware-analyst for more context.
+Suggest: Run full analysis with chainaware-wallet-auditor for more context.
 ```
 
 ---

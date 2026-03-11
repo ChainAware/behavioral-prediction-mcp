@@ -1,5 +1,5 @@
 ---
-name: chainaware-analyst
+name: chainaware-wallet-auditor
 description: >
   Specialized Web3 intelligence analyst powered by ChainAware's Behavioral Prediction MCP.
   Use this agent PROACTIVELY whenever a user mentions a wallet address, blockchain address,

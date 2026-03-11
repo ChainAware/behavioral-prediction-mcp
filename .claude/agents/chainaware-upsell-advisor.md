@@ -349,7 +349,7 @@ Personalise the upsell message       → chainaware-wallet-marketer
 DeFi product catalogue fit           → chainaware-defi-advisor
 Identify high-value upsell targets   → chainaware-whale-detector
 Re-engage before upselling           → chainaware-churn-predictor (coming soon)
-Full wallet profile for top targets  → chainaware-analyst
+Full wallet profile for top targets  → chainaware-wallet-auditor
 ```
 
 ---

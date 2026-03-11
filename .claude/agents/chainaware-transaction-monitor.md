@@ -300,7 +300,7 @@ Transaction monitoring fits into the broader ChainAware agent ecosystem:
 ```
 Deep counterparty check (manual)    → chainaware-counterparty-screener
 Contract deep-dive                  → chainaware-rug-pull-detector
-Full sender due diligence           → chainaware-analyst
+Full sender due diligence           → chainaware-wallet-auditor
 AML compliance report on sender     → chainaware-aml-scorer
 Post-transaction cohort tagging     → chainaware-cohort-analyzer
 Governance vote transaction         → chainaware-governance-screener

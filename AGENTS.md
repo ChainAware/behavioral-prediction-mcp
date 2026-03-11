@@ -15,8 +15,8 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Agent Directory
 
-### chainaware-analyst
-**File:** `.claude/agents/chainaware-analyst.md`
+### chainaware-wallet-auditor
+**File:** `.claude/agents/chainaware-wallet-auditor.md`
 **Model:** claude-sonnet-4-6
 **Tools:** `predictive_fraud`, `predictive_behaviour`, `predictive_rug_pull`
 **Purpose:** Full due diligence. Combines fraud, behaviour, and rug pull analysis into a comprehensive wallet or contract report.
@@ -348,7 +348,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 ```
 Autonomous transaction pipeline  → chainaware-transaction-monitor
 Transaction safety check         → chainaware-counterparty-screener
-  └─ needs more detail       → chainaware-analyst
+  └─ needs more detail       → chainaware-wallet-auditor
   └─ is a contract address   → chainaware-rug-pull-detector
 
 User onboarding              → chainaware-onboarding-router
@@ -360,27 +360,28 @@ Airdrop campaign             → chainaware-airdrop-screener
   └─ message each recipient  → chainaware-wallet-marketer
 
 DAO governance vote          → chainaware-governance-screener
-  └─ full member audit       → chainaware-analyst
+  └─ full member audit       → chainaware-wallet-auditor
   └─ AML on flagged wallets  → chainaware-aml-scorer
 
 DeFi lending                 → chainaware-lending-risk-assessor
-  └─ full borrower profile   → chainaware-analyst
+  └─ full borrower profile   → chainaware-wallet-auditor
 
 Token / launchpad vetting    → chainaware-token-launch-auditor
   └─ token holder quality    → chainaware-token-analyzer
-  └─ deployer deep dive      → chainaware-analyst
+  └─ deployer deep dive      → chainaware-wallet-auditor
 
 User analytics               → chainaware-cohort-analyzer
   └─ per-cohort messaging    → chainaware-wallet-marketer
   └─ onboard new cohort      → chainaware-onboarding-router
 
 AI agent verification        → chainaware-agent-screener
-  └─ full agent audit        → chainaware-analyst
+  └─ full agent audit        → chainaware-wallet-auditor
 ```
 
 ## Further Reading
 
 - Full documentation: https://github.com/ChainAware/behavioral-prediction-mcp
+- Wallet Auditor Guide: https://chainaware.ai/blog/chainaware-wallet-auditor-how-to-use/
 - MCP integration guide: https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/
 - 12 agent capabilities: https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/
 - Complete product guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/

@@ -102,12 +102,12 @@ capabilities:
         required: true
 
 subagents:
-  - id: chainaware-analyst
-    display_name: "ChainAware Analyst"
+  - id: chainaware-wallet-auditor
+    display_name: "Wallet Auditor"
     description: "Full due diligence — fraud, behaviour, and rug pull combined into one comprehensive report."
     model: claude-sonnet-4-6
     tools: [predictive_fraud, predictive_behaviour, predictive_rug_pull]
-    file: .claude/agents/chainaware-analyst.md
+    file: .claude/agents/chainaware-wallet-auditor.md
 
   - id: chainaware-fraud-detector
     display_name: "Fraud Detector"

@@ -299,7 +299,7 @@ Re-engagement for cold/dead leads   → chainaware-churn-predictor (coming soon)
 Upsell path for warm leads          → chainaware-upsell-advisor (coming soon)
 Whale identification within leads   → chainaware-whale-detector
 Segment leads into cohorts          → chainaware-cohort-analyzer
-Full profile on top leads           → chainaware-analyst
+Full profile on top leads           → chainaware-wallet-auditor
 ```
 
 ---

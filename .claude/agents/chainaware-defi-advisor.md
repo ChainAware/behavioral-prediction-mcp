@@ -215,7 +215,7 @@ When `probabilityFraud > 0.70`:
 
 This wallet shows high fraud risk. DeFi product recommendations are not provided
 for likely fraudulent wallets.
-Suggest: Run full analysis with chainaware-fraud-detector or chainaware-analyst.
+Suggest: Run full analysis with chainaware-fraud-detector or chainaware-wallet-auditor.
 ```
 
 ---
@@ -243,7 +243,7 @@ DeFi advisor pairs well with other ChainAware agents:
 
 ```
 Fraud screen before advising        → chainaware-fraud-detector
-Full behavioral due diligence       → chainaware-analyst
+Full behavioral due diligence       → chainaware-wallet-auditor
 Marketing message after product match → chainaware-wallet-marketer
 Onboarding flow for new users       → chainaware-onboarding-router
 Reputation score for feature gating → chainaware-reputation-scorer

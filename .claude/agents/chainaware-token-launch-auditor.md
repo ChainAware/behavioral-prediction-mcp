@@ -398,7 +398,7 @@ Token launch auditing connects to other ChainAware agents:
 
 ```
 Ongoing LP monitoring post-launch     → chainaware-rug-pull-detector
-Full behavioral profile of deployer   → chainaware-analyst
+Full behavioral profile of deployer   → chainaware-wallet-auditor
 AML compliance report on deployer     → chainaware-aml-scorer
 Fraud deep-dive on deployer wallet    → chainaware-fraud-detector
 DeFi product recommendations for users → chainaware-defi-advisor

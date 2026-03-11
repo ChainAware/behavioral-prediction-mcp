@@ -302,7 +302,7 @@ When a hard rejection rule is triggered:
 **AML Flags:** [list flags if applicable, or "None detected"]
 
 Do not originate a loan for this wallet under any terms.
-Suggest: Run full analysis with chainaware-fraud-detector or chainaware-analyst for details.
+Suggest: Run full analysis with chainaware-fraud-detector or chainaware-wallet-auditor for details.
 ```
 
 ---
@@ -363,7 +363,7 @@ Lending risk assessment connects to other ChainAware agents:
 ```
 AML compliance before lending        → chainaware-aml-scorer
 DeFi product match post-approval     → chainaware-defi-advisor
-Full behavioral due diligence        → chainaware-analyst
+Full behavioral due diligence        → chainaware-wallet-auditor
 Fraud deep-dive on borderline wallet → chainaware-fraud-detector
 Reputation score for credit tier     → chainaware-reputation-scorer
 Onboarding route for new borrowers   → chainaware-onboarding-router

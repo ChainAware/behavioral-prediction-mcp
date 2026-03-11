@@ -273,7 +273,7 @@ Always state which thresholds were applied at the top of the report.
 Airdrop screening pairs with other ChainAware agents:
 
 ```
-Deep wallet audit before allocating  → chainaware-analyst
+Deep wallet audit before allocating  → chainaware-wallet-auditor
 Marketing message to eligible wallets → chainaware-wallet-marketer
 Onboarding route for new recipients  → chainaware-onboarding-router
 Reputation score for a single wallet → chainaware-reputation-scorer

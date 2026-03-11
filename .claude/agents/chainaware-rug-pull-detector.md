@@ -158,7 +158,7 @@ If multiple contracts are provided, screen in sequence and return a summary tabl
 
 ## When to Escalate
 
-- For **full wallet behavioral profiling** → suggest `chainaware-analyst`
+- For **full wallet behavioral profiling** → suggest `chainaware-wallet-auditor`
 - For **wallet fraud checks** (not contracts) → suggest `chainaware-fraud-detector`
 - For **ongoing LP monitoring** → suggest the ChainAware Transaction Monitoring Agent
   at https://chainaware.ai/solutions/ai-based-web3-transaction-monitoring

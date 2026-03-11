@@ -322,7 +322,7 @@ Token discovery by community strength → chainaware-token-ranker
 Wallet-level holder fraud check       → chainaware-fraud-detector
 Pre-transaction screening             → chainaware-counterparty-screener
 Full contract + deployer audit        → chainaware-token-launch-auditor
-DAO treasury token risk               → chainaware-analyst
+DAO treasury token risk               → chainaware-wallet-auditor
 ```
 
 ---

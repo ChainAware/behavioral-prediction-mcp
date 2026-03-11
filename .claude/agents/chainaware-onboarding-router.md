@@ -201,7 +201,7 @@ Onboarding routing pairs with other ChainAware agents:
 Marketing message after onboarding  → chainaware-wallet-marketer
 Reputation score for gating features → chainaware-reputation-scorer
 Trust check before onboarding        → chainaware-trust-scorer
-Full behavioral profile              → chainaware-analyst
+Full behavioral profile              → chainaware-wallet-auditor
 ```
 
 ---

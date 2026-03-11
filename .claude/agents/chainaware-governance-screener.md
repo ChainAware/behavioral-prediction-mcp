@@ -281,7 +281,7 @@ Output an allocation column in the batch table.
 Governance screening integrates with other ChainAware agents:
 
 ```
-Full wallet due diligence         → chainaware-analyst
+Full wallet due diligence         → chainaware-wallet-auditor
 Whale tier for governance weight  → chainaware-whale-detector
 Reputation score (standalone)     → chainaware-reputation-scorer
 AML compliance for legal review   → chainaware-aml-scorer

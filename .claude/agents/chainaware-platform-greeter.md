@@ -283,7 +283,7 @@ Wallet connects → chainaware-platform-greeter (welcome message)
 Wallet completes action → chainaware-action-trigger-messenger (next nudge, coming soon)
 Wallet shows churn signals → chainaware-churn-predictor (coming soon)
 Wallet ready for next tier → chainaware-upsell-advisor
-Full wallet profile → chainaware-analyst
+Full wallet profile → chainaware-wallet-auditor
 Outbound campaign message → chainaware-wallet-marketer
 ```
 

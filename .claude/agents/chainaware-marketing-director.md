@@ -63,7 +63,7 @@ Before spawning any specialist agents, call `predictive_fraud` on the submitted 
 
 - **Single wallet:** if `probabilityFraud > 0.70` or `status == "Fraud"`, stop and
   return: *"Marketing Blocked — wallet shows high fraud risk (probability: [score]).
-  Do not include in campaigns. Run `chainaware-analyst` for a full investigation."*
+  Do not include in campaigns. Run `chainaware-wallet-auditor` for a full investigation."*
 - **Batch:** note how many wallets fail the fraud gate. Pass the clean list to specialist
   agents. Include the excluded count in your final report.
 

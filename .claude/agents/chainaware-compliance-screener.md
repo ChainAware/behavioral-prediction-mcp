@@ -351,7 +351,7 @@ The compliance screener integrates with the broader ChainAware stack:
 
 ```
 Pre-onboarding screening      → chainaware-compliance-screener (this agent)
-Deep wallet investigation     → chainaware-analyst
+Deep wallet investigation     → chainaware-wallet-auditor
 Full fraud forensics          → chainaware-fraud-detector
 Ongoing transaction monitoring → chainaware-transaction-monitor
 Counterparty check            → chainaware-counterparty-screener

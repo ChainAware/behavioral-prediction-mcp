@@ -183,7 +183,7 @@ require attention:
 - For ambiguous cases that would normally trigger Step 2, return 🟡 CAUTION with note: *"Behaviour data unavailable for [network] — verdict based on fraud signal only"*
 
 **Very high-value transaction**
-- If the user mentions a large amount (e.g. ">$10k", "large transfer"), recommend escalating to `chainaware-analyst` for a full due diligence report regardless of verdict
+- If the user mentions a large amount (e.g. ">$10k", "large transfer"), recommend escalating to `chainaware-wallet-auditor` for a full due diligence report regardless of verdict
 
 ---
 
@@ -193,7 +193,7 @@ Counterparty screening fits into broader pre-transaction workflows:
 
 ```
 Contract / pool address check    → chainaware-rug-pull-detector
-Full wallet due diligence        → chainaware-analyst
+Full wallet due diligence        → chainaware-wallet-auditor
 AML compliance report            → chainaware-aml-scorer
 Trust score (0.00–1.00)         → chainaware-trust-scorer
 Whale tier of counterparty       → chainaware-whale-detector

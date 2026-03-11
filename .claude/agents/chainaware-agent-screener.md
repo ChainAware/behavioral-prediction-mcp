@@ -267,7 +267,7 @@ Do not interact until the agent wallet has established a verifiable record.
 Agent screening pairs with other ChainAware agents:
 
 ```
-Full behavioral profile of agent wallet  → chainaware-analyst
+Full behavioral profile of agent wallet  → chainaware-wallet-auditor
 AML report on feeder wallet              → chainaware-aml-scorer
 Reputation score standalone              → chainaware-reputation-scorer
 Fraud deep-dive                          → chainaware-fraud-detector

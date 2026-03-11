@@ -246,7 +246,7 @@ When a disqualification rule is triggered:
 Block this wallet from game access and P2E rewards.
 P2E Eligibility: ❌ INELIGIBLE — Reward Multiplier: 0×
 
-Suggest: For deep investigation, escalate to chainaware-analyst or chainaware-fraud-detector.
+Suggest: For deep investigation, escalate to chainaware-wallet-auditor or chainaware-fraud-detector.
 ```
 
 ---
@@ -331,7 +331,7 @@ GameFi screening connects to other ChainAware agents:
 ```
 Airdrop token distribution to players → chainaware-airdrop-screener
 Deep fraud investigation              → chainaware-fraud-detector
-Full wallet due diligence             → chainaware-analyst
+Full wallet due diligence             → chainaware-wallet-auditor
 Reputation score for leaderboard      → chainaware-reputation-scorer
 Onboarding flow for new players       → chainaware-onboarding-router
 Whale detection for VIP game modes    → chainaware-whale-detector

@@ -51,7 +51,7 @@ behavioral-prediction-mcp/
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
-| `chainaware-analyst` | Sonnet | All 3 prediction tools | Full due diligence, complex analysis |
+| `chainaware-wallet-auditor` | Sonnet | All 3 prediction tools | Full due diligence, complex analysis |
 | `chainaware-fraud-detector` | Haiku | `predictive_fraud` | Fast fraud screening, batch checks |
 | `chainaware-rug-pull-detector` | Haiku | `predictive_rug_pull` + `predictive_fraud` | Contract/LP safety checks |
 | `chainaware-wallet-marketer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Personalized marketing messages |
@@ -94,7 +94,7 @@ behavioral-prediction-mcp/
 
 - **Haiku** for single-purpose, fast, deterministic agents
 - **Sonnet** for agents requiring reasoning, creativity, or multi-tool orchestration
-- Subagents should **escalate** to `chainaware-analyst` when a task exceeds their scope
+- Subagents should **escalate** to `chainaware-wallet-auditor` when a task exceeds their scope
 - Never hardcode API keys — always use `CHAINAWARE_API_KEY` env var
 - Token rank tools (`token_rank_list`, `token_rank_single`) are documented in SKILL.md and have reference docs
 - SKILL.md includes OpenClaw metadata (`version`, `metadata.openclaw`) for ClawHub publishing

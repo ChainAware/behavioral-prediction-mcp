@@ -168,7 +168,7 @@ Token ranking feeds into other ChainAware agents:
 ```
 Single token deep-dive     → chainaware-token-analyzer  (rank + top holders)
 Top holder fraud check     → chainaware-fraud-detector   (screen holders)
-Top holder behavior        → chainaware-analyst           (full profile)
+Top holder behavior        → chainaware-wallet-auditor           (full profile)
 Portfolio quality scoring  → combine with chainaware-reputation-scorer
 ```
 

@@ -109,7 +109,7 @@ After cohort assignment, apply a risk overlay for each wallet:
 | **Casual User** | Education-first onboarding, simple single-step products, low-friction entry points, DeFi explainers. |
 | **Dormant / Inactive** | Re-engagement campaigns, "we miss you" incentives, highlight new features since last activity. |
 | **New / Fresh Wallet** | Welcome flow, beginner guides, starter incentives (no-risk yield, free NFT, tutorial rewards). |
-| **Unclassified** | Generic outreach; escalate to `chainaware-analyst` for deeper individual profiling. |
+| **Unclassified** | Generic outreach; escalate to `chainaware-wallet-auditor` for deeper individual profiling. |
 
 ---
 
@@ -268,7 +268,7 @@ Whale identification within cohort → chainaware-whale-detector
 Onboarding route for new wallets   → chainaware-onboarding-router
 DeFi product fit per cohort        → chainaware-defi-advisor
 Airdrop allocation by cohort       → chainaware-airdrop-screener
-Deep profile on a specific wallet  → chainaware-analyst
+Deep profile on a specific wallet  → chainaware-wallet-auditor
 AML check on flagged wallets       → chainaware-aml-scorer
 ```
 

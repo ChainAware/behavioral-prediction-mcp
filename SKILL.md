@@ -93,7 +93,7 @@ agent what is *about to happen*.
 - User asks about general blockchain data (balances, transaction history) → use a block explorer
 - User wants real-time price data or market cap → use a market data API
 - User wants to analyze smart contract code for bugs → use a code auditing tool
-- For complex multi-tool analysis (fraud + behavior + rug pull combined) → escalate to `chainaware-analyst` subagent
+- For complex multi-tool analysis (fraud + behavior + rug pull combined) → escalate to `chainaware-wallet-auditor` subagent
 - For batch screening of many wallets → use `chainaware-fraud-detector` subagent
 - For marketing personalization → use `chainaware-wallet-marketer` subagent
 
@@ -152,7 +152,7 @@ agent what is *about to happen*.
 3. Call `predictive_rug_pull` (if a contract address) → get contract risk
 4. Synthesize all three into a unified verdict with risk level and recommendation
 
-> For complex due diligence workflows, escalate to the `chainaware-analyst` subagent.
+> For complex due diligence workflows, escalate to the `chainaware-wallet-auditor` subagent.
 
 ---
 
@@ -483,7 +483,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 
 | Subagent | Use When |
 |---|---|
-| `chainaware-analyst` | Full due diligence combining all prediction tools |
+| `chainaware-wallet-auditor` | Full due diligence combining all prediction tools |
 | `chainaware-fraud-detector` | Fast fraud screening, batch wallet checks |
 | `chainaware-rug-pull-detector` | Contract/LP safety with deployer analysis |
 | `chainaware-wallet-marketer` | Personalized marketing messages per wallet segment |
