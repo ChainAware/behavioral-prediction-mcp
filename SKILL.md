@@ -36,6 +36,33 @@ metadata:
       env:
         - CHAINAWARE_API_KEY
     primaryEnv: CHAINAWARE_API_KEY
+    env_usage:
+      CHAINAWARE_API_KEY: >
+        Passed as the `apiKey` parameter in every tool call
+        (predictive_fraud, predictive_behaviour, predictive_rug_pull).
+        Never logged or included in output. Sourced exclusively from
+        the CHAINAWARE_API_KEY environment variable — never hardcoded.
+    data_handling:
+      external_endpoints:
+        - url: https://prediction.mcp.chainaware.ai/sse
+          transport: SSE
+          purpose: Blockchain wallet and contract behavioural analysis
+          data_sent:
+            - Wallet addresses (pseudonymous on-chain identifiers)
+            - Smart contract / LP addresses
+            - Network identifier (e.g. ETH, BNB, BASE)
+          data_NOT_sent:
+            - Names, emails, or any off-chain PII
+            - Raw transaction data
+            - Private keys or seed phrases
+          retention: Governed by ChainAware's privacy policy
+          privacy_policy: https://chainaware.ai/privacy
+      user_consent_note: >
+        Users should be informed that wallet addresses submitted for
+        analysis are transmitted to ChainAware's servers. Wallet
+        addresses are pseudonymous blockchain identifiers and do not
+        constitute personal data under most jurisdictions, but operators
+        should assess their own regulatory context.
     emoji: 🔮
     homepage: https://github.com/ChainAware/behavioral-prediction-mcp
     author: ChainAware
@@ -526,11 +553,42 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 
 ---
 
+## Data & Privacy
+
+### What data leaves your environment
+
+Every tool call transmits the following to `https://prediction.mcp.chainaware.ai/sse`:
+
+| Field | Example | Notes |
+|---|---|---|
+| `walletAddress` | `0xABC...` | Pseudonymous on-chain identifier — not PII |
+| `network` | `ETH` | Chain identifier only |
+| `apiKey` | _(your key)_ | Sourced from `CHAINAWARE_API_KEY` env var; never logged |
+
+**What is NOT sent:** names, emails, IP addresses, private keys, raw transaction history, or any off-chain personal data.
+
+### API key handling
+
+`CHAINAWARE_API_KEY` is read from the environment and passed as the `apiKey` parameter in each tool call. It is never included in output, never written to disk, and never logged by this skill. Treat it as a secret and rotate it regularly.
+
+### Integration-specific privacy notes
+
+- **Claude Code / Cursor**: key passed via `X-API-Key` header — does not appear in URLs or logs
+- **Claude Web / ChatGPT**: key must be appended to the SSE URL (`?apiKey=...`) — these platforms do not support custom SSE headers. Be aware the key will appear in your browser's network tab. Use a restricted-scope key for these integrations.
+
+### Operator responsibilities
+
+Wallet addresses are pseudonymous identifiers. Whether they constitute personal data in your jurisdiction depends on your regulatory context (e.g. GDPR, MiCA). Operators processing wallets linked to identified users should perform their own data protection assessment.
+
+**Privacy policy:** https://chainaware.ai/privacy
+
+---
+
 ## Security Notes
 
 - **Never hard-code API keys** in public repositories
 - Use environment variables (`CHAINAWARE_API_KEY`) or secret managers in production
-- Rotate API keys regularly
+- Rotate API keys regularly; use restricted-scope keys for browser-based integrations
 - The server uses **SSE (Server-Sent Events)** for streaming responses
 - Rate limits apply depending on your subscription tier
 
