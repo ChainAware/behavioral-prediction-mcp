@@ -11,13 +11,14 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 
 ---
 
-## MCP Tools (5 total)
+## MCP Tools (6 total)
 
 | Tool | Purpose | Networks |
 |---|---|---|
 | `predictive_fraud` | Fraud probability + AML forensics for a wallet | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | `predictive_behaviour` | Wallet segmentation, intent, experience, recommendations | ETH, BNB, BASE, HAQQ, SOLANA |
 | `predictive_rug_pull` | Smart contract rug pull risk scoring | ETH, BNB, BASE, HAQQ |
+| `credit_score` | Crypto credit/trust score (1–9) combining fraud + social graph analysis | ETH, BNB, POLYGON, TON, BASE, HAQQ |
 | `token_rank_list` | Ranked list of tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Token rank + top holders for a specific contract | ETH, BNB, BASE, SOLANA |
 
@@ -35,6 +36,7 @@ behavioral-prediction-mcp/
 │   ├── tools-fraud.md
 │   ├── tools-behaviour.md
 │   ├── tools-rug-pull.md
+│   ├── tools-credit-score.md
 │   ├── tools-token-rank-list.md
 │   └── tools-token-rank-single.md
 ├── CLAUDE.md                # This file
@@ -47,7 +49,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-28 specialist subagents in `.claude/agents/`. Use the right one for the task:
+31 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -58,6 +60,8 @@ behavioral-prediction-mcp/
 | `chainaware-reputation-scorer` | Haiku | `predictive_behaviour` + `predictive_fraud` | Reputation score 0–4000 |
 | `chainaware-aml-scorer` | Haiku | `predictive_fraud` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Haiku | `predictive_fraud` | Simple trust score 0.00–1.00 |
+| `chainaware-credit-scorer` | Haiku | `credit_score` | Crypto credit score 1–9 combining fraud probability + social graph analysis |
+| `chainaware-clv-estimator` | Haiku | `predictive_behaviour` + `predictive_fraud` | 12-month revenue potential (CLV) as a USD range — experience, categories, risk profile, intent, and retention combined |
 | `chainaware-wallet-ranker` | Haiku | `predictive_behaviour` | Wallet experience rank + leaderboard |
 | `chainaware-token-ranker` | Haiku | `token_rank_list` | Discover/rank tokens by holder community strength |
 | `chainaware-token-analyzer` | Haiku | `token_rank_single` + `predictive_fraud` | Single token deep-dive + top holders |
@@ -65,7 +69,7 @@ behavioral-prediction-mcp/
 | `chainaware-whale-detector` | Haiku | `predictive_behaviour` + `predictive_fraud` | Classify wallets into whale tiers (Mega/Whale/Emerging) |
 | `chainaware-defi-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Personalized DeFi product recommendations by experience + risk tier |
 | `chainaware-airdrop-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Batch screen wallets for airdrop eligibility, filter bots/fraud, rank by reputation |
-| `chainaware-lending-risk-assessor` | Haiku | `predictive_fraud` + `predictive_behaviour` | Borrower risk grade (A–F), collateral ratio, and interest rate tier for DeFi lending |
+| `chainaware-lending-risk-assessor` | Haiku | `predictive_fraud` + `predictive_behaviour` + `credit_score` | Borrower risk grade (A–F), collateral ratio, and interest rate tier for DeFi lending |
 | `chainaware-token-launch-auditor` | Haiku | `predictive_rug_pull` + `predictive_fraud` + `predictive_behaviour` | Pre-listing launch safety audit — composite LSS, APPROVED/CONDITIONAL/REJECTED verdict, badge copy |
 | `chainaware-agent-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Screens AI agent wallet + feeder wallet; returns Agent Trust Score 0–10 (0=fraud, 1=new, 2–10=reputation) |
 | `chainaware-cohort-analyzer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Segments a batch of wallets into behavioral cohorts (Power DeFi, NFT, Trader, Dormant, etc.) with per-cohort engagement strategies |
@@ -118,6 +122,7 @@ behavioral-prediction-mcp/
 - [Transaction Monitoring Guide](https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/) — Real-time transaction risk monitoring patterns
 - [Web3 Behavioral User Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — Using `predictive_behaviour` for user analytics and segmentation
 - [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
+- [Credit Scoring Agent Guide](https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/) — How to build and use the ChainAware credit scoring agent
 
 ### Analytics & Strategy
 - [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth
@@ -139,6 +144,7 @@ behavioral-prediction-mcp/
 - `references/tools-fraud.md` — `predictive_fraud` full schema, thresholds, forensic flags
 - `references/tools-behaviour.md` — `predictive_behaviour` full schema, intent signals, personalization patterns
 - `references/tools-rug-pull.md` — `predictive_rug_pull` full schema, 3-layer scoring model
+- `references/tools-credit-score.md` — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - `references/tools-token-rank-list.md` — `token_rank_list` full schema, categories, sorting, pagination
 - `references/tools-token-rank-single.md` — `token_rank_single` full schema, top holders, global rank
 

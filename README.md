@@ -404,7 +404,57 @@ Error cases:
 ---
 
 
-### 4. Token Rank List Tool
+### 4. Credit Score Tool
+
+**ID:** `credit_score`
+
+**Description:**
+AI-driven crypto credit/trust scoring for blockchain wallets. Combines fraud probability, on-chain inflow/outflow analytics, and social graph analysis to produce a **riskRating** from 1 (highest risk) to 9 (highest trust). Designed for DeFi lending protocols that need a fast, single-number creditworthiness signal per wallet.
+
+➡️ Example Use Cases:
+
+    • "What is the credit score for this wallet?"
+    • "What's the calculated trust score for this borrower?"
+    • "Calculate credit score before approving this loan."
+
+**Inputs:**
+
+| Name            | Type   | Required | Description                                                               |
+| --------------- | ------ | -------- | ------------------------------------------------------------------------- |
+| `apiKey`        | string | ✅        | API key for authentication                                               |
+| `network`       | string | ✅        | Blockchain network (`ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `HAQQ`)      |
+| `walletAddress` | string | ✅        | The wallet address to score                                              |
+
+**Outputs (JSON):**
+
+```json
+{
+  "message": "Success",
+  "creditData": {
+    "riskRating": 7,
+    "walletAddress": "0x..."
+  }
+}
+```
+
+| riskRating | Risk Level | Lending Interpretation |
+|-----------|------------|------------------------|
+| 9 | Very Low Risk | Prime borrower |
+| 7–8 | Low Risk | Reliable borrower |
+| 5–6 | Moderate Risk | Elevated caution |
+| 3–4 | High Risk | Restricted terms |
+| 1–2 | Very High Risk | Decline |
+
+Error cases:
+
+    • `401 Unauthorized` → invalid `apiKey`
+    • `400 Bad Request` → malformed `network` or `walletAddress`
+    • `500 Internal Server Error` → temporary downstream failure
+
+---
+
+### 5. Token Rank List Tool
+
 
 **ID:** `token_rank_list`
 
@@ -464,7 +514,7 @@ Error cases:
 
 ---
 
-### 5. Token Rank Single Tool
+### 6. Token Rank Single Tool
 
 **ID:** `token_rank_single`
 
@@ -695,7 +745,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **29 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **31 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -703,6 +753,8 @@ This repository includes **29 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-fraud-detector` | Fast wallet fraud screening |
 | `chainaware-rug-pull-detector` | Smart contract / LP safety checks |
 | `chainaware-trust-scorer` | Trust score (0.00–1.00) |
+| `chainaware-credit-scorer` | Crypto credit score (1–9) for lending and creditworthiness decisions |
+| `chainaware-clv-estimator` | 12-month revenue potential (CLV) as a USD range based on behavioral signals |
 | `chainaware-reputation-scorer` | Reputation score (0–4000) |
 | `chainaware-aml-scorer` | AML compliance scoring (0–100) |
 | `chainaware-wallet-ranker` | Wallet experience rank + leaderboard |
@@ -821,6 +873,7 @@ To request access:
 - [Transaction Monitoring Guide](https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/) — Real-time transaction risk monitoring patterns
 - [Web3 Behavioral User Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — Using `predictive_behaviour` for user analytics and segmentation
 - [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
+- [Credit Scoring Agent Guide](https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/) — How to build and use the ChainAware credit scoring agent
 
 ### Analytics & Strategy
 - [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth

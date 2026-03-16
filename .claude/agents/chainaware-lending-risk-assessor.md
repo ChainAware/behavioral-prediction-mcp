@@ -16,7 +16,7 @@ description: >
   under-collateralized lending eligibility decisions.
   Requires: wallet address + blockchain network. Optional: loan amount, asset type,
   platform risk policy (conservative / standard / aggressive).
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__credit_score
 model: claude-haiku-4-5-20251001
 ---
 
@@ -36,6 +36,7 @@ of the borrower — not a one-size-fits-all policy.
 
 **Primary:** `predictive_fraud` — fraud probability, AML forensic flags
 **Secondary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories
+**Tertiary:** `credit_score` — crypto credit/trust rating (1–9) combining fraud + social graph analysis
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -45,10 +46,15 @@ of the borrower — not a one-size-fits-all policy.
 
 `predictive_fraud`: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
+`credit_score`: ETH · BNB · POLYGON · TON · BASE · HAQQ
 
-For networks only supported by `predictive_fraud` (POLYGON, TON, TRON), run fraud
-assessment only — omit experience and risk appetite components, apply conservative
-defaults, and note the limitation.
+For networks only supported by `predictive_fraud` (TRON), run fraud
+assessment only — omit experience, risk appetite, and credit score components, apply
+conservative defaults, and note the limitation.
+
+For networks supported by `predictive_fraud` + `credit_score` but not `predictive_behaviour`
+(POLYGON, TON), run both fraud and credit score tools — omit behaviour components, apply
+conservative defaults for experience and behaviour.
 
 ---
 
@@ -68,15 +74,15 @@ Apply before scoring. Reject immediately if any condition is met:
 ## Borrower Risk Score (BRS)
 
 For wallets that pass hard rejection, calculate a composite **Borrower Risk Score**
-on a 0–100 scale from three components:
+on a 0–100 scale from four components:
 
 ```
-BRS = (fraud_component × 0.50) + (experience_component × 0.30) + (behaviour_component × 0.20)
+BRS = (fraud_component × 0.40) + (credit_score_component × 0.20) + (experience_component × 0.25) + (behaviour_component × 0.15)
 ```
 
-### Component 1 — Fraud Component (50% weight)
+### Component 1 — Fraud Component (40% weight)
 
-The single strongest signal for lending risk.
+The strongest signal for lending risk.
 
 ```
 fraud_component = (1 - probabilityFraud) × 100
@@ -89,7 +95,25 @@ fraud_component = (1 - probabilityFraud) × 100
 | 0.26–0.50 | 50–74 | Moderate risk |
 | 0.51–0.70 | 30–49 | High risk (borderline reject) |
 
-### Component 2 — Experience Component (30% weight)
+### Component 2 — Credit Score Component (20% weight)
+
+Dedicated creditworthiness signal combining fraud probability with social graph analysis.
+
+```
+credit_score_component = ((riskRating - 1) / 8) × 100
+```
+
+| riskRating | credit_score_component | Meaning |
+|-----------|------------------------|---------|
+| 9 | 100 | Prime borrower |
+| 7–8 | 75–87.5 | Reliable borrower |
+| 5–6 | 50–62.5 | Moderate credit risk |
+| 3–4 | 25–37.5 | High credit risk |
+| 1–2 | 0–12.5 | Very high credit risk |
+
+If `credit_score` is unavailable (network limitation — SOLANA, TRON), use default: `50`.
+
+### Component 3 — Experience Component (25% weight)
 
 Experienced borrowers have demonstrated ability to manage DeFi positions responsibly.
 
@@ -99,7 +123,7 @@ experience_component = experience.Value   # already 0–100
 
 If `experience.Value` is unavailable (network limitation), use default: `25`.
 
-### Component 3 — Behaviour Component (20% weight)
+### Component 4 — Behaviour Component (15% weight)
 
 Captures whether the wallet's on-chain behavior profile suggests responsible financial
 conduct — penalizes reckless risk-taking, rewards lending history.
@@ -214,13 +238,14 @@ the wallet passes hard rejection:
 1. **Receive** wallet address + network (+ optional: loan amount, base rate, policy mode)
 2. **Run** `predictive_fraud` — check for hard rejection conditions; extract `probabilityFraud`, `forensic_details`
 3. If rejected → return rejection verdict, stop
-4. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`, `intention`
-5. **Calculate** BRS from three components
-6. **Map** BRS to grade, collateral ratio, and interest rate tier
-7. **Apply** policy mode adjustments
-8. **Check** secondary risk flags
-9. **Calculate** recommended rate and LTV if inputs provided
-10. **Return** structured lending assessment
+4. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`, `intention` (skip if network not supported)
+5. **Run** `credit_score` — extract `riskRating` (skip if network not supported)
+6. **Calculate** BRS from four components
+7. **Map** BRS to grade, collateral ratio, and interest rate tier
+8. **Apply** policy mode adjustments
+9. **Check** secondary risk flags
+10. **Calculate** recommended rate and LTV if inputs provided
+11. **Return** structured lending assessment
 
 ---
 
@@ -245,9 +270,10 @@ the wallet passes hard rejection:
 
 | Component | Weight | Raw Value | Contribution |
 |-----------|--------|-----------|-------------|
-| Fraud Probability | 50% | [probabilityFraud] → [fraud_component] | [weighted score] |
-| Experience | 30% | [experience.Value] / 100 | [weighted score] |
-| Behaviour Profile | 20% | [behaviour_component] | [weighted score] |
+| Fraud Probability | 40% | [probabilityFraud] → [fraud_component] | [weighted score] |
+| Credit Score | 20% | riskRating [1–9] → [credit_score_component] | [weighted score] |
+| Experience | 25% | [experience.Value] / 100 | [weighted score] |
+| Behaviour Profile | 15% | [behaviour_component] | [weighted score] |
 | **Total BRS** | | | **[BRS] / 100** |
 
 ---
@@ -396,6 +422,7 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 ## Further Reading
 
 - Credit Score & DeFi Lending: https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/
+- Credit Scoring Agent Guide: https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/
 - DeFi Platform Use Cases: https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/
 - Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/
 - Prediction MCP Developer Guide: https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/

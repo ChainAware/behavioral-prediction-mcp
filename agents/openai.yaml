@@ -57,6 +57,22 @@ capabilities:
         type: string
         required: true
 
+  - id: credit_score
+    display_name: "Crypto Credit Score"
+    description: >
+      Calculates a crypto credit/trust score (1–9) for a wallet by combining fraud
+      probability with social graph analysis. Designed for DeFi lending protocols
+      that need a fast, single-number creditworthiness signal per wallet.
+      1 = highest credit risk, 9 = highest creditworthiness.
+    networks: [ETH, BNB, POLYGON, TON, BASE, HAQQ]
+    inputs:
+      - name: walletAddress
+        type: string
+        required: true
+      - name: network
+        type: string
+        required: true
+
   - id: token_rank_list
     display_name: "Token Rank List"
     description: >
@@ -204,7 +220,7 @@ subagents:
     display_name: "Lending Risk Assessor"
     description: "Borrower risk grade (A–F), recommended collateral ratio, and interest rate tier for DeFi lending."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud, predictive_behaviour]
+    tools: [predictive_fraud, predictive_behaviour, credit_score]
     file: .claude/agents/chainaware-lending-risk-assessor.md
 
   - id: chainaware-token-launch-auditor
@@ -304,6 +320,20 @@ subagents:
     model: claude-haiku-4-5-20251001
     tools: [predictive_fraud, predictive_behaviour]
     file: .claude/agents/chainaware-rwa-investor-screener.md
+
+  - id: chainaware-credit-scorer
+    display_name: "Credit Scorer"
+    description: "Returns a crypto credit score (1–9) for any wallet combining fraud probability and social graph analysis. Fast, single-number creditworthiness signal for lending and trust decisions."
+    model: claude-haiku-4-5-20251001
+    tools: [credit_score]
+    file: .claude/agents/chainaware-credit-scorer.md
+
+  - id: chainaware-clv-estimator
+    display_name: "CLV Estimator"
+    description: "Estimates 12-month customer lifetime value (CLV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_behaviour, predictive_fraud]
+    file: .claude/agents/chainaware-clv-estimator.md
 
 dependencies:
   tools:

@@ -9,7 +9,7 @@ metadata:
         - CHAINAWARE_API_KEY
     primaryEnv: CHAINAWARE_API_KEY
     env_usage:
-      CHAINAWARE_API_KEY: "Passed as the `apiKey` parameter in every tool call (predictive_fraud, predictive_behaviour, predictive_rug_pull).Never logged or included in output. Sourced exclusively from the CHAINAWARE_API_KEY environment variable — never hardcoded."
+      CHAINAWARE_API_KEY: "Passed as the `apiKey` parameter in every tool call (predictive_fraud, predictive_behaviour, predictive_rug_pull, credit_score). Never logged or included in output. Sourced exclusively from the CHAINAWARE_API_KEY environment variable — never hardcoded."
     data_handling:
       external_endpoints:
         - url: https://prediction.mcp.chainaware.ai/sse
@@ -50,13 +50,14 @@ metadata:
 
 The **ChainAware Behavioral Prediction MCP** connects any AI agent to a continuously updated
 Web3 behavioral intelligence layer: **14M+ wallet profiles** across **8 blockchains**, built from
-**1.3 billion+ predictive data points**. It delivers five capabilities via a single MCP endpoint:
+**1.3 billion+ predictive data points**. It delivers six capabilities via a single MCP endpoint:
 
 1. **Fraud Detection** — predict fraudulent wallet behavior before it happens (~98% accuracy on ETH)
 2. **Behavioral Analysis** — profile wallet intent, risk tolerance, experience, and next likely actions
 3. **Rug Pull Detection** — forecast whether a smart contract or liquidity pool will rug pull
-4. **Token Rank List** — rank tokens by holder community strength across chains and categories
-5. **Token Rank Single** — deep-dive into a single token's community quality and top holders
+4. **Credit Score** — crypto credit/trust score (1–9) combining fraud probability and social graph analysis
+5. **Token Rank List** — rank tokens by holder community strength across chains and categories
+6. **Token Rank Single** — deep-dive into a single token's community quality and top holders
 
 Unlike forensic blockchain tools that describe the past, this MCP is **predictive** — it tells your
 agent what is *about to happen*.
@@ -96,6 +97,7 @@ agent what is *about to happen*.
 | Fraud Detection | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | Behavioral Analysis | ETH, BNB, BASE, HAQQ, SOLANA |
 | Rug Pull Detection | ETH, BNB, BASE, HAQQ |
+| Credit Score | ETH, BNB, POLYGON, TON, BASE, HAQQ |
 | Token Rank List | ETH, BNB, BASE, SOLANA |
 | Token Rank Single | ETH, BNB, BASE, SOLANA |
 
@@ -234,7 +236,37 @@ Forecasts whether a smart contract or liquidity pool is likely to execute a rug 
 
 ---
 
-### 4. `token_rank_list` — Token Ranking by Holder Strength
+### 4. `credit_score` — Crypto Credit Score
+
+Calculates a credit/trust score (1–9) for a wallet by combining fraud probability with social graph analysis. Designed for DeFi lending and any use case needing a fast single-number creditworthiness signal.
+
+**Inputs:**
+- `apiKey` (string, required)
+- `network` (string, required) — `ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `HAQQ`
+- `walletAddress` (string, required) — the wallet to score
+
+**Key output fields:**
+- `creditData.riskRating` — integer 1–9 (1 = highest risk, 9 = highest trust)
+- `creditData.walletAddress` — echoed wallet address
+
+| riskRating | Label | Lending Interpretation |
+|-----------|-------|------------------------|
+| 9 | ✅ Prime | Highest creditworthiness — best terms |
+| 7–8 | 🟢 Reliable | Low credit risk — standard terms |
+| 5–6 | 🟡 Moderate | Elevated caution — higher collateral |
+| 3–4 | 🔴 High Risk | Restricted terms or decline |
+| 1–2 | ⛔ Very High Risk | Do not lend |
+
+**Example prompts that trigger this tool:**
+- *"What is the credit score for 0xABC...?"*
+- *"Is this wallet a reliable borrower?"*
+- *"Calculate credit score for this address on ETH."*
+- *"Rate this wallet's creditworthiness."*
+- *"Trust score for lending — 0xDEF... on BNB."*
+
+---
+
+### 5. `token_rank_list` — Token Ranking by Holder Strength
 
 Ranks tokens by the quality and strength of their holder community.
 
@@ -260,7 +292,7 @@ Ranks tokens by the quality and strength of their holder community.
 
 ---
 
-### 5. `token_rank_single` — Single Token Rank & Top Holders
+### 6. `token_rank_single` — Single Token Rank & Top Holders
 
 Returns the rank and top holders for a specific token by contract address.
 
@@ -480,6 +512,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-reputation-scorer` | Reputation score 0–4000 |
 | `chainaware-aml-scorer` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Simple composable trust score 0.00–1.00 |
+| `chainaware-credit-scorer` | Crypto credit score 1–9 for lending and creditworthiness decisions |
 | `chainaware-wallet-ranker` | Wallet experience rank and leaderboard |
 | `chainaware-whale-detector` | Whale tier classification for VIP treatment |
 | `chainaware-onboarding-router` | Route wallets to beginner / intermediate / skip onboarding |
@@ -490,6 +523,19 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-lending-risk-assessor` | Borrower risk grade (A–F), collateral ratio, interest rate tier |
 | `chainaware-token-launch-auditor` | Pre-listing launch safety audit — APPROVED / CONDITIONAL / REJECTED |
 | `chainaware-agent-screener` | AI agent trust score 0–10 via agent + feeder wallet fraud checks |
+| `chainaware-cohort-analyzer` | Segment a batch of wallets into behavioral cohorts with engagement strategies |
+| `chainaware-counterparty-screener` | Real-time pre-transaction go/no-go (Safe / Caution / Block) |
+| `chainaware-governance-screener` | DAO voter Sybil detection and voting weight calculation |
+| `chainaware-transaction-monitor` | Real-time transaction risk for autonomous agents — ALLOW / FLAG / HOLD / BLOCK |
+| `chainaware-lead-scorer` | Sales lead qualification — score, tier, conversion probability, outreach angle |
+| `chainaware-upsell-advisor` | Next product recommendation and upsell message for existing users |
+| `chainaware-platform-greeter` | Contextual welcome message per wallet per platform |
+| `chainaware-marketing-director` | Full-cycle campaign orchestrator — segments, leads, whales, per-cohort messages |
+| `chainaware-compliance-screener` | MiCA-aligned compliance report — PASS / EDD / REJECT (~70–75% MiCA coverage) |
+| `chainaware-gamefi-screener` | Web3 game / P2E bot detection, player tier classification, reward eligibility |
+| `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull scan, risk grade (A–F), rebalancing plan |
+| `chainaware-rwa-investor-screener` | RWA investor suitability — QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED |
+| `chainaware-clv-estimator` | 12-month revenue potential (CLV) as a USD range based on behavioral signals |
 
 ---
 
@@ -506,6 +552,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | Transaction Monitoring Guide | https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/ |
 | Web3 Behavioral Analytics Guide | https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/ |
 | Credit Score Guide | https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/ |
+| Credit Scoring Agent Guide | https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/ |
 | Prediction MCP Developer Guide | https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/ |
 | Top 5 Ways Prediction MCP Turbocharges DeFi | https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/ |
 | Why Personalization Is Next for AI Agents | https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/ |
