@@ -844,3 +844,7 @@ To request access:
 
 MIT (for client examples).
 Server implementation and backend logic are proprietary and remain private.
+
+## Resources and third party 
+
+[![chain-aware-behavioural-prediction-mcp-server MCP server](https://glama.ai/mcp/servers/ChainAware/chain-aware-behavioural-prediction-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/ChainAware/chain-aware-behavioural-prediction-mcp-server)
