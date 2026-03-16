@@ -1,6 +1,6 @@
 # ChainAware Subagent Index
 
-Machine-readable index of all 29 Claude Code subagents in `.claude/agents/`.
+Machine-readable index of all 31 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 
@@ -174,7 +174,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 ### chainaware-lending-risk-assessor
 **File:** `.claude/agents/chainaware-lending-risk-assessor.md`
 **Model:** claude-haiku-4-5-20251001
-**Tools:** `predictive_fraud`, `predictive_behaviour`
+**Tools:** `predictive_fraud`, `predictive_behaviour`, `credit_score` (ETH only)
 **Purpose:** Assesses borrower risk for DeFi lending protocols. Returns risk grade, collateral ratio, and interest rate tier.
 **Triggers:** "what collateral should I require from 0x...", "lending risk for this address", "what LTV for this wallet?", "assess this borrower", "should I lend to this wallet?"
 **Input:** wallet address + network. Optional: loan amount, asset type, platform risk policy
@@ -344,6 +344,29 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-credit-scorer
+**File:** `.claude/agents/chainaware-credit-scorer.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `credit_score`
+**Purpose:** Returns a crypto credit score (1–9) for any wallet combining fraud probability and social graph analysis. Fast, single-number creditworthiness signal for lending and trust decisions.
+**Triggers:** "what is the credit score for 0x...", "credit score for this wallet", "is this wallet a good borrower?", "creditworthiness of this address", "rate this wallet for credit", "calculate credit score"
+**Input:** wallet address + network (ETH only)
+**Output:** Credit score (1–9), tier label (Prime / Reliable / Moderate / High Risk / Very High Risk)
+
+---
+
+### chainaware-clv-estimator
+**File:** `.claude/agents/chainaware-clv-estimator.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Purpose:** Estimates 12-month customer lifetime value (CLV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability. Hard rejects fraudulent wallets ($0).
+**Formula:** `Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor` ±25%
+**Triggers:** "what is the CLV of 0x...", "revenue potential for this wallet", "12-month revenue estimate", "estimate lifetime value for this address", "rank these wallets by revenue potential", "prioritize wallets by CLV"
+**Input:** wallet address + network
+**Output:** USD revenue range (Low–High), CLV tier (Dormant / Low / Medium / High / Very High), score breakdown, key revenue drivers
+
+---
+
 ## Network Support Matrix
 
 | Tool | ETH | BNB | POLYGON | TON | BASE | TRON | HAQQ | SOLANA |
@@ -351,6 +374,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 | `predictive_fraud` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 | `predictive_behaviour` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ |
 | `predictive_rug_pull` | ✅ | ✅ | — | — | ✅ | — | ✅ | — |
+| `credit_score` | ✅ | — | — | — | — | — | — | — |
 | `token_rank_list` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
 | `token_rank_single` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
 
