@@ -64,7 +64,7 @@ capabilities:
       probability with social graph analysis. Designed for DeFi lending protocols
       that need a fast, single-number creditworthiness signal per wallet.
       1 = highest credit risk, 9 = highest creditworthiness.
-    networks: [ETH, BNB, POLYGON, TON, BASE, HAQQ]
+    networks: [ETH]
     inputs:
       - name: walletAddress
         type: string

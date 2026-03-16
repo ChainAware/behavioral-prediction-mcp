@@ -18,7 +18,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 | `predictive_fraud` | Fraud probability + AML forensics for a wallet | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | `predictive_behaviour` | Wallet segmentation, intent, experience, recommendations | ETH, BNB, BASE, HAQQ, SOLANA |
 | `predictive_rug_pull` | Smart contract rug pull risk scoring | ETH, BNB, BASE, HAQQ |
-| `credit_score` | Crypto credit/trust score (1–9) combining fraud + social graph analysis | ETH, BNB, POLYGON, TON, BASE, HAQQ |
+| `credit_score` | Crypto credit/trust score (1–9) combining fraud + social graph analysis | ETH |
 | `token_rank_list` | Ranked list of tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Token rank + top holders for a specific contract | ETH, BNB, BASE, SOLANA |
 

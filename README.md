@@ -422,7 +422,7 @@ AI-driven crypto credit/trust scoring for blockchain wallets. Combines fraud pro
 | Name            | Type   | Required | Description                                                               |
 | --------------- | ------ | -------- | ------------------------------------------------------------------------- |
 | `apiKey`        | string | ✅        | API key for authentication                                               |
-| `network`       | string | ✅        | Blockchain network (`ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `HAQQ`)      |
+| `network`       | string | ✅        | Blockchain network (`ETH`)                                               |
 | `walletAddress` | string | ✅        | The wallet address to score                                              |
 
 **Outputs (JSON):**

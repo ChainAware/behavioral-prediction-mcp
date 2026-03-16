@@ -13,7 +13,7 @@ Primary use case: DeFi lending protocols that need a fast, single-number creditw
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
 | `apiKey` | string | ✅ | API key for authentication (`CHAINAWARE_API_KEY` env var) |
-| `network` | string | ✅ | Blockchain network: `ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `HAQQ` |
+| `network` | string | ✅ | Blockchain network: `ETH` |
 | `walletAddress` | string | ✅ | The wallet address to score |
 
 ---
@@ -57,9 +57,9 @@ credit_component = ((riskRating - 1) / 8) × 100
 
 ## Supported Networks
 
-`ETH` · `BNB` · `POLYGON` · `TON` · `BASE` · `HAQQ`
+`ETH`
 
-Note: SOLANA and TRON are **not** supported. For those networks, fall back to `predictive_fraud` alone.
+Note: Only Ethereum is currently supported. For all other networks, fall back to `predictive_fraud` alone.
 
 ---
 
@@ -80,7 +80,7 @@ Note: SOLANA and TRON are **not** supported. For those networks, fall back to `p
 | Output | Continuous 0.00–1.00 probability + forensic details | Integer 1–9 rating |
 | Signal sources | On-chain behavior, AML flags | Fraud score + social graph |
 | AML forensics | ✅ Full forensic breakdown | ❌ Rating only |
-| Networks | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ | ETH, BNB, POLYGON, TON, BASE, HAQQ |
+| Networks | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ | ETH only |
 | Best for | Fraud detection, compliance screening | Lending/credit decisions |
 
 ---

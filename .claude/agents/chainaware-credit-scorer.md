@@ -35,7 +35,9 @@ Fast, simple, composable.
 
 ## Supported Networks
 
-`ETH` · `BNB` · `POLYGON` · `TON` · `BASE` · `HAQQ`
+`ETH`
+
+All other networks are not currently supported — see Edge Cases below.
 
 ---
 
@@ -77,15 +79,15 @@ Fast, simple, composable.
 | Wallet | Network | Credit Score | Label |
 |--------|---------|--------------|-------|
 | 0xABC... | ETH | 9 | ✅ Prime |
-| 0xDEF... | BNB | 3 | 🔴 High Risk |
-| 0xGHI... | BASE | 6 | 🟡 Moderate |
+| 0xDEF... | ETH | 3 | 🔴 High Risk |
+| 0xGHI... | ETH | 6 | 🟡 Moderate |
 ```
 
 ---
 
 ## Edge Cases
 
-- **Unsupported network (SOLANA, TRON)** — return `null`, note: *"credit_score not available for [network] — use chainaware-trust-scorer instead"*
+- **Unsupported network (anything other than ETH)** — return `null`, note: *"credit_score is currently only available on ETH — use chainaware-trust-scorer instead"*
 - **Missing `riskRating`** — return `null`, note: *"Score unavailable"*
 
 ---

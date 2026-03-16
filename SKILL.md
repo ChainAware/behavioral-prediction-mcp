@@ -97,7 +97,7 @@ agent what is *about to happen*.
 | Fraud Detection | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | Behavioral Analysis | ETH, BNB, BASE, HAQQ, SOLANA |
 | Rug Pull Detection | ETH, BNB, BASE, HAQQ |
-| Credit Score | ETH, BNB, POLYGON, TON, BASE, HAQQ |
+| Credit Score | ETH |
 | Token Rank List | ETH, BNB, BASE, SOLANA |
 | Token Rank Single | ETH, BNB, BASE, SOLANA |
 
@@ -242,7 +242,7 @@ Calculates a credit/trust score (1–9) for a wallet by combining fraud probabil
 
 **Inputs:**
 - `apiKey` (string, required)
-- `network` (string, required) — `ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `HAQQ`
+- `network` (string, required) — `ETH`
 - `walletAddress` (string, required) — the wallet to score
 
 **Key output fields:**

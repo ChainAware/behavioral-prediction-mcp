@@ -46,15 +46,14 @@ of the borrower — not a one-size-fits-all policy.
 
 `predictive_fraud`: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
-`credit_score`: ETH · BNB · POLYGON · TON · BASE · HAQQ
+`credit_score`: ETH only
 
-For networks only supported by `predictive_fraud` (TRON), run fraud
-assessment only — omit experience, risk appetite, and credit score components, apply
+For networks other than ETH, skip `credit_score` — use Credit Score Component default: `50`.
+Note the limitation in the output.
+
+For networks not supported by `predictive_behaviour` (POLYGON, TON, TRON), run fraud
+assessment only — omit experience, risk appetite, and behaviour components, apply
 conservative defaults, and note the limitation.
-
-For networks supported by `predictive_fraud` + `credit_score` but not `predictive_behaviour`
-(POLYGON, TON), run both fraud and credit score tools — omit behaviour components, apply
-conservative defaults for experience and behaviour.
 
 ---
 
