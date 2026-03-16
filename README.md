@@ -59,20 +59,55 @@ Use this when your user wants a risk assessment or early‑warning on a blockcha
 
 **Outputs (JSON):**
 
-```json
-{
-    "message": "string",              // Human‑readable status message
-    "walletAddress": "string",        // hex address 
-    "status": "Fraud",                // Fraudelent status (Fraud,Not Fraud,New Address)
-    "probabilityFraud": "0.00–1.00",  // Decimal probability
-    "token": "string",                //
-    "lastChecked": "ISO‑8601 timestamp",
-    "forensic_details": {             // Deep forensic breakdown
-    /* ...other metrics... */
+  ```json
+  {
+    "message": "string",                         // e.g. “Success” or error description
+    "walletAddress": "string",                   // blockchain wallet address that was analyzed
+    "chain": "string",                           // blockchain network identifier (e.g. ETH, BNB,POLYGON,TON,BASE, TRON, HAQQ)
+    "status": "string",                          // classification result (e.g. “Fraud” | “Not Fraud” | “New Address”)
+    "probabilityFraud": "0.00–1.00",             // decimal fraud probability score (string to preserve precision)
+    
+    "token": "string | null",                    // optional token associated with the check (may be null)
+    "lastChecked": "ISO-8601 timestamp",         // last time the wallet risk analysis was executed
+    
+    "forensic_details": {
+      "cybercrime": "string",                    // indicator score for cybercrime activity
+      "money_laundering": "string",              // indicator score for money laundering activity
+      "number_of_malicious_contracts_created": "string",  // number of malicious contracts deployed by this wallet
+      "gas_abuse": "string",                     // gas abuse indicator
+      "financial_crime": "string",               // financial crime indicator
+      "darkweb_transactions": "string",          // interaction with darkweb-linked wallets
+      "reinit": "string",                        // reinitialization exploit indicator
+      "phishing_activities": "string",           // phishing activity indicator
+      "fake_kyc": "string",                      // fake KYC related activity
+      "blacklist_doubt": "string",               // suspected blacklist association
+      "fake_standard_interface": "string",       // fake ERC interface indicator
+      "data_source": "string",                   // source of forensic intelligence (may be empty)
+      "stealing_attack": "string",               // stealing attack indicator
+      "blackmail_activities": "string",          // blackmail activity indicator
+      "sanctioned": "string",                    // sanction exposure indicator
+      "malicious_mining_activities": "string",   // malicious mining indicator
+      "mixer": "string",                         // interaction with mixing services
+      "fake_token": "string",                    // fake token creation or usage indicator
+      "honeypot_related_address": "string"       // interaction with honeypot-related addresses
     },
-    "createdAt": "ISO‑8601 timestamp", 
-    "updatedAt": "ISO‑8601 timestamp"
-}
+    "checked_times": 0,                          // integer — number of times this wallet has been analyzed
+    
+    "createdAt": "ISO-8601 timestamp",           // record creation timestamp
+    "updatedAt": "ISO-8601 timestamp",           // record last update timestamp
+
+    "sanctionData": [
+      {
+        "category": "string | null",              // sanction category (may be null)
+        "name": "string | null",                  // sanction list name
+        "description": "string | null",           // sanction description
+        "url": "string | null",                   // source URL for sanction information
+        "isSanctioned": false,                    // boolean — whether the wallet is officially sanctioned
+        "createdAt": "ISO-8601 timestamp",        // sanction record creation timestamp
+        "updatedAt": "ISO-8601 timestamp"         // sanction record last update timestamp
+      }
+    ]
+  }
 ```
 
 Error cases:
@@ -118,25 +153,118 @@ Error cases:
 
 ```json
 {
-    "message":           "string",                    // e.g. “Success” or error text  
-    "walletAddress":     "string",                    // echoed input  
-    "status":            "string",                    // Fraudelent status (Fraud,Not Fraud,New Address)  
-    "probabilityFraud":  "0.00–1.00",                 // decimal fraud score  
-    "lastChecked":       "ISO‑8601 timestamp",        // e.g. “2025‑01‑03T16:19:13.000Z”  
-    "forensic_details":  { /* dict of forensic metrics */ },  
-    "categories":        [ { "Category":"string", "Count":int }, … ],  
-    "riskProfile":       [ { "Category":"string", "Balance_age":float }, … ],  
-    "segmentInfo":       "JSON‑string of segment counts",  
-    "experience":        { "Type":"Experience", "Value":int },  
-    "intention":         {                              
-    "Type":"Intentions",  
-    "Value": { "Prob_Trade":"High", "Prob_Stake":"Medium", … }  
-    },  
-    "protocols":         [ { "Protocol":"string","Count":int }, … ],  
-    "recommendation":    { "Type":"Recommendation", "Value":[ "string", … ] },  
-    "createdAt":         "ISO‑8601 timestamp",  
-    "updatedAt":         "ISO‑8601 timestamp"  
-}
+      "message": "string",                           // e.g. “Success” or error description
+      "walletAddress": "string",                     // blockchain wallet address analyzed
+      "status": "string",                            // fraud classification result (e.g. “Fraud” | “Not Fraud” | “New Address”)
+
+      "probabilityFraud": "0.00–1.00",               // decimal probability score indicating fraud risk
+      "token": "string | null",                      // optional token context for the analysis
+      "chain": "string",                             // blockchain network identifier (e.g. ETH, BNB,BASE,HAQQ,SOLANA)
+
+      "lastChecked": "ISO-8601 timestamp",           // last time the wallet was analyzed
+
+      "forensic_details": {
+        "cybercrime": "string",                      // indicator of cybercrime association
+        "money_laundering": "string",                // money laundering activity indicator
+        "number_of_malicious_contracts_created": "string", // malicious contracts deployed by wallet
+        "gas_abuse": "string",                       // abnormal gas usage indicator
+        "financial_crime": "string",                 // financial crime activity indicator
+        "darkweb_transactions": "string",            // interaction with darkweb-linked wallets
+        "reinit": "string",                          // contract reinitialization exploit indicator
+        "phishing_activities": "string",             // phishing activity indicator
+        "fake_kyc": "string",                        // fake KYC interaction indicator
+        "blacklist_doubt": "string",                 // suspected blacklist association
+        "fake_standard_interface": "string",         // fake token interface indicator
+        "data_source": "string",                     // source of forensic intelligence
+        "stealing_attack": "string",                 // stealing attack indicator
+        "blackmail_activities": "string",            // blackmail activity indicator
+        "sanctioned": "string",                      // sanction exposure indicator
+        "malicious_mining_activities": "string",     // malicious mining activity indicator
+        "mixer": "string",                           // interaction with mixing services
+        "fake_token": "string",                      // fake token creation/use indicator
+        "honeypot_related_address": "string"         // honeypot contract interaction indicator
+      },
+
+      "categories": [
+        {
+          "Category": "string",                      // wallet interaction category (e.g. DeFi, NFT, Bridge)
+          "Count": 0                                 // number of transactions/interactions in this category
+        }
+      ],
+
+      "riskProfile": [
+        {
+          "Category": "Risk_Profile",                 // willingnes to take risk object
+          "Balance_age": 0.0                         // 1-10 willingnes to take risk value
+        }
+      ],
+
+      "segmentInfo": "string (JSON encoded)",        // serialized JSON containing protocol engagement flags (e.g "{\"Maker\":0,\"Aave_borrow\":0,\"Aave_lend\":1,\"Lido\":0,\"Uniswap\":1,\"Compound_lend\":0,\"Compound_borrow\":0}")
+
+      "experience": {
+        "Type": "string",                            // descriptor label (e.g. “Experience”)
+        "Value": 0                                   // numeric experience score level
+      },
+
+      "intention": {
+        "Type": "string",                            // descriptor label (e.g. “Intentions”)
+        "Value": {
+          "Prob_Lend": "Low | Medium | High",
+          "Prob_Trade": "Low | Medium | High",
+          "Prob_Game": "Low | Medium | High",
+          "Prob_NFT": "Low | Medium | High",
+          "Prob_Stake_ETH": "Low | Medium | High",
+          "Prob_Borrow": "Low | Medium | High",
+          "Prob_Gamble": "Low | Medium | High",
+          "Prob_Stake": "Low | Medium | High",
+          "Prob_Yield_Farm": "Low | Medium | High",
+          "Prob_Leveraged_Stake": "Low | Medium | High",
+          "Prob_Leveraged_Stake_ETH": "Low | Medium | High",
+          "Prob_Leveraged_Lend": "Low | Medium | High",
+          "Prob_Leverage_Long_ETH": "Low | Medium | High",
+          "Prob_Leverage_Long": "Low | Medium | High"
+        }
+      },
+
+      "protocols": [
+        {
+          "Protocol": "string",                      // protocol name (e.g. Uniswap, Curve, MakerDAO)
+          "Count": 0                                 // number of interactions with this protocol
+        }
+      ],
+
+      "userDetails": {
+        "wallet_age_days": 0,                        // age of wallet in days
+        "total_balance_usd": 0.0,                    // current wallet balance in USD
+        "transaction_count": 0,                      // total number of transactions executed
+        "wallet_rank": 0                             // ranking of wallet in the scoring system
+      },
+
+      "riskCapability": 0,                           // numeric risk capability score
+
+      "recommendation": {
+        "Type": "string",                            // descriptor label (e.g. “Recommendation”)
+        "Value": [
+          "string"                                   // recommended strategies or actions
+        ]
+      },
+
+      "checked_times": 0,                            // number of times the wallet analysis was executed
+      "createdAt": "ISO-8601 timestamp",             // record creation timestamp
+      "updatedAt": "ISO-8601 timestamp",             // record last update timestamp
+
+      "sanctionData": [
+        {
+          "category": "string | null",               // sanction category
+          "name": "string | null",                   // sanction list name
+          "description": "string | null",            // sanction description
+          "url": "string | null",                    // reference source URL
+          "isSanctioned": false,                     // whether the wallet is officially sanctioned
+          "createdAt": "ISO-8601 timestamp",
+          "updatedAt": "ISO-8601 timestamp"
+        }
+      ]
+    }
 ```
 
 Error cases:
@@ -171,15 +299,99 @@ This AI‑powered engine forecasts which liquidity pools or contracts are likely
 
 ```json
 {
-  "message": "Success",
-  "contractAddress": "0x1234...",
-  "status": "Fraud",
-  "probabilityFraud": 0.87,
-  "lastChecked": "2025-10-25T12:45:00Z",
-  "forensic_details": { /* dict of on‑chain metrics */ }, 
-  "createdAt": "2025-10-25T12:45:00Z",
-  "updatedAt": "2025-10-25T12:45:00Z"
-}
+      "message": "string",                         // e.g. “Success” or error description
+
+      "contractAddress": "string",                 // smart contract address analyzed
+      "pairAddress": "string",                     // liquidity pair address on DEX
+      "contractCreatorAddress": "string | null",   // creator address of the contract if known
+
+      "risk_score": 0,                             // numeric internal risk score
+      "risk_status": "string",                     // qualitative risk level (e.g. “Low Risk”, “Medium Risk”, “High Risk”)
+
+      "risk_indicators": {
+        "is_honeypot": 0,                          // honeypot detection flag
+        "honeypot_with_same_creator": 0,           // creator deployed previous honeypots
+        "can_take_back_ownership": 0,              // contract allows reclaiming ownership
+        "is_mintable": 0,                          // token supply can be minted
+        "hidden_owner": 0,                         // hidden ownership mechanism detected
+
+        "buy_tax": 0,                              // buy transaction tax percentage
+        "sell_tax": 0,                             // sell transaction tax percentage
+
+        "cannot_buy": 0,                           // trading restriction preventing buys
+        "cannot_sell_all": 0,                      // restriction preventing full sell
+
+        "is_blacklisted": 0,                       // blacklist functionality detected
+        "is_whitelisted": 0,                       // whitelist-only functionality detected
+
+        "creator_percent": 0,                      // percentage of supply owned by creator
+        "lp_holders_locked": false,                // liquidity lock status
+
+        "liquidity": 0.0,                          // liquidity amount in base token
+        "market_cap": 0,                           // estimated market capitalization
+
+        "is_in_dex": 0,                            // token listed on DEX
+
+        "slippage_modifiable": 0,                  // contract can modify slippage parameters
+        "transfer_pausable": 0,                    // transfers can be paused
+        "is_anti_whale": 0,                        // anti-whale protection mechanism
+        "anti_whale_modifiable": 0,                // anti-whale parameters modifiable
+
+        "trading_cooldown": 0,                     // cooldown period between trades
+        "personal_slippage_modifiable": 0,         // per-wallet slippage modification
+
+        "is_open_source": 0,                       // contract source verified
+        "is_proxy": 0,                             // proxy contract indicator
+
+        "owner_address": "string",                 // owner address of contract
+        "owner_change_balance": 0,                 // owner ability to modify balances
+
+        "selfdestruct": 0,                         // self-destruct capability
+        "external_call": 0,                        // external calls present
+        "gas_abuse": 0                             // abnormal gas manipulation behavior
+      },
+
+      "liquidityEvent": [
+        {
+          "eventType": "string",                   // liquidity event type (e.g. add/remove)
+          "amount": 0.0,                           // liquidity amount affected
+          "token": "string",                       // token symbol involved in liquidity
+
+          "tx_hash": "string",                     // transaction hash
+
+          "from_address": "string",                // address initiating liquidity action
+          "from_fraud_probability": "0.00–1.00",   // fraud probability score for sender
+          "from_fraud_status": "string",           // fraud classification of sender
+
+          "createdAt": "ISO-8601 timestamp"        // timestamp of liquidity event
+        }
+      ],
+
+      "status": "string",                          // overall fraud classification of contract
+      "probabilityFraud": "0.00–1.00",             // probability of contract being fraudulent
+
+      "chain": "string",                           // blockchain network identifier (e.g. BNB, ETH, BASE, HAQQ)
+      "lastChecked": "ISO-8601 timestamp",         // last time contract analysis was performed
+
+      "contractCreationTime": "ISO-8601 timestamp | null", // contract deployment timestamp
+
+      "forensic_details": {
+        "owner": "object",                         // owner metadata
+        "privilege_withdraw": 0,                   // privileged withdraw capability
+        "withdraw_missing": 0,                     // missing withdraw function
+        "is_open_source": 0,                       // contract source verification status
+        "blacklist": 0,                            // blacklist functionality
+        "contract_name": "string",                 // contract/token name
+        "selfdestruct": 0,                         // self-destruct capability
+        "is_proxy": 0,                             // proxy contract indicator
+        "approval_abuse": 0                        // abnormal token approval behavior
+      },
+
+      "checked_times": 0,                          // number of times contract has been analyzed
+
+      "createdAt": "ISO-8601 timestamp",           // record creation time
+      "updatedAt": "ISO-8601 timestamp"            // last update time
+    }
 ```
 
 Error cases:
