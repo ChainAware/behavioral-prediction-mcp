@@ -9,15 +9,16 @@
 - **GitHub:** https://github.com/ChainAware/behavioral-prediction-mcp
 - **Website:** https://chainaware.ai
 
-## MCP Tools (5)
+## MCP Tools (6)
 
 - `predictive_fraud` — Fraud probability (0–1) + AML forensic flags for a wallet. Networks: ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ.
 - `predictive_behaviour` — Wallet segmentation, intent, experience level, protocol history, personalized recommendations. Networks: ETH, BNB, BASE, HAQQ, SOLANA.
 - `predictive_rug_pull` — Smart contract and liquidity pool rug pull risk scoring. Networks: ETH, BNB, BASE, HAQQ.
+- `credit_score` — Crypto credit/trust score (1–9) combining fraud probability and social graph analysis. Networks: ETH only.
 - `token_rank_list` — Ranked list of tokens by holder community strength, with search, filter, sort, and pagination. Networks: ETH, BNB, BASE, SOLANA.
 - `token_rank_single` — Token community rank + top holders for a specific contract address. Networks: ETH, BNB, BASE, SOLANA.
 
-## Claude Code Subagents (29)
+## Claude Code Subagents (31)
 
 Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project after registering the MCP server.
 
@@ -50,6 +51,8 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-gamefi-screener` — Web3 game and P2E wallet screening: detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility and multiplier.
 - `chainaware-portfolio-risk-advisor` — Portfolio-level rug pull and community health assessment: scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan.
 - `chainaware-rwa-investor-screener` — RWA investor suitability screening: assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap.
+- `chainaware-credit-scorer` — Crypto credit score (1–9) for any ETH wallet combining fraud probability and social graph analysis. Fast single-number creditworthiness signal.
+- `chainaware-clv-estimator` — 12-month customer lifetime value (CLV) as a USD revenue range, derived from behavioral signals: experience, activity breadth, risk profile, intent, and fraud-based retention. Hard rejects fraudulent wallets ($0).
 
 ## Key Scoring Formulas
 
@@ -73,7 +76,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Key Files
 
-- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 29 subagents with triggers, tools, inputs, and outputs
+- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 31 subagents with triggers, tools, inputs, outputs, and network support matrix
 - [SKILL.md](./SKILL.md) — Full skill definition for Claude Code, Cursor, and OpenClaw ClawHub
 - [CLAUDE.md](./CLAUDE.md) — Project conventions, subagent table, scoring formulas, and blog references
 - [README.md](./README.md) — Full documentation, tool schemas, and integration guides
@@ -81,6 +84,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 - [references/tools-behaviour.md](./references/tools-behaviour.md) — `predictive_behaviour` full schema and intent signals
 - [references/tools-rug-pull.md](./references/tools-rug-pull.md) — `predictive_rug_pull` full schema
 - [references/tools-token-rank-list.md](./references/tools-token-rank-list.md) — `token_rank_list` full schema
+- [references/tools-credit-score.md](./references/tools-credit-score.md) — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - [references/tools-token-rank-single.md](./references/tools-token-rank-single.md) — `token_rank_single` full schema
 
 ## Further Reading
@@ -99,6 +103,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 - https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/
 - https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/
 - https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/
+- https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/
 
 ### Analytics & Strategy
 - https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/
