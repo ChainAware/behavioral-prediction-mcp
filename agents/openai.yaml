@@ -328,12 +328,12 @@ subagents:
     tools: [credit_score]
     file: .claude/agents/chainaware-credit-scorer.md
 
-  - id: chainaware-clv-estimator
-    display_name: "CLV Estimator"
-    description: "Estimates 12-month customer lifetime value (CLV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability."
+  - id: chainaware-ltv-estimator
+    display_name: "LTV Estimator"
+    description: "Estimates 12-month lifetime value (LTV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability."
     model: claude-haiku-4-5-20251001
     tools: [predictive_behaviour, predictive_fraud]
-    file: .claude/agents/chainaware-clv-estimator.md
+    file: .claude/agents/chainaware-ltv-estimator.md
 
 dependencies:
   tools:

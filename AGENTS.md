@@ -355,15 +355,15 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
-### chainaware-clv-estimator
-**File:** `.claude/agents/chainaware-clv-estimator.md`
+### chainaware-ltv-estimator
+**File:** `.claude/agents/chainaware-ltv-estimator.md`
 **Model:** claude-haiku-4-5-20251001
 **Tools:** `predictive_behaviour`, `predictive_fraud`
-**Purpose:** Estimates 12-month customer lifetime value (CLV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability. Hard rejects fraudulent wallets ($0).
+**Purpose:** Estimates 12-month lifetime value (LTV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability. Hard rejects fraudulent wallets ($0).
 **Formula:** `Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor` ±25%
-**Triggers:** "what is the CLV of 0x...", "revenue potential for this wallet", "12-month revenue estimate", "estimate lifetime value for this address", "rank these wallets by revenue potential", "prioritize wallets by CLV"
+**Triggers:** "what is the LTV of 0x...", "revenue potential for this wallet", "12-month revenue estimate", "estimate lifetime value for this address", "rank these wallets by revenue potential", "prioritize wallets by LTV"
 **Input:** wallet address + network
-**Output:** USD revenue range (Low–High), CLV tier (Dormant / Low / Medium / High / Very High), score breakdown, key revenue drivers
+**Output:** USD revenue range (Low–High), LTV tier (Dormant / Low / Medium / High / Very High), score breakdown, key revenue drivers
 
 ---
 

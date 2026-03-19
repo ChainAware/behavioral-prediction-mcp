@@ -52,7 +52,7 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-portfolio-risk-advisor` — Portfolio-level rug pull and community health assessment: scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan.
 - `chainaware-rwa-investor-screener` — RWA investor suitability screening: assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap.
 - `chainaware-credit-scorer` — Crypto credit score (1–9) for any ETH wallet combining fraud probability and social graph analysis. Fast single-number creditworthiness signal.
-- `chainaware-clv-estimator` — 12-month customer lifetime value (CLV) as a USD revenue range, derived from behavioral signals: experience, activity breadth, risk profile, intent, and fraud-based retention. Hard rejects fraudulent wallets ($0).
+- `chainaware-ltv-estimator` — 12-month lifetime value (LTV) as a USD revenue range, derived from behavioral signals: experience, activity breadth, risk profile, intent, and fraud-based retention. Hard rejects fraudulent wallets ($0).
 
 ## Key Scoring Formulas
 
