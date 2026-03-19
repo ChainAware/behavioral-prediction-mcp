@@ -42,6 +42,7 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-cohort-analyzer` — Segments a batch of wallets into behavioural cohorts with per-cohort engagement strategies.
 - `chainaware-counterparty-screener` — Real-time pre-transaction go/no-go verdict (Safe / Caution / Block).
 - `chainaware-governance-screener` — DAO voter screening: Sybil detection, governance tier, and voting weight multiplier.
+- `chainaware-sybil-detector` — Bulk Sybil attack detection for DAO governance votes: classifies each wallet as ELIGIBLE / REVIEW / EXCLUDE, detects coordinated fraud patterns across the voter set, and produces reputation-weighted vote multipliers.
 - `chainaware-transaction-monitor` — Real-time transaction risk scoring for autonomous agents — composite score (0–100) and pipeline action (ALLOW / FLAG / HOLD / BLOCK).
 - `chainaware-lead-scorer` — Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle.
 - `chainaware-upsell-advisor` — Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message.

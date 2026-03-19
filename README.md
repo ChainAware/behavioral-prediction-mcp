@@ -771,6 +771,7 @@ This repository includes **31 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-cohort-analyzer` | Segment a batch of wallets into behavioral cohorts with per-cohort engagement strategies |
 | `chainaware-counterparty-screener` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
 | `chainaware-governance-screener` | DAO voter screening — Sybil detection, governance tier, and voting weight multiplier (supports token-weighted, reputation-weighted, and quadratic models) |
+| `chainaware-sybil-detector` | Bulk Sybil attack detection for DAO votes — classifies voters as ELIGIBLE / REVIEW / EXCLUDE, detects coordinated fraud patterns (wallet farms, new-wallet surges), and produces reputation-weighted vote multipliers |
 | `chainaware-transaction-monitor` | Real-time transaction risk scoring for autonomous agents — composite score (0–100) and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 | `chainaware-lead-scorer` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
 | `chainaware-upsell-advisor` | Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message |

@@ -526,6 +526,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-cohort-analyzer` | Segment a batch of wallets into behavioral cohorts with engagement strategies |
 | `chainaware-counterparty-screener` | Real-time pre-transaction go/no-go (Safe / Caution / Block) |
 | `chainaware-governance-screener` | DAO voter Sybil detection and voting weight calculation |
+| `chainaware-sybil-detector` | Bulk Sybil attack detection for DAO votes — ELIGIBLE / REVIEW / EXCLUDE per wallet, pattern flags, and vote multipliers |
 | `chainaware-transaction-monitor` | Real-time transaction risk for autonomous agents — ALLOW / FLAG / HOLD / BLOCK |
 | `chainaware-lead-scorer` | Sales lead qualification — score, tier, conversion probability, outreach angle |
 | `chainaware-upsell-advisor` | Next product recommendation and upsell message for existing users |

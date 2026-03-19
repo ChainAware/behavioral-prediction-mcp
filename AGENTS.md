@@ -289,6 +289,17 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-sybil-detector
+**File:** `.claude/agents/chainaware-sybil-detector.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Purpose:** Bulk Sybil attack detection for DAO governance votes — screens a voter list for coordinated fraud, wallet farms, and low-quality participation. Classifies each wallet as ELIGIBLE / REVIEW / EXCLUDE, detects cross-wallet Sybil patterns (cluster, fraud concentration, new-wallet surge, uniform risk profile), and produces reputation-weighted vote multipliers.
+**Triggers:** "screen these wallets for governance", "are these voters legitimate?", "detect Sybil attackers in this vote", "rank these voters by quality", "which wallets should be excluded from this proposal?", "run Sybil detection on this voter list"
+**Input:** list of wallet addresses + network. Optional: minimum reputation threshold, custom fraud/experience thresholds, proposal context
+**Output:** ELIGIBLE / REVIEW / EXCLUDE classification per wallet, Sybil pattern flags, overall risk rating (LOW / MEDIUM / HIGH / CRITICAL), recommendation (PROCEED / PROCEED WITH CAUTION / HALT AND INVESTIGATE), reputation-weighted vote multipliers
+
+---
+
 ### chainaware-marketing-director
 **File:** `.claude/agents/chainaware-marketing-director.md`
 **Model:** claude-sonnet-4-6

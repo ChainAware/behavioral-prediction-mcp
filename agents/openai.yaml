@@ -258,6 +258,13 @@ subagents:
     tools: [predictive_behaviour, predictive_fraud]
     file: .claude/agents/chainaware-governance-screener.md
 
+  - id: chainaware-sybil-detector
+    display_name: "Sybil Detector"
+    description: "Bulk Sybil attack detection for DAO governance votes. Screens a voter list for coordinated fraud, wallet farms, and low-quality participation. Classifies each wallet as ELIGIBLE, REVIEW, or EXCLUDE, detects cross-wallet Sybil patterns, and produces reputation-weighted vote multipliers."
+    model: claude-haiku-4-5-20251001
+    tools: [predictive_behaviour, predictive_fraud]
+    file: .claude/agents/chainaware-sybil-detector.md
+
   - id: chainaware-platform-greeter
     display_name: "Platform Greeter"
     description: "Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea."
