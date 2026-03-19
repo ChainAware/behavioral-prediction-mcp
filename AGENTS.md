@@ -1,6 +1,6 @@
 # ChainAware Subagent Index
 
-Machine-readable index of all 31 Claude Code subagents in `.claude/agents/`.
+Machine-readable index of all 32 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 

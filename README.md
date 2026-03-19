@@ -745,7 +745,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **31 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **32 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|

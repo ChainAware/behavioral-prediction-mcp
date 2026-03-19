@@ -18,7 +18,7 @@
 - `token_rank_list` — Ranked list of tokens by holder community strength, with search, filter, sort, and pagination. Networks: ETH, BNB, BASE, SOLANA.
 - `token_rank_single` — Token community rank + top holders for a specific contract address. Networks: ETH, BNB, BASE, SOLANA.
 
-## Claude Code Subagents (31)
+## Claude Code Subagents (32)
 
 Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project after registering the MCP server.
 
@@ -77,7 +77,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Key Files
 
-- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 31 subagents with triggers, tools, inputs, outputs, and network support matrix
+- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 32 subagents with triggers, tools, inputs, outputs, and network support matrix
 - [SKILL.md](./SKILL.md) — Full skill definition for Claude Code, Cursor, and OpenClaw ClawHub
 - [CLAUDE.md](./CLAUDE.md) — Project conventions, subagent table, scoring formulas, and blog references
 - [README.md](./README.md) — Full documentation, tool schemas, and integration guides

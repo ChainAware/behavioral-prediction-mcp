@@ -49,7 +49,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-31 specialist subagents in `.claude/agents/`. Use the right one for the task:
+32 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
