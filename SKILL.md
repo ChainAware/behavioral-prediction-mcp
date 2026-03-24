@@ -69,6 +69,17 @@ agent what is *about to happen*.
 
 ---
 
+## Capabilities
+
+- **Fraud Detection** — predict fraudulent wallet behavior before it happens (~98% accuracy on ETH)
+- **Behavioral Analysis** — profile wallet intent, risk tolerance, experience, and next likely actions across DeFi, NFT, and trading segments
+- **Rug Pull Detection** — forecast whether a smart contract or liquidity pool will rug pull
+- **Credit Score** — crypto credit/trust score (1–9) combining fraud probability and social graph analysis for DeFi lending decisions
+- **Token Rank List** — rank tokens by holder community strength across ETH, BNB, BASE, and Solana
+- **Token Rank Single** — deep-dive into a specific token's community quality and top holders
+
+---
+
 ## When to Use This Skill
 
 - User asks about wallet safety, fraud risk, or suspicious activity
@@ -384,6 +395,15 @@ Recommendation:
   → Skip NFT-focused messaging
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
+
+---
+
+## Requirements
+
+- **API Key** — a `CHAINAWARE_API_KEY` environment variable is required. Obtain one at https://chainaware.ai/pricing
+- **MCP-compatible host** — Claude Code, Cursor, Claude Desktop, ChatGPT Connectors, or any MCP client that supports SSE transport
+- **Network awareness** — different tools support different blockchains; see the Supported Blockchains table above
+- **No local installation** — the MCP server runs remotely at `https://prediction.mcp.chainaware.ai/sse`; no packages to install
 
 ---
 
