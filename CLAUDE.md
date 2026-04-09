@@ -53,7 +53,7 @@ behavioral-prediction-mcp/
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
-| `chainaware-wallet-auditor` | Sonnet | All 3 prediction tools | Full due diligence, complex analysis |
+| `chainaware-wallet-auditor` | Sonnet | `predictive_behaviour` | Full due diligence, complex analysis |
 | `chainaware-fraud-detector` | Haiku | `predictive_fraud` | Fast fraud screening, batch checks |
 | `chainaware-rug-pull-detector` | Haiku | `predictive_rug_pull` + `predictive_fraud` | Contract/LP safety checks |
 | `chainaware-wallet-marketer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Personalized marketing messages |

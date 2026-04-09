@@ -18,11 +18,11 @@ export CHAINAWARE_API_KEY="your-key-here"
 ### chainaware-wallet-auditor
 **File:** `.claude/agents/chainaware-wallet-auditor.md`
 **Model:** claude-sonnet-4-6
-**Tools:** `predictive_fraud`, `predictive_behaviour`, `predictive_rug_pull`
-**Purpose:** Full due diligence. Combines fraud, behaviour, and rug pull analysis into a comprehensive wallet or contract report.
+**Tools:** `predictive_behaviour`
+**Purpose:** Full due diligence. Deep behavioural analysis of a wallet including fraud signals, intent, experience, and recommendations.
 **Triggers:** "full audit of 0x...", "due diligence on this wallet", "complete analysis", "deep dive on this address"
-**Input:** wallet or contract address + network
-**Output:** Fraud probability, behaviour profile, rug pull risk, reputation score, recommendations
+**Input:** wallet address + network
+**Output:** Behaviour profile, fraud signals, experience score, intent, recommendations
 
 ---
 

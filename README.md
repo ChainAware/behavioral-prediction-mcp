@@ -749,7 +749,7 @@ This repository includes **32 ready-to-use Claude Code subagents** in `.claude/a
 
 | Agent | Purpose |
 |-------|---------|
-| `chainaware-wallet-auditor` | Full due diligence — fraud + behavior + rug pull |
+| `chainaware-wallet-auditor` | Full due diligence — deep behavioural profiling including fraud signals |
 | `chainaware-fraud-detector` | Fast wallet fraud screening |
 | `chainaware-rug-pull-detector` | Smart contract / LP safety checks |
 | `chainaware-trust-scorer` | Trust score (0.00–1.00) |

@@ -95,7 +95,7 @@ agent what is *about to happen*.
 - User asks about general blockchain data (balances, transaction history) → use a block explorer
 - User wants real-time price data or market cap → use a market data API
 - User wants to analyze smart contract code for bugs → use a code auditing tool
-- For complex multi-tool analysis (fraud + behavior + rug pull combined) → escalate to `chainaware-wallet-auditor` subagent
+- For complex behavioural analysis (deep wallet profiling including fraud signals) → escalate to `chainaware-wallet-auditor` subagent
 - For batch screening of many wallets → use `chainaware-fraud-detector` subagent
 - For marketing personalization → use `chainaware-wallet-marketer` subagent
 
@@ -525,7 +525,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 
 | Subagent | Use When |
 |---|---|
-| `chainaware-wallet-auditor` | Full due diligence combining all prediction tools |
+| `chainaware-wallet-auditor` | Full due diligence — deep behavioural profiling including fraud signals |
 | `chainaware-fraud-detector` | Fast fraud screening, batch wallet checks |
 | `chainaware-rug-pull-detector` | Contract/LP safety with deployer analysis |
 | `chainaware-wallet-marketer` | Personalized marketing messages per wallet segment |

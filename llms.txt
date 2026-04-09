@@ -22,7 +22,7 @@
 
 Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project after registering the MCP server.
 
-- `chainaware-wallet-auditor` — Full due diligence combining fraud, behaviour, and rug pull analysis.
+- `chainaware-wallet-auditor` — Full due diligence: deep behavioural profiling including fraud signals, intent, and recommendations.
 - `chainaware-fraud-detector` — Fast wallet fraud screening. Returns status, probability, and forensic flags.
 - `chainaware-rug-pull-detector` — Smart contract and LP safety checks before depositing.
 - `chainaware-wallet-marketer` — Generates a personalised marketing message (≤20 words) per wallet.
