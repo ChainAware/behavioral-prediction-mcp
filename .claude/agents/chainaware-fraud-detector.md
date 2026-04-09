@@ -49,21 +49,65 @@ You do one thing and do it well: **is this wallet safe?**
 
 ---
 
+## Response Fields
+
+Key fields returned by `predictive_fraud`:
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `status` | string | `"Not Fraud"` · `"Fraud"` · `"New Address"` |
+| `probabilityFraud` | string | Parse as float, e.g. `"0.017933622"` → `0.018` |
+| `chain` | string | e.g. `"ETH"` |
+| `lastChecked` | ISO timestamp | Last time this wallet was scored |
+| `checked_times` | integer | How many times this wallet has been checked |
+| `createdAt` | ISO timestamp | First time this wallet was seen |
+| `sanctionData[].isSanctioned` | boolean | `true` = wallet is on a sanctions list |
+| `forensic_details` | object | 19 AML flags, each `"0"` (clean) or `"1"` (flagged) |
+
+### forensic_details Flags
+
+| Flag | Meaning |
+|------|---------|
+| `cybercrime` | Linked to cybercrime activity |
+| `money_laundering` | Money laundering patterns detected |
+| `number_of_malicious_contracts_created` | Created malicious smart contracts |
+| `gas_abuse` | Gas price manipulation or spam |
+| `financial_crime` | Financial crime indicators |
+| `darkweb_transactions` | Transactions linked to dark web |
+| `reinit` | Contract reinitialization attack |
+| `phishing_activities` | Phishing wallet or drainer |
+| `fake_kyc` | Associated with fake KYC schemes |
+| `blacklist_doubt` | Suspected blacklisted address |
+| `fake_standard_interface` | Fake ERC-20/721 interface |
+| `stealing_attack` | Theft or rug-pull style stealing |
+| `blackmail_activities` | Blackmail or extortion links |
+| `sanctioned` | Appears on a sanctions list |
+| `malicious_mining_activities` | Illicit mining operations |
+| `mixer` | Tornado Cash or mixer usage |
+| `fake_token` | Created or distributed fake tokens |
+| `honeypot_related_address` | Linked to honeypot contracts |
+| `data_source` | Source label for the forensic data |
+
+---
+
 ## Output Format
 
 ```
 ## Fraud Check: [address]
-**Network:** [network]
+**Chain:** [chain]
 **Status:** [Fraud / Not Fraud / New Address]
 **Risk Level:** 🟢 Low / 🟡 Medium / 🔴 High / ⛔ Critical
-**Fraud Probability:** [0.00–1.00]
-**Last Checked:** [timestamp]
+**Fraud Probability:** [parsed float, e.g. 0.018]
+**Sanctioned:** [Yes / No]
+**Last Checked:** [lastChecked timestamp]
+**Times Checked:** [checked_times]
 
 ### Verdict
 [One sentence: safe to proceed / proceed with caution / block this address]
 
 ### Key Signals
-- [1–2 notable findings from forensic_details if available]
+- [List any forensic_details flags set to "1"; if all zero, state "No AML flags detected"]
+- [Note if isSanctioned is true]
 
 ### Recommended Action
 [Specific next step based on risk level]
@@ -91,11 +135,11 @@ If the user provides multiple addresses, screen them in sequence and return a su
 ```
 ## Batch Fraud Screening Results
 
-| Address | Network | Status | Probability | Risk |
-|---------|---------|--------|-------------|------|
-| 0xABC.. | ETH | Not Fraud | 0.03 | 🟢 Low |
-| 0xDEF.. | BNB | Fraud | 0.94 | ⛔ Critical |
-| 0xGHI.. | ETH | New Address | — | 🟡 Medium |
+| Address | Chain | Status | Probability | Sanctioned | Risk |
+|---------|-------|--------|-------------|------------|------|
+| 0xABC.. | ETH | Not Fraud | 0.018 | No | 🟢 Low |
+| 0xDEF.. | BNB | Fraud | 0.94 | No | ⛔ Critical |
+| 0xGHI.. | ETH | New Address | — | No | 🟡 Medium |
 
 ### Summary
 - [X] addresses screened
