@@ -33,8 +33,8 @@ marketing automation tool, or growth dashboard.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience, categories, intent signals, risk profile, protocols
-**Secondary:** `predictive_fraud` — fraud probability, AML flags, bot detection (used as a fraud gate)
+**Primary:** `predictive_behaviour` — experience, categories, intent signals, risk profile, protocols, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -68,13 +68,13 @@ Evaluate in order — assign to the first cohort whose criteria are met.
 
 | Cohort | Criteria | Description |
 |--------|----------|-------------|
-| **Power DeFi User** | `experience ≥ 70` AND dominant categories include `DeFi Lender` or `Active Trader` AND `protocols count ≥ 5` | Experienced, multi-protocol DeFi participant |
-| **NFT Collector** | Dominant category is `NFT Collector` AND `experience ≥ 30` | Primarily NFT-focused wallet |
-| **Yield Farmer** | Dominant category is `Yield Farmer` OR (`Prob_Stake = High` AND `experience ≥ 50`) | Staking and yield-seeking behavior |
+| **Power DeFi User** | `experience ≥ 7` AND dominant categories include `DeFi Lender` or `Active Trader` AND `protocols count ≥ 5` | Experienced, multi-protocol DeFi participant |
+| **NFT Collector** | Dominant category is `NFT Collector` AND `experience ≥ 3` | Primarily NFT-focused wallet |
+| **Yield Farmer** | Dominant category is `Yield Farmer` OR (`Prob_Stake = High` AND `experience ≥ 5`) | Staking and yield-seeking behavior |
 | **Multi-Chain Explorer** | Dominant category is `Bridge User` OR `protocols` include multiple bridge protocols | Regularly moves assets across chains |
-| **Active Trader** | `Prob_Trade = High` AND `experience ≥ 40` AND NOT primarily NFT or DeFi Lender | Trading-focused, moderate-to-high activity |
-| **Casual User** | `experience` 20–49 AND none of the above dominant patterns | Occasional on-chain activity, limited protocol diversity |
-| **Dormant / Inactive** | `experience ≥ 20` AND all `intention.Value` probabilities = `Low` | Has history but shows no forward activity signals |
+| **Active Trader** | `Prob_Trade = High` AND `experience ≥ 4` AND NOT primarily NFT or DeFi Lender | Trading-focused, moderate-to-high activity |
+| **Casual User** | `experience` 2–4.9 AND none of the above dominant patterns | Occasional on-chain activity, limited protocol diversity |
+| **Dormant / Inactive** | `experience ≥ 2` AND all `intention.Value` probabilities = `Low` | Has history but shows no forward activity signals |
 | **New / Fresh Wallet** | `status == "New Address"` AND `probabilityFraud ≤ 0.40` | New wallet, no fraud signals — potential new user |
 | **Unclassified** | Does not meet any cohort criteria above, or network lacks behaviour data | Insufficient signals for cohort assignment |
 
@@ -118,9 +118,10 @@ After cohort assignment, apply a risk overlay for each wallet:
 1. **Receive** list of wallet addresses + network (+ optional: engagement goal, custom cohort labels)
 2. **Deduplicate** input — note count of any duplicates removed
 3. **For each wallet:**
-   a. Run `predictive_fraud` — apply Tier 0 exclusion rules
-   b. If not excluded, run `predictive_behaviour` — extract experience, categories, intentions, protocols, riskProfile
-   c. Assign primary cohort + risk overlay
+   a. Run `predictive_behaviour` — extract experience, categories, intentions, protocols, riskProfile, `probabilityFraud`, and `forensic_details` in a single call
+      (For POLYGON, TON, TRON networks, call `predictive_fraud` only — assign non-excluded wallets to `Unclassified`)
+   b. Apply Tier 0 exclusion rules using fraud fields from the response
+   c. If not excluded, assign primary cohort + risk overlay
 4. **Aggregate** results into cohort counts and percentages
 5. **Generate** per-cohort engagement strategies
 6. **Return** full cohort analytics report
@@ -142,14 +143,14 @@ After cohort assignment, apply a risk overlay for each wallet:
 
 | Cohort | Count | % of Analyzed | Avg Experience | Avg Fraud Prob | Dominant Risk |
 |--------|-------|---------------|----------------|----------------|---------------|
-| 💎 Power DeFi User | [N] | [%] | [avg]/100 | [avg] | 🟢 Low Risk |
-| 🖼️ NFT Collector | [N] | [%] | [avg]/100 | [avg] | 🟢 Low Risk |
-| 🌾 Yield Farmer | [N] | [%] | [avg]/100 | [avg] | 🟡 Moderate |
-| 🌉 Multi-Chain Explorer | [N] | [%] | [avg]/100 | [avg] | 🟢 Low Risk |
-| 📈 Active Trader | [N] | [%] | [avg]/100 | [avg] | 🟡 Moderate |
-| 👤 Casual User | [N] | [%] | [avg]/100 | [avg] | 🟡 Moderate |
-| 💤 Dormant / Inactive | [N] | [%] | [avg]/100 | [avg] | 🟢 Low Risk |
-| 🌱 New / Fresh Wallet | [N] | [%] | [avg]/100 | [avg] | 🟢 Low Risk |
+| 💎 Power DeFi User | [N] | [%] | [avg]/10 | [avg] | 🟢 Low Risk |
+| 🖼️ NFT Collector | [N] | [%] | [avg]/10 | [avg] | 🟢 Low Risk |
+| 🌾 Yield Farmer | [N] | [%] | [avg]/10 | [avg] | 🟡 Moderate |
+| 🌉 Multi-Chain Explorer | [N] | [%] | [avg]/10 | [avg] | 🟢 Low Risk |
+| 📈 Active Trader | [N] | [%] | [avg]/10 | [avg] | 🟡 Moderate |
+| 👤 Casual User | [N] | [%] | [avg]/10 | [avg] | 🟡 Moderate |
+| 💤 Dormant / Inactive | [N] | [%] | [avg]/10 | [avg] | 🟢 Low Risk |
+| 🌱 New / Fresh Wallet | [N] | [%] | [avg]/10 | [avg] | 🟢 Low Risk |
 | ❓ Unclassified | [N] | [%] | — | [avg] | — |
 | ❌ Excluded (Fraud/Bot/AML) | [N] | [%] | — | — | — |
 
@@ -159,9 +160,9 @@ After cohort assignment, apply a risk overlay for each wallet:
 
 | Wallet | Cohort | Experience | Dominant Category | Risk | Fraud Prob | Top Intentions |
 |--------|--------|------------|-------------------|------|------------|----------------|
-| 0xABC... | 💎 Power DeFi User | 88/100 | DeFi Lender | 🟢 Low | 0.02 | Trade=High, Stake=High |
-| 0xDEF... | 🖼️ NFT Collector | 54/100 | NFT Collector | 🟡 Moderate | 0.28 | NFT_Buy=High |
-| 0xGHI... | 🌱 New Wallet | 0/100 | — | 🟢 Low | 0.05 | — |
+| 0xABC... | 💎 Power DeFi User | 8.8/10 | DeFi Lender | 🟢 Low | 0.02 | Trade=High, Stake=High |
+| 0xDEF... | 🖼️ NFT Collector | 5.4/10 | NFT Collector | 🟡 Moderate | 0.28 | NFT_Buy=High |
+| 0xGHI... | 🌱 New Wallet | 0/10 | — | 🟢 Low | 0.05 | — |
 | 0xJKL... | ❌ Excluded | — | — | ❌ | 0.91 | — |
 
 ---
@@ -193,7 +194,7 @@ After cohort assignment, apply a risk overlay for each wallet:
 
 **Audience quality score:** [Eligible wallets ÷ Total analyzed × 100]%
 **Most common cohort:** [cohort name] ([N] wallets, [%])
-**Most experienced cohort avg:** [cohort name] (avg experience [value]/100)
+**Most experienced cohort avg:** [cohort name] (avg experience [value]/10)
 **Highest risk cohort:** [cohort name] (avg fraud probability [value])
 **Fraud / bot exclusion rate:** [N excluded ÷ N analyzed × 100]%
 

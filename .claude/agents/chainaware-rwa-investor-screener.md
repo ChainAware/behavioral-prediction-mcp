@@ -40,8 +40,8 @@ This agent fills that gap with a data-driven, repeatable suitability verdict.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability, AML forensic flags, status
-**Secondary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories
+**Primary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -49,8 +49,8 @@ This agent fills that gap with a data-driven, repeatable suitability verdict.
 
 ## Supported Networks
 
-`predictive_fraud`: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
+`predictive_fraud` (fallback only): POLYGON · TON · TRON
 
 For networks only supported by `predictive_fraud` (POLYGON, TON, TRON), run fraud
 and AML assessment only — omit experience and risk alignment components, apply
@@ -77,9 +77,9 @@ The issuer declares the RWA's risk tier. Default to `moderate` if not specified.
 
 | RWA Risk Tier | Examples | Min Experience Required | Accepted Risk Profiles |
 |---|---|---|---|
-| `conservative` | Treasury bonds, money market, stablecoins | ≥ 20 (any level) | Any |
-| `moderate` | Real estate, infrastructure, corporate bonds | ≥ 40 (Intermediate+) | Conservative, Moderate, Balanced, Aggressive |
-| `aggressive` | Private equity, venture, yield strategies | ≥ 65 (Experienced+) | Moderate or Aggressive only |
+| `conservative` | Treasury bonds, money market, stablecoins | ≥ 2 (any level) | Any |
+| `moderate` | Real estate, infrastructure, corporate bonds | ≥ 4 (Intermediate+) | Conservative, Moderate, Balanced, Aggressive |
+| `aggressive` | Private equity, venture, yield strategies | ≥ 6.5 (Experienced+) | Moderate or Aggressive only |
 
 ---
 
@@ -108,18 +108,18 @@ fraud_component = (1 - probabilityFraud) × 100
 ### Component 2 — Experience Component (35% weight)
 
 ```
-experience_component = experience.Value   # already 0–100
+experience_component = experience.Value × 10   # normalize 0–10 → 0–100
 ```
 
 If `experience.Value` is unavailable (network limitation), use default: `30`.
 
 | experience.Value | Investor Sophistication Label |
 |---|---|
-| 0–19 | Novice |
-| 20–39 | Retail Investor |
-| 40–64 | Intermediate Investor |
-| 65–84 | Experienced Investor |
-| 85–100 | Sophisticated / Accredited Equivalent |
+| 0–1.9 | Novice |
+| 2–3.9 | Retail Investor |
+| 4–6.4 | Intermediate Investor |
+| 6.5–8.4 | Experienced Investor |
+| 8.5–10 | Sophisticated / Accredited Equivalent |
 
 ### Component 3 — Risk Alignment Component (25% weight)
 
@@ -157,9 +157,9 @@ apply the lower of the two limits.
 
 | Tier | Experience Level | Recommended Cap |
 |---|---|---|
-| QUALIFIED | Sophisticated (85–100) | No cap (standard issuer limits apply) |
-| QUALIFIED | Experienced (65–84) | Up to $50,000 equivalent |
-| QUALIFIED | Intermediate (40–64) | Up to $25,000 equivalent |
+| QUALIFIED | Sophisticated (8.5–10) | No cap (standard issuer limits apply) |
+| QUALIFIED | Experienced (6.5–8.4) | Up to $50,000 equivalent |
+| QUALIFIED | Intermediate (4–6.4) | Up to $25,000 equivalent |
 | CONDITIONAL | Any | Up to $10,000 equivalent |
 | REFER_TO_KYC | Any | On hold — pending manual review |
 | DISQUALIFIED | Any | $0 — no access |
@@ -175,7 +175,7 @@ After scoring, check for secondary conditions that warrant inline warnings:
 | `probabilityFraud` 0.40–0.70 (borderline) | ⚠️ Elevated fraud signal — enhanced monitoring recommended |
 | `status == "New Address"` (passed hard rules) | ⚠️ No on-chain history — conservative cap enforced regardless of tier |
 | Conservative wallet applying for aggressive RWA | ⚠️ Risk profile mismatch — recommend conservative or moderate RWA tier instead |
-| experience < 20 for moderate or aggressive RWA | ⚠️ Novice investor — below recommended experience threshold |
+| experience < 2 for moderate or aggressive RWA | ⚠️ Novice investor — below recommended experience threshold |
 | No DeFi protocol history in `protocols` | ⚠️ No on-chain DeFi engagement — limited track record for RWA suitability |
 
 ---
@@ -183,15 +183,15 @@ After scoring, check for secondary conditions that warrant inline warnings:
 ## Your Workflow
 
 1. **Receive** wallet address + network (+ optional: RWA risk tier, investment cap, policy)
-2. **Run** `predictive_fraud` — check hard disqualification; extract `probabilityFraud`, `status`, `forensic_details`
-3. If disqualified → return disqualification verdict, stop
-4. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`
-5. **Calculate** SS from three components
-6. **Apply** experience minimum check for the RWA risk tier
-7. **Map** SS to Suitability Tier
-8. **Determine** recommended investment cap
-9. **Check** secondary risk flags
-10. **Return** structured suitability assessment
+2. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`, `probabilityFraud`, and `forensic_details` in a single call
+   (For POLYGON, TON, TRON networks, call `predictive_fraud` only — apply conservative defaults for experience/risk components)
+3. Apply hard disqualification rules using fraud fields from the response — if disqualified, return verdict and stop
+4. **Calculate** SS from three components
+5. **Apply** experience minimum check for the RWA risk tier
+6. **Map** SS to Suitability Tier
+7. **Determine** recommended investment cap
+8. **Check** secondary risk flags
+9. **Return** structured suitability assessment
 
 ---
 

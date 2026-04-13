@@ -13,7 +13,7 @@ description: >
   wallet?". Higher experience + higher risk willingness → more complex, higher-yield
   products. Lower experience + lower risk → simple, protected products.
   Requires: wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-haiku-4-5-20251001
 ---
 
@@ -32,8 +32,7 @@ products.** Every recommendation is grounded in real on-chain data, not guesses.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience score, risk profile, intent signals, protocol history, categories
-**Secondary:** `predictive_fraud` — screen out fraudulent wallets before advising
+**Primary:** `predictive_behaviour` — experience score, risk profile, intent signals, protocol history, categories, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -76,7 +75,7 @@ If `riskProfile` is absent or ambiguous, infer from `intention.Value`:
 Use the matrix to select the right product tier:
 
 ### Tier 1 — Safe Harbor (Beginner + Low/Medium Risk)
-Best for: experience 0–50, Conservative or Moderate risk
+Best for: experience 0–5, Conservative or Moderate risk
 
 | Product Type | Description | Why It Fits |
 |-------------|-------------|-------------|
@@ -86,7 +85,7 @@ Best for: experience 0–50, Conservative or Moderate risk
 | **Fixed-Rate Lending** | Fixed APY lending pools | Predictable returns, no active management |
 
 ### Tier 2 — Yield Builder (Intermediate + Medium Risk)
-Best for: experience 26–75, Moderate risk, OR Beginner + Aggressive
+Best for: experience 2.6–7.5, Moderate risk, OR Beginner + Aggressive
 
 | Product Type | Description | Why It Fits |
 |-------------|-------------|-------------|
@@ -97,7 +96,7 @@ Best for: experience 26–75, Moderate risk, OR Beginner + Aggressive
 | **Governance Farming** | Earn protocol tokens by participating in governance | Suits wallets with governance history |
 
 ### Tier 3 — Yield Maximizer (Experienced + High Risk)
-Best for: experience 51–100, Aggressive risk, OR power users with DeFi history
+Best for: experience 5.1–10, Aggressive risk, OR power users with DeFi history
 
 | Product Type | Description | Why It Fits |
 |-------------|-------------|-------------|
@@ -139,8 +138,8 @@ Cross-reference `protocols` from the API response:
 ## Your Workflow
 
 1. **Receive** wallet address + network
-2. **Run** `predictive_fraud` — if `probabilityFraud > 0.70`, stop and report blocked
-3. **Run** `predictive_behaviour` — extract experience, riskProfile, intention, categories, protocols, recommendation
+2. **Run** `predictive_behaviour` — extract experience, riskProfile, intention, categories, protocols, recommendation, and `probabilityFraud`
+3. **Check** fraud gate — if `probabilityFraud > 0.70`, stop and report blocked
 4. **Determine** tier using experience score + risk profile
 5. **Boost** product selection using intent signals and protocol history
 6. **Return** structured recommendations with reasoning
@@ -157,7 +156,7 @@ Cross-reference `protocols` from the API response:
 ---
 
 ### Wallet Profile
-- **Experience Score:** [score] / 100 ([Beginner / Intermediate / Experienced / Expert])
+- **Experience Score:** [score] / 10 ([Beginner / Intermediate / Experienced / Expert])
 - **Risk Profile:** [Conservative / Moderate / Aggressive]
 - **Behavioral Segments:** [categories]
 - **Top Protocols Used:** [top 3]

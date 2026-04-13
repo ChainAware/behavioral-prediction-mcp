@@ -34,8 +34,8 @@ exactly how to approach them.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience, intent, risk profile, categories, protocols
-**Secondary:** `predictive_fraud` — fraud gate (disqualifies bots, fraudsters, and AML-flagged wallets)
+**Primary:** `predictive_behaviour` — experience, intent, risk profile, categories, protocols, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -52,7 +52,7 @@ exactly how to approach them.
 
 ### Step 1 — Fraud Gate
 
-Call `predictive_fraud`. Disqualify immediately if:
+Call `predictive_behaviour`. Disqualify immediately if any of the following fraud signals are present in the response:
 
 | Condition | Outcome |
 |-----------|---------|
@@ -64,11 +64,11 @@ All other wallets proceed to Step 2.
 
 ### Step 2 — Behaviour Profile
 
-Call `predictive_behaviour` and extract:
+Extract from the `predictive_behaviour` response (already called in Step 1):
 
 | Signal | Field | Weight |
 |--------|-------|--------|
-| Experience | `experience.Value` (0–100) | 35 pts |
+| Experience | `experience.Value` (0–10) | 35 pts |
 | Intent strength | `intention.Value` (High/Medium/Low across Prob_Trade, Prob_Stake, Prob_Bridge, Prob_NFT_Buy) | 25 pts |
 | Activity breadth | `categories` count + `protocols` count | 20 pts |
 | Risk appetite | `riskProfile` category | 10 pts |
@@ -78,7 +78,7 @@ Call `predictive_behaviour` and extract:
 
 #### Experience Score (0–35 pts)
 ```
-experience.Value / 100 × 35
+experience.Value / 10 × 35
 ```
 
 #### Intent Score (0–25 pts)
@@ -186,7 +186,7 @@ If product context is provided, tailor the angle specifically to that product.
 
 | Component | Score | Max | Signal |
 |-----------|-------|-----|--------|
-| Experience | [x] | 35 | [experience.Value]/100 |
+| Experience | [x] | 35 | [experience.Value]/10 |
 | Intent | [x] | 25 | Trade=[H/M/L] Stake=[H/M/L] Bridge=[H/M/L] NFT=[H/M/L] |
 | Activity | [x] | 20 | [N] categories · [N] protocols |
 | Risk Appetite | [x] | 10 | [riskProfile] |

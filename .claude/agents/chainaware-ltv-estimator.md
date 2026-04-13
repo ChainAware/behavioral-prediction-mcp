@@ -32,8 +32,8 @@ single point estimate, then expressed as a ±25% range.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience, categories, risk profile, intention
-**Secondary:** `predictive_fraud` — fraud probability (retention factor + hard reject)
+**Primary:** `predictive_behaviour` — experience, categories, risk profile, intention, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -74,11 +74,11 @@ Experience is the primary proxy for a wallet's historical transaction activity l
 
 | experience.Value | Tier | Base Revenue |
 |-----------------|------|-------------|
-| 0–20 | Beginner | $500 |
-| 21–40 | Casual | $2,000 |
-| 41–60 | Intermediate | $8,000 |
-| 61–80 | Active | $25,000 |
-| 81–100 | Expert | $80,000 |
+| 0–2 | Beginner | $500 |
+| 2.1–4 | Casual | $2,000 |
+| 4.1–6 | Intermediate | $8,000 |
+| 6.1–8 | Active | $25,000 |
+| 8.1–10 | Expert | $80,000 |
 
 If `experience.Value` is unavailable (network limitation), use default: `$500` (conservative).
 
@@ -162,13 +162,13 @@ Round both to the nearest $100.
 ## Your Workflow
 
 1. **Receive** wallet address + network
-2. **Run** `predictive_fraud` — check hard reject conditions
-3. If rejected → return $0 verdict, stop
-4. **Run** `predictive_behaviour` — extract experience, categories, riskProfile, intention
-5. **Calculate** each component and LTV_12M point estimate
-6. **Apply** ±25% to get revenue range
-7. **Assign** LTV tier
-8. **Return** structured output
+2. **Run** `predictive_behaviour` — extract experience, categories, riskProfile, intention, and `probabilityFraud`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud` only — use conservative defaults for behaviour components)
+3. Check hard reject conditions using fraud fields from the response — if rejected, return $0 verdict and stop
+4. **Calculate** each component and LTV_12M point estimate
+5. **Apply** ±25% to get revenue range
+6. **Assign** LTV tier
+7. **Return** structured output
 
 ---
 

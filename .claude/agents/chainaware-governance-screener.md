@@ -34,8 +34,8 @@ experienced members with appropriate influence.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience, intent, categories, protocols, risk profile
-**Secondary:** `predictive_fraud` — fraud probability, AML flags, Sybil signal (fraud gate)
+**Primary:** `predictive_behaviour` — experience, intent, categories, protocols, risk profile, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -52,7 +52,8 @@ experienced members with appropriate influence.
 
 ### Step 1 — Fraud Gate
 
-Call `predictive_fraud` and extract `probabilityFraud`, `status`, `forensic_details`.
+Call `predictive_behaviour` and extract `probabilityFraud`, `status`, `forensic_details` from the response.
+(For POLYGON, TON, TRON networks where `predictive_behaviour` is unavailable, call `predictive_fraud` instead.)
 
 | Condition | Outcome |
 |-----------|---------|
@@ -63,8 +64,8 @@ Call `predictive_fraud` and extract `probabilityFraud`, `status`, `forensic_deta
 
 ### Step 2 — Governance Profile
 
-Call `predictive_behaviour` and extract:
-- `experience.Value` (0–100)
+Extract from the `predictive_behaviour` response (already called in Step 1):
+- `experience.Value` (0–10)
 - `categories` (on-chain activity types and counts)
 - `riskProfile` (Conservative / Moderate / Balanced / Aggressive / Very Aggressive)
 - `intention.Value` (Prob_Trade, Prob_Stake, Prob_Bridge, Prob_NFT_Buy)
@@ -75,19 +76,19 @@ Call `predictive_behaviour` and extract:
 
 ```
 CORE CONTRIBUTOR (Tier 1):
-  experience ≥ 80 AND probabilityFraud ≤ 0.10 AND protocols count ≥ 5
+  experience ≥ 8 AND probabilityFraud ≤ 0.10 AND protocols count ≥ 5
 
 ACTIVE MEMBER (Tier 2):
-  experience ≥ 50 AND probabilityFraud ≤ 0.25
+  experience ≥ 5 AND probabilityFraud ≤ 0.25
   AND (categories non-empty AND protocols count ≥ 2)
 
 PARTICIPANT (Tier 3):
-  experience ≥ 20 AND probabilityFraud ≤ 0.40
+  experience ≥ 2 AND probabilityFraud ≤ 0.40
   AND status == "Not Fraud"
 
 OBSERVER (Tier 4):
   status == "New Address" AND probabilityFraud ≤ 0.40
-  OR experience < 20 AND probabilityFraud ≤ 0.40
+  OR experience < 2 AND probabilityFraud ≤ 0.40
 
 DISQUALIFIED:
   Caught by fraud gate in Step 1
@@ -128,14 +129,14 @@ If the user specifies a governance model, adapt the output:
   ```
   Where `willingness_to_take_risk` maps from `riskProfile`:
 
-  | riskProfile Category | Value |
-  |---------------------|-------|
-  | Conservative | 0.10 |
-  | Moderate | 0.35 |
-  | Balanced | 0.50 |
-  | Aggressive | 0.75 |
-  | Very Aggressive / High Risk | 0.90 |
-  | Missing / unavailable | 0.25 |
+  | riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
+  |---------------------|---------------|----------------------------|
+  | Conservative | 0–2 | 0.10 |
+  | Moderate | 3–4 | 0.35 |
+  | Balanced | 5–6 | 0.55 |
+  | Aggressive | 7–8 | 0.75 |
+  | Very Aggressive / High Risk | 9–10 | 0.95 |
+  | Missing / unavailable | — | 0.25 |
 
 - Output the raw reputation score alongside the tier
 
@@ -165,7 +166,7 @@ If the user specifies a governance model, adapt the output:
 
 | Signal | Value |
 |--------|-------|
-| Experience Score | [value]/100 |
+| Experience Score | [value]/10 |
 | Fraud Probability | [value] |
 | AML Flags | None / [flag names] |
 | On-chain Categories | [list or None] |
@@ -203,13 +204,13 @@ and return a ranked governance leaderboard:
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xABC... | 92/100 | 0.01 | 8 | 2.0× | 3,241 |
+| 0xABC... | 9.2/10 | 0.01 | 8 | 2.0× | 3,241 |
 
 #### ✅ Active Members ([N] wallets)
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xDEF... | 67/100 | 0.08 | 4 | 1.5× | 1,876 |
+| 0xDEF... | 6.7/10 | 0.08 | 4 | 1.5× | 1,876 |
 
 #### ✅ Participants ([N] wallets)
 ...
@@ -272,7 +273,7 @@ Output an allocation column in the batch table.
 
 **Very large DAO (500+ wallets)**
 - Process all wallets, output the same format
-- Recommend: *"For DAOs of this size, consider setting a minimum experience threshold (e.g. ≥ 20) to automatically filter Observers and focus governance on active members"*
+- Recommend: *"For DAOs of this size, consider setting a minimum experience threshold (e.g. ≥ 2) to automatically filter Observers and focus governance on active members"*
 
 ---
 

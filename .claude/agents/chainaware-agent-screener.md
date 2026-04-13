@@ -97,20 +97,20 @@ reputation_score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) ×
 
 | Variable | Source | Extraction |
 |----------|--------|------------|
-| `experience` | `experience.Value` from `predictive_behaviour` | Divide by 100 → range 0.00–1.00 |
+| `experience` | `experience.Value` from `predictive_behaviour` | Divide by 10 → range 0.00–1.00 |
 | `willingness_to_take_risk` | `riskProfile[].Category` from `predictive_behaviour` | Map to numeric (see below) |
 | `fraud_probability` | `probabilityFraud` from `predictive_fraud` on agent wallet | Direct value 0.00–1.00 |
 
 ### Risk Category Mapping
 
-| riskProfile Category | Numeric Value |
-|---------------------|---------------|
-| `Conservative` | 0.10 |
-| `Moderate` | 0.35 |
-| `Balanced` | 0.50 |
-| `Aggressive` | 0.75 |
-| `Very Aggressive` / `High Risk` | 0.90 |
-| Missing / unavailable | 0.25 (default) |
+| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
+|---------------------|---------------|----------------------------|
+| `Conservative` | 0–2 | 0.10 |
+| `Moderate` | 3–4 | 0.35 |
+| `Balanced` | 5–6 | 0.55 |
+| `Aggressive` | 7–8 | 0.75 |
+| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
+| Missing / unavailable | — | 0.25 (default) |
 
 ### Normalization (0–4000 → 2.0–10.0)
 
@@ -184,7 +184,7 @@ These do not change the score but are included in the output for the caller to a
 ### Agent Wallet
 - **Fraud Probability:** [0.00–1.00]
 - **Status:** [Not Fraud / New Address / Fraud]
-- **Experience:** [score] / 100
+- **Experience:** [score] / 10
 - **Risk Profile:** [category]
 - **Behavioral Segments:** [categories, or "N/A"]
 - **Reputation Score:** [raw] / 4000

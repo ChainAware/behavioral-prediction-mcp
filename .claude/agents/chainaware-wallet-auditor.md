@@ -52,7 +52,7 @@ Profiles wallet history and predicts next on-chain actions. Includes fraud signa
 1. Run `predictive_behaviour` on the connected wallet
 2. Map `intention.Value` fields to product actions
 3. Use `recommendation.Value` strings directly as agent context
-4. Adjust UX based on `experience.Value` (0–100 scale)
+4. Adjust UX based on `experience.Value` (0–10 scale)
 
 ---
 
@@ -67,7 +67,7 @@ Always structure your analysis as:
 
 ### Behavioral Profile
 - Segments: [categories]
-- Experience: [score/100]
+- Experience: [score/10]
 - Next likely action: [top intention]
 - Protocols used: [list]
 - Fraud signals: [any flags from behavioural data]

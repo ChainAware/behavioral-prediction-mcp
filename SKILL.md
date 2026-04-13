@@ -211,7 +211,7 @@ Profiles a wallet's on-chain history and predicts its next actions.
 - `recommendation` — personalized action suggestions
 - `categories` — behavioral segments (DeFi Lender, NFT Trader, Bridge User, etc.)
 - `riskProfile` — risk tolerance and balance age breakdown
-- `experience` — experience score 0–100 (beginner → expert)
+- `experience` — experience score 0–10 (beginner → expert)
 - `protocols` — which protocols this wallet uses (Aave, Uniswap, GMX, etc.)
 
 **Example prompts that trigger this tool:**
@@ -377,7 +377,7 @@ interactions without additional verification.
 Wallet:  0xDEF...
 Network: BASE
 
-Experience:   72/100 — Experienced
+Experience:   7.2/10 — Experienced
 Segment:      DeFi Lender, Bridge User
 Risk Profile: Balanced
 

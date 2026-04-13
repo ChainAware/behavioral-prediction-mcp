@@ -34,8 +34,8 @@ their experience.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability, bot signals, AML forensic flags
-**Secondary:** `predictive_behaviour` — experience score, on-chain categories, risk profile, intent signals
+**Primary:** `predictive_behaviour` — experience score, on-chain categories, risk profile, intent signals, fraud probability, and bot signals
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -62,7 +62,7 @@ further for scoring.
 | 1 | `status == "Fraud"` | ❌ CONFIRMED_BOT | Confirmed fraudulent wallet — block immediately |
 | 2 | `probabilityFraud > 0.70` | ❌ FARM_WALLET | High-confidence bot farm or sybil attacker |
 | 3 | Any field in `forensic_details` flagged as negative | ❌ CHEATER | AML/manipulation signals — coordinated abuse patterns |
-| 4 | `status == "New Address"` AND `probabilityFraud > 0.40` AND `experience.Value == 0` | ❌ FARM_WALLET | Fresh address with fraud signals — classic bot farm pattern |
+| 4 | `status == "New Address"` AND `probabilityFraud > 0.40` AND `experience.Value == 0.0` | ❌ FARM_WALLET | Fresh address with fraud signals — classic bot farm pattern |
 
 ### Borderline (allow with restrictions)
 
@@ -70,7 +70,7 @@ further for scoring.
 |-----------|---------|--------|
 | `probabilityFraud` 0.40–0.70 | ⚠️ BOT_RISK | Allow with reduced P2E rewards; flag for manual review |
 | `status == "New Address"` AND `probabilityFraud ≤ 0.40` | ⚠️ NEW_PLAYER | Allow at Casual tier; no P2E rewards until activity history builds |
-| `status == "New Address"` AND `experience.Value > 30` | ⚠️ SUSPICIOUS_NEW | High experience on a new address — possible account transfer or bot; flag for review |
+| `status == "New Address"` AND `experience.Value > 3` | ⚠️ SUSPICIOUS_NEW | High experience on a new address — possible account transfer or bot; flag for review |
 
 ---
 
@@ -80,7 +80,7 @@ For wallets that pass disqualification, calculate a **Player Legitimacy Score** 
 a 0–100 scale. This combines wallet trustworthiness with on-chain experience depth.
 
 ```
-PLS = round( (1 - probabilityFraud) × 60 + (experience.Value / 100) × 40 )
+PLS = round( (1 - probabilityFraud) × 60 + (experience.Value / 10) × 40 )
 ```
 
 ### Component Breakdown
@@ -88,7 +88,7 @@ PLS = round( (1 - probabilityFraud) × 60 + (experience.Value / 100) × 40 )
 | Component | Weight | Source | Meaning |
 |-----------|--------|--------|---------|
 | Legitimacy | 60% | `1 - probabilityFraud` | How clean and non-bot the wallet is |
-| Experience Depth | 40% | `experience.Value / 100` | Proxy for how long and actively they've used Web3 |
+| Experience Depth | 40% | `experience.Value / 10` | Proxy for how long and actively they've used Web3 |
 
 ### PLS Thresholds
 
@@ -99,7 +99,7 @@ PLS = round( (1 - probabilityFraud) × 60 + (experience.Value / 100) × 40 )
 | 30–49 | 🟠 Low Legitimacy | CONDITIONAL — reduced P2E rewards (50%) |
 | 0–29 | 🔴 Very Low Legitimacy | CONDITIONAL — minimal rewards (25%) or manual review |
 
-If `experience.Value` is unavailable (network limitation), use default: `20`.
+If `experience.Value` is unavailable (network limitation), use default: `2.0`.
 
 ---
 
@@ -110,10 +110,10 @@ UX personalization. Source: `experience.Value` from `predictive_behaviour`.
 
 | experience.Value | Player Tier | Matchmaking Bracket | Onboarding |
 |-----------------|-------------|---------------------|------------|
-| 0–15 | 🔵 Casual | Beginner | Full onboarding recommended |
-| 16–45 | 🟢 Active | Standard | Light onboarding |
-| 46–75 | 🟡 Veteran | Advanced | Skip onboarding |
-| 76–100 | 🔴 Pro | Elite | Skip onboarding; eligible for competitive modes |
+| 0–1.5 | 🔵 Casual | Beginner | Full onboarding recommended |
+| 1.6–4.5 | 🟢 Active | Standard | Light onboarding |
+| 4.6–7.5 | 🟡 Veteran | Advanced | Skip onboarding |
+| 7.6–10 | 🔴 Pro | Elite | Skip onboarding; eligible for competitive modes |
 
 ---
 
@@ -155,15 +155,15 @@ operator provides a maximum reward cap, calculate the actual reward amount per t
 ## Your Workflow
 
 1. **Receive** wallet address + network (+ optional: game name, reward cap, min PLS threshold)
-2. **Run** `predictive_fraud` — apply disqualification rules 1–4; extract `probabilityFraud`, `forensic_details`, `status`
-3. If disqualified → return disqualification verdict and stop
-4. **Run** `predictive_behaviour` — extract `experience.Value`, `categories`, `riskProfile`, `intention`
-5. **Calculate** Player Legitimacy Score (PLS)
-6. **Map** experience to Player Experience Tier
-7. **Assess** gaming behavior signals from categories
-8. **Determine** P2E reward eligibility and multiplier
-9. **Check** borderline flags (BOT_RISK, NEW_PLAYER, SUSPICIOUS_NEW)
-10. **Return** structured screening report
+2. **Run** `predictive_behaviour` — extract `experience.Value`, `categories`, `riskProfile`, `intention`, `probabilityFraud`, and `forensic_details` in a single call
+   (For POLYGON, TON, TRON networks, call `predictive_fraud` only — mark Player Experience Tier as `N/A`)
+3. Apply disqualification rules 1–4 using fraud fields from the response — if disqualified, return verdict and stop
+4. **Calculate** Player Legitimacy Score (PLS)
+5. **Map** experience to Player Experience Tier
+6. **Assess** gaming behavior signals from categories
+7. **Determine** P2E reward eligibility and multiplier
+8. **Check** borderline flags (BOT_RISK, NEW_PLAYER, SUSPICIOUS_NEW)
+9. **Return** structured screening report
 
 ---
 
@@ -185,14 +185,14 @@ operator provides a maximum reward cap, calculate the actual reward amount per t
 | Component | Raw Value | Weight | Contribution |
 |-----------|-----------|--------|-------------|
 | Legitimacy (1 − fraud prob) | [value] | 60% | [score] |
-| Experience Depth | [experience.Value] / 100 | 40% | [score] |
+| Experience Depth | [experience.Value] / 10 | 40% | [score] |
 | **Total PLS** | | | **[PLS] / 100** |
 
 ---
 
 ### Player Experience Tier: [Casual / Active / Veteran / Pro]
 
-- **Experience Score:** [value] / 100
+- **Experience Score:** [value] / 10
 - **Matchmaking Bracket:** [Beginner / Standard / Advanced / Elite]
 - **Onboarding Recommendation:** [Full onboarding / Light onboarding / Skip onboarding]
 

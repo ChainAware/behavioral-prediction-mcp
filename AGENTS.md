@@ -101,7 +101,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 **Purpose:** Returns a wallet's global experience rank and leaderboard position.
 **Triggers:** "what is the rank of 0x...", "rank this wallet", "how good is this wallet?", "global rank", "wallet leaderboard"
 **Input:** wallet address + network
-**Output:** Experience score (0–100), global rank, experience tier, wallet age, transaction count
+**Output:** Experience score (0–10), global rank, experience tier, wallet age, transaction count
 
 ---
 

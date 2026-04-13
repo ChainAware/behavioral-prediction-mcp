@@ -8,7 +8,7 @@ description: >
   "high-value user", "whale detection", "whale tier", "find whales", "batch whale
   screening", "classify this wallet", "high-value wallet check".
   Requires: wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-haiku-4-5-20251001
 ---
 
@@ -21,12 +21,11 @@ whale tiers using behavioral and reputational signals from the ChainAware Predic
 
 - **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 - **API Key:** Use `CHAINAWARE_API_KEY` environment variable
-- **Tools:** `predictive_behaviour` (primary) + `predictive_fraud` (fraud gate)
+- **Tools:** `predictive_behaviour` — includes behavioral profile and fraud signals
 
 ## Supported Networks
 
-- `predictive_behaviour`: ETH, BNB, BASE, HAQQ, SOLANA
-- `predictive_fraud`: ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ
+ETH · BNB · BASE · HAQQ · SOLANA
 
 ---
 
@@ -34,7 +33,7 @@ whale tiers using behavioral and reputational signals from the ChainAware Predic
 
 ### Step 1 — Behaviour Profile
 Call `predictive_behaviour` to retrieve:
-- `experience.Value` (0–100)
+- `experience.Value` (0–10)
 - `totalPoints` (float — global scoring metric)
 - `walletAgeInDays` (integer — wallet age)
 - `transactionsNumber` (integer — total transactions)
@@ -43,7 +42,7 @@ Call `predictive_behaviour` to retrieve:
 - `protocols` (array — protocols used and counts)
 
 ### Step 2 — Fraud Gate
-Call `predictive_fraud` to retrieve `probabilityFraud`.
+Extract `probabilityFraud` from the `predictive_behaviour` response.
 - If `probabilityFraud > 0.30` → **disqualify** (wash trader, bot, or manipulator)
 - Proceed to tier classification only for clean wallets
 
@@ -51,20 +50,20 @@ Call `predictive_fraud` to retrieve `probabilityFraud`.
 
 ```
 MEGA WHALE (Tier 1):
-  experience ≥ 90 AND totalPoints ≥ 5,000 AND active categories ≥ 3
+  experience ≥ 9 AND totalPoints ≥ 5,000 AND active categories ≥ 3
 
 WHALE (Tier 2):
-  experience ≥ 75 AND totalPoints ≥ 2,000
-  OR (experience ≥ 70 AND active categories ≥ 3 AND protocols count ≥ 5)
+  experience ≥ 7.5 AND totalPoints ≥ 2,000
+  OR (experience ≥ 7 AND active categories ≥ 3 AND protocols count ≥ 5)
 
 EMERGING WHALE (Tier 3):
-  experience ≥ 50 AND totalPoints ≥ 500
-  OR (experience ≥ 60 AND Prob_Stake = High AND Prob_Trade = High)
+  experience ≥ 5 AND totalPoints ≥ 500
+  OR (experience ≥ 6 AND Prob_Stake = High AND Prob_Trade = High)
 
 NOT A WHALE:
-  experience < 50
+  experience < 5
   OR fraud_probability > 0.30
-  OR totalPoints < 500 AND experience < 60
+  OR totalPoints < 500 AND experience < 6
 ```
 
 ### Step 4 — Activity Status
@@ -107,7 +106,7 @@ Determine the whale's primary domain from categories:
 
 | Signal | Value |
 |--------|-------|
-| Experience Score | [value]/100 |
+| Experience Score | [value]/10 |
 | Total Points | [totalPoints] |
 | Wallet Age | [walletAgeInDays] days |
 | Transactions | [transactionsNumber] |

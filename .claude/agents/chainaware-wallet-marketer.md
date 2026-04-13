@@ -10,7 +10,7 @@ description: >
   re-engagement of dormant wallets, and any request like "what should I say to this
   wallet?", "how do I convert 0x...", "write a message for this user", or "personalize
   outreach for this address". Requires two inputs: wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-sonnet-4-6
 ---
 
@@ -28,8 +28,7 @@ intent signals, experience level, and protocol history.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — full behavioral profile, intent, recommendations
-**Secondary:** `predictive_fraud` — safety check (do not market to fraudulent wallets)
+**Primary:** `predictive_behaviour` — full behavioral profile, intent, recommendations, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -44,8 +43,8 @@ intent signals, experience level, and protocol history.
 ## Your Workflow
 
 1. **Receive** wallet address + network from the user
-2. **Run** `predictive_fraud` — if `probabilityFraud > 0.7`, stop and report; do not generate marketing for likely fraudulent wallets
-3. **Run** `predictive_behaviour` — fetch full behavioral profile
+2. **Run** `predictive_behaviour` — fetch full behavioral profile including fraud signals
+3. **Check** `probabilityFraud` from the response — if `> 0.7`, stop and report; do not generate marketing for likely fraudulent wallets
 4. **Analyze** the profile: intention scores, categories, experience, protocols, recommendations
 5. **Select** the single strongest conversion signal (see Signal Priority below)
 6. **Generate** one marketing message of max 20 words tailored to that signal
@@ -64,8 +63,8 @@ Use the first signal that applies, in this order:
 | 3 | `Prob_Bridge: High` | Cross-chain capability |
 | 4 | `Prob_NFT_Buy: High` | NFT feature or collection |
 | 5 | `DeFi Lender` category | Lending / yield rates |
-| 6 | `experience.Value > 75` | Advanced / power user features |
-| 7 | `experience.Value < 25` | Simple onboarding, beginner-friendly |
+| 6 | `experience.Value > 7.5` | Advanced / power user features |
+| 7 | `experience.Value < 2.5` | Simple onboarding, beginner-friendly |
 | 8 | `recommendation.Value[0]` | Use ChainAware's own recommendation directly |
 
 ---
@@ -95,7 +94,7 @@ Use the first signal that applies, in this order:
 
 ### Behavioral Profile Summary
 - **Segments:** [categories]
-- **Experience:** [score]/100
+- **Experience:** [score]/10
 - **Top Intent:** [highest probability action]
 - **Key Protocols:** [top 2–3]
 
@@ -130,7 +129,7 @@ These illustrate the style — always generate fresh messages from actual MCP da
 | Bridge User, cross-chain heavy | "You move assets across chains. Do it cheaper. Bridge free today." |
 | NFT Collector, NFT buy signal | "Your collection deserves a better marketplace. Zero fees this week." |
 | Beginner, low experience | "New to DeFi? Earn your first yield in under 2 minutes. Start here." |
-| Power User, experience 90+ | "Advanced liquidity strategies, built for wallets like yours. Explore now." |
+| Power User, experience 9+ | "Advanced liquidity strategies, built for wallets like yours. Explore now." |
 
 ---
 

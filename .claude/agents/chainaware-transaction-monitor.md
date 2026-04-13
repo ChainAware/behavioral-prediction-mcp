@@ -36,9 +36,9 @@ and low-latency. Avoid narrative prose — lead with the signal.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability and AML flags for sender and receiver
+**Primary:** `predictive_behaviour` — fraud probability, AML flags, and intent signals for sender and receiver in a single call per address
 **Secondary:** `predictive_rug_pull` — contract risk (only when a contract address is involved)
-**Tertiary:** `predictive_behaviour` — sender intent signals (only for ambiguous cases)
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -56,7 +56,8 @@ and low-latency. Avoid narrative prose — lead with the signal.
 
 ### Step 1 — Screen Sender (always run)
 
-Call `predictive_fraud` on the sender address.
+Call `predictive_behaviour` on the sender address (includes fraud probability, AML flags, and intent signals).
+For POLYGON, TON, TRON networks, call `predictive_fraud` instead.
 
 | Condition | Sender Risk |
 |-----------|-------------|
@@ -70,7 +71,8 @@ Call `predictive_fraud` on the sender address.
 
 ### Step 2 — Screen Receiver (always run)
 
-Call `predictive_fraud` on the receiver address. Apply the same risk mapping as Step 1.
+Call `predictive_behaviour` on the receiver address (same approach as Step 1). Apply the same risk mapping.
+For POLYGON, TON, TRON networks, call `predictive_fraud` instead.
 
 Skip if receiver is the same as sender (self-transfer) — note this in output.
 
@@ -89,12 +91,10 @@ Skip if network does not support `predictive_rug_pull` — note limitation.
 
 ### Step 4 — Sender Intent Check (ambiguous cases only)
 
-Call `predictive_behaviour` on the sender only when:
+Use `intention.Value` and `categories` already extracted from the `predictive_behaviour`
+response in Step 1 — no additional API call needed. Apply only when:
 - Sender risk is 🟠 ELEVATED or 🟡 MODERATE, AND
 - Action type is `approve`, `bridge`, or `liquidity` (higher-value action types)
-
-Extract `intention.Value` and `categories` to determine if the action is consistent
-with the sender's known behaviour pattern.
 
 | Condition | Adjustment |
 |-----------|------------|

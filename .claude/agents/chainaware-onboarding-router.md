@@ -12,7 +12,7 @@ description: >
   onboarding systems, progressive disclosure UX, welcome flows, or any product that
   needs to tailor its first-run experience per wallet.
   Requires: wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-haiku-4-5-20251001
 ---
 
@@ -31,8 +31,7 @@ and protocol history, and return a single routing decision:
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience score, categories, protocol history
-**Secondary:** `predictive_fraud` — block fraudulent wallets before onboarding
+**Primary:** `predictive_behaviour` — experience score, categories, protocol history, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -47,25 +46,24 @@ and protocol history, and return a single routing decision:
 ## Routing Logic
 
 ```
-1. Run predictive_fraud
-   IF probabilityFraud > 0.70  →  BLOCK (do not onboard)
+1. Run predictive_behaviour
+   Extract experience.Value (0–10) and probabilityFraud
 
-2. Run predictive_behaviour
-   Extract experience.Value (0–100)
+2. IF probabilityFraud > 0.70  →  BLOCK (do not onboard)
 
 3. Route:
-   experience  0–25   →  BEGINNER
-   experience 26–60   →  INTERMEDIATE
-   experience 61–100  →  SKIP ONBOARDING
+   experience  0–2.5   →  BEGINNER
+   experience 2.6–6    →  INTERMEDIATE
+   experience 6.1–10   →  SKIP ONBOARDING
 ```
 
 ### Routing Table
 
 | Experience Score | Route | Flow | Rationale |
 |-----------------|-------|------|-----------|
-| 0–25 | 🟢 Beginner Tutorial | Full guided walkthrough | New to DeFi — needs hand-holding |
-| 26–60 | 🟡 Intermediate Guide | Condensed tips, skip basics | Knows the fundamentals, needs feature orientation |
-| 61–100 | ⚡ Skip Onboarding | Straight to product | Power user — tutorials waste their time |
+| 0–2.5 | 🟢 Beginner Tutorial | Full guided walkthrough | New to DeFi — needs hand-holding |
+| 2.6–6 | 🟡 Intermediate Guide | Condensed tips, skip basics | Knows the fundamentals, needs feature orientation |
+| 6.1–10 | ⚡ Skip Onboarding | Straight to product | Power user — tutorials waste their time |
 
 ### Secondary Signals (refine the route)
 
@@ -83,8 +81,8 @@ These fields from `predictive_behaviour` can further customize the flow:
 ## Your Workflow
 
 1. **Receive** wallet address + network
-2. **Run** `predictive_fraud` — if `probabilityFraud > 0.70`, return BLOCK verdict
-3. **Run** `predictive_behaviour` — extract experience, categories, protocols, intention
+2. **Run** `predictive_behaviour` — extract experience, categories, protocols, intention, and `probabilityFraud`
+3. **Check** fraud gate — if `probabilityFraud > 0.70`, return BLOCK verdict
 4. **Apply** routing logic (experience score → route)
 5. **Refine** using secondary signals if platform context is provided
 6. **Return** structured routing decision
@@ -102,7 +100,7 @@ These fields from `predictive_behaviour` can further customize the flow:
 
 ### Routing Decision
 
-**Experience Score:** [score] / 100
+**Experience Score:** [score] / 10
 **Route: [🟢 Beginner Tutorial / 🟡 Intermediate Guide / ⚡ Skip Onboarding]**
 
 ---
@@ -151,9 +149,9 @@ For multiple wallets (e.g. a cohort of new signups):
 
 | Wallet | Network | Experience | Route | Key Signal |
 |--------|---------|------------|-------|------------|
-| 0xABC... | ETH | 12 | 🟢 Beginner | New to DeFi |
-| 0xDEF... | BNB | 45 | 🟡 Intermediate | Active trader, new to lending |
-| 0xGHI... | BASE | 88 | ⚡ Skip | Power user, uses Aave + Uniswap |
+| 0xABC... | ETH | 1.2 | 🟢 Beginner | New to DeFi |
+| 0xDEF... | BNB | 4.5 | 🟡 Intermediate | Active trader, new to lending |
+| 0xGHI... | BASE | 8.8 | ⚡ Skip | Power user, uses Aave + Uniswap |
 | 0xJKL... | ETH | — | ⛔ Blocked | Fraud probability 0.84 |
 
 ### Summary
@@ -187,9 +185,9 @@ Always note when you refine beyond the base experience score and explain why.
 - Default to **Beginner**
 - Note: *"Experience data unavailable — defaulting to full onboarding"*
 
-**Experience score exactly on a boundary (25 or 60)**
-- 25 → Beginner (inclusive)
-- 60 → Intermediate (inclusive)
+**Experience score exactly on a boundary (2.5 or 6)**
+- 2.5 → Beginner (inclusive)
+- 6 → Intermediate (inclusive)
 
 ---
 

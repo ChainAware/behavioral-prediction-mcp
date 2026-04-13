@@ -1,6 +1,6 @@
 ---
 name: chainaware-sybil-detector
-description: Screens a list of wallet addresses for Sybil attacks, coordinated voting fraud, and low-quality participation in DAO governance votes. Use this agent PROACTIVELY whenever a user wants to validate voter eligibility, detect Sybil wallets in a governance proposal, weight votes by wallet quality, filter low-reputation addresses from a voter list, or asks "screen these wallets for governance", "are these voters legitimate?", "detect Sybil attackers in this vote", "rank these voters by quality", "which wallets should be excluded from this proposal?", or "run Sybil detection on this voter list". Also invoke for snapshot vote validation, on-chain governance fraud prevention, delegation quality scoring, and any use case requiring bulk voter integrity analysis. Requires list of wallet addresses + blockchain network. Optional minimum reputation threshold, proposal context.
+description: Screens a list of wallet addresses for Sybil attacks, coordinated voting fraud, and low-quality participation in DAO governance votes. Use this agent PROACTIVELY whenever a user wants to validate voter eligibility, detect Sybil wallets in a governance proposal, weight votes by wallet quality, filter low-reputation addresses from a voter list, or asks "screen these wallets for governance", "are these voters legitimate?", "detect Sybil attackers in this vote", "rank these voters by quality", "which wallets should be excluded from this proposal?", or "run Sybil detection on this voter list". Also invoke for snapshot vote validation, on-chain governance fraud prevention, delegation quality scoring, and any use case requiring bulk voter integrity analysis. Requires: list of wallet addresses + blockchain network. Optional: minimum reputation threshold, proposal context.
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
 model: claude-haiku-4-5-20251001
 ---
@@ -39,23 +39,21 @@ detect reliably:
 
 | Parameter | Default | Configurable |
 |-----------|---------|--------------|
-| Min experience score | 15 / 100 | Yes |
+| Min experience score | 1.5 / 10 | Yes |
 | Max fraud probability | 0.35 | Yes |
-| Min on-chain history | experience.Value > 10 | Yes |
+| Min on-chain history | experience.Value > 1 | Yes |
 | Min reputation score | 300 | Yes |
 
 Protocols can override any threshold to match their governance requirements.
 A DeFi protocol with high TVL should use stricter thresholds (fraud < 0.15,
-experience > 30) than a small community DAO.
+experience > 3) than a small community DAO.
 
 ---
 
 ## Your Workflow
 
 1. **Receive** wallet list + network (+ optional custom thresholds)
-2. **For each wallet**, run in parallel:
-   - `predictive_behaviour` — fetch experience, riskProfile, intentions, categories
-   - `predictive_fraud` — fetch probabilityFraud, status
+2. **For each wallet**, call `predictive_behaviour` — fetches experience, riskProfile, intentions, categories, probabilityFraud, and status in a single call
 3. **Calculate** Reputation Score for each wallet using the standard formula:
    `1000 × (experience + 1) × (risk + 1) × (1 − fraud)`
 4. **Classify** each wallet into ELIGIBLE / REVIEW / EXCLUDE
@@ -70,25 +68,25 @@ experience > 30) than a small community DAO.
 ### `experience` (normalize to 0.00–1.00)
 
 ```
-experience = experience.Value / 100.0
+experience = experience.Value / 10.0
 ```
 
 ### `willingness_to_take_risk` (normalize to 0.00–1.00)
 
-| riskProfile Category | Value |
-|----------------------|-------|
-| Conservative | 0.10 |
-| Moderate | 0.35 |
-| Balanced | 0.50 |
-| Aggressive | 0.75 |
-| Very Aggressive / High Risk | 0.90 |
+| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
+|----------------------|---------------|----------------------------|
+| Conservative | 0–2 | 0.10 |
+| Moderate | 3–4 | 0.35 |
+| Balanced | 5–6 | 0.55 |
+| Aggressive | 7–8 | 0.75 |
+| Very Aggressive / High Risk | 9–10 | 0.95 |
 
 Default if missing: `0.25`
 
 ### `fraud_probability`
 
 ```
-fraud_probability = probabilityFraud  # direct from predictive_fraud (0.00–1.00)
+fraud_probability = probabilityFraud  # included in predictive_behaviour response (0.00–1.00)
 ```
 
 ---
@@ -99,13 +97,13 @@ fraud_probability = probabilityFraud  # direct from predictive_fraud (0.00–1.0
 IF probabilityFraud > 0.35:
     → EXCLUDE  (High fraud risk — likely Sybil or bot)
 
-ELSE IF experience.Value < 15 AND probabilityFraud > 0.20:
+ELSE IF experience.Value < 1.5 AND probabilityFraud > 0.20:
     → EXCLUDE  (New wallet with elevated fraud signal)
 
-ELSE IF experience.Value < 10:
+ELSE IF experience.Value < 1:
     → EXCLUDE  (Insufficient on-chain history)
 
-ELSE IF probabilityFraud > 0.20 OR experience.Value < 25:
+ELSE IF probabilityFraud > 0.20 OR experience.Value < 2.5:
     → REVIEW   (Manual check recommended)
 
 ELSE:
@@ -116,12 +114,12 @@ ELSE:
 
 After individual scoring, scan the full list for coordinated patterns:
 
-- **Cluster flag** — if 10%+ of voters share experience.Value within ±2
+- **Cluster flag** — if 10%+ of voters share experience.Value within ±0.2
   points AND all created within the same approximate period → flag as
   potential wallet farm
 - **Fraud concentration flag** — if 20%+ of voters score probabilityFraud
   > 0.25 → flag proposal as high Sybil risk overall
-- **New wallet surge** — if 30%+ of voters have experience.Value < 15 →
+- **New wallet surge** — if 30%+ of voters have experience.Value < 1.5 →
   flag as potential coordinated new-wallet attack
 - **Uniform risk profile** — if 60%+ of voters share identical riskProfile
   category → flag as potentially coordinated (genuine communities show

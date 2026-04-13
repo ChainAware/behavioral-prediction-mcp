@@ -32,8 +32,8 @@ contract or Merkle tree.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability, AML forensic flags, bot detection
-**Secondary:** `predictive_behaviour` — experience, risk profile, categories (for reputation scoring and quality signal)
+**Primary:** `predictive_behaviour` — experience, risk profile, categories, fraud probability, and AML forensic flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -84,20 +84,20 @@ Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) ×
 
 | Variable | Source | Extraction |
 |----------|--------|------------|
-| `experience` | `experience.Value` ÷ 100 | Normalize 0–100 → 0.00–1.00 |
+| `experience` | `experience.Value` ÷ 10 | Normalize 0–10 → 0.00–1.00 |
 | `willingness_to_take_risk` | `riskProfile[].Category` | Map category to numeric (see below) |
-| `fraud_probability` | `probabilityFraud` | Direct from `predictive_fraud` response |
+| `fraud_probability` | `probabilityFraud` | Included in `predictive_behaviour` response |
 
 ### Risk Category Mapping
 
-| riskProfile Category | Numeric Value |
-|---------------------|---------------|
-| `Conservative` | 0.10 |
-| `Moderate` | 0.35 |
-| `Balanced` | 0.50 |
-| `Aggressive` | 0.75 |
-| `Very Aggressive` / `High Risk` | 0.90 |
-| Missing / unavailable | 0.25 (default) |
+| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
+|---------------------|---------------|----------------------------|
+| `Conservative` | 0–2 | 0.10 |
+| `Moderate` | 3–4 | 0.35 |
+| `Balanced` | 5–6 | 0.55 |
+| `Aggressive` | 7–8 | 0.75 |
+| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
+| Missing / unavailable | — | 0.25 (default) |
 
 ### Score Tiers
 
@@ -131,9 +131,10 @@ If no budget is provided, output multipliers only and let the project apply them
 
 1. **Receive** list of wallet addresses + network (+ optional: fraud threshold, token budget)
 2. **For each wallet:**
-   a. Run `predictive_fraud` — apply disqualification rules
-   b. If not disqualified, run `predictive_behaviour` — extract experience, riskProfile, categories
-   c. Calculate reputation score
+   a. Run `predictive_behaviour` — extract experience, riskProfile, categories, `probabilityFraud`, and `forensic_details` in a single call
+      (For POLYGON, TON, TRON networks, call `predictive_fraud` only — skip reputation scoring)
+   b. Apply disqualification rules using fraud fields from the response
+   c. If not disqualified, calculate reputation score
    d. Assign tier and allocation multiplier
 3. **Sort** eligible wallets by reputation score (descending)
 4. **Calculate** token allocations if budget provided
@@ -156,11 +157,11 @@ If no budget is provided, output multipliers only and let the project apply them
 
 | Rank | Wallet | Reputation Score | Tier | Experience | Risk Profile | Fraud Prob | Multiplier | Allocation |
 |------|--------|-----------------|------|------------|--------------|------------|------------|------------|
-| 1 | 0xABC... | 3,241 | 🥇 Elite | 91/100 | Aggressive | 0.01 | 4× | [X tokens] |
-| 2 | 0xDEF... | 2,156 | 🥈 Power User | 74/100 | Balanced | 0.03 | 3× | [X tokens] |
-| 3 | 0xGHI... | 1,489 | 🥉 Active User | 55/100 | Moderate | 0.08 | 2× | [X tokens] |
-| 4 | 0xJKL... | 743 | ⬜ Regular | 38/100 | Conservative | 0.05 | 1× | [X tokens] |
-| 5 | 0xMNO... | 312 | 🔵 Low Score | 18/100 | Conservative | 0.12 | 0.5× | [X tokens] |
+| 1 | 0xABC... | 3,241 | 🥇 Elite | 9.1/10 | Aggressive | 0.01 | 4× | [X tokens] |
+| 2 | 0xDEF... | 2,156 | 🥈 Power User | 7.4/10 | Balanced | 0.03 | 3× | [X tokens] |
+| 3 | 0xGHI... | 1,489 | 🥉 Active User | 5.5/10 | Moderate | 0.08 | 2× | [X tokens] |
+| 4 | 0xJKL... | 743 | ⬜ Regular | 3.8/10 | Conservative | 0.05 | 1× | [X tokens] |
+| 5 | 0xMNO... | 312 | 🔵 Low Score | 1.8/10 | Conservative | 0.12 | 0.5× | [X tokens] |
 
 ---
 

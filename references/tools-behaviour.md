@@ -46,7 +46,7 @@ about each wallet they interact with, instead of serving generic responses.
     { "Category": "Conservative", "Balance_age": 1.8 }
   ],
   "segmentInfo": "JSON-string of segment counts",
-  "experience": { "Type": "Experience", "Value": 87 },
+  "experience": { "Type": "Experience", "Value": 8 },
   "intention": {
     "Type": "Intentions",
     "Value": {
@@ -103,14 +103,14 @@ Probability of the wallet's next on-chain action within the near term:
 
 ### `experience` — Expertise Score
 
-Integer 0–100 representing on-chain maturity:
+Integer 0–10 representing on-chain maturity:
 
-| Range   | Interpretation             |
+| Range  | Interpretation             |
 |--------|----------------------------|
-| 0–25    | Beginner — new to DeFi     |
-| 26–50   | Intermediate               |
-| 51–75   | Experienced                |
-| 76–100  | Expert / Power User        |
+| 0–2    | Beginner — new to DeFi     |
+| 3–5    | Intermediate               |
+| 6–7    | Experienced                |
+| 8–10   | Expert / Power User        |
 
 ### `recommendation` — Personalized Action Suggestions
 
@@ -151,7 +151,7 @@ if (intention.Value.Prob_Stake === "High") {
   agent.suggest("staking opportunities");
 }
 
-if (experience.Value > 75) {
+if (experience.Value > 7) {
   agent.skipOnboarding();
 } else {
   agent.showBeginnersGuide();

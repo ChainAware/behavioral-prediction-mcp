@@ -38,8 +38,8 @@ Keep messages short and direct. This is in-app copy, not an email.
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience, intent signals, categories, protocols, risk profile
-**Secondary:** `predictive_fraud` — fraud gate (never personalise for bots or fraudsters)
+**Primary:** `predictive_behaviour` — experience, intent signals, categories, protocols, risk profile, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -74,21 +74,22 @@ are most relevant for the message.
 
 ## Screening Workflow
 
-### Step 1 — Fraud Gate
+### Step 1 — Fraud Gate & Behaviour Profile
 
-Call `predictive_fraud`.
+Call `predictive_behaviour` and extract all signals, including fraud fields:
 
 - `status == "Fraud"` OR `probabilityFraud > 0.70` OR any AML flag → return **NO MESSAGE**
   Note: *"Wallet flagged — show generic platform landing page, do not personalise."*
 - `status == "New Address"` AND `probabilityFraud > 0.40` → return **NO MESSAGE**
-- `status == "New Address"` AND `probabilityFraud ≤ 0.40` → proceed but flag as new wallet (use new-user message template)
+- `status == "New Address"` AND `probabilityFraud ≤ 0.40` → flag as new wallet (use new-user message template)
+- For POLYGON, TON, TRON networks where `predictive_behaviour` is unavailable, call `predictive_fraud` only
 - All others → proceed to Step 2
 
-### Step 2 — Behaviour Profile
+### Step 2 — Platform Relevance & Message
 
-Call `predictive_behaviour` and extract:
+Use the `predictive_behaviour` response from Step 1 to extract:
 
-- `experience.Value` (0–100)
+- `experience.Value` (0–10)
 - `intention.Value` — Prob_Trade, Prob_Stake, Prob_Bridge, Prob_NFT_Buy (High / Medium / Low)
 - `categories` — on-chain activity types and counts
 - `protocols` — protocols used, counts
@@ -186,7 +187,7 @@ Example — Power user hitting 1inch:
 **Intent match:** [Strong / Partial / Weak] — [dominant signal]
 **Hook used:** [what specific wallet signal the hook references]
 **Feature angle:** [which platform feature was chosen and why]
-**Experience calibration:** [experience.Value]/100 — [Beginner / Intermediate / Advanced / Power User]
+**Experience calibration:** [experience.Value]/10 — [Beginner / Intermediate / Advanced / Power User]
 
 ---
 
@@ -194,7 +195,7 @@ Example — Power user hitting 1inch:
 
 | Signal | Value |
 |--------|-------|
-| Experience | [value]/100 |
+| Experience | [value]/10 |
 | Dominant intent | [signal = H/M/L] |
 | Risk profile | [profile] |
 | Relevant categories | [list] |
@@ -225,9 +226,9 @@ a feature or campaign:
 
 | Wallet | Experience | Framing | Intent Match | Message |
 |--------|------------|---------|--------------|---------|
-| 0xABC... | 84/100 | Returning | Strong | "Your WBTC position is live — lending rates up 0.6% this week. Rebalance now." |
-| 0xDEF... | 43/100 | First visit | Partial | "You trade — here you can also earn on idle assets between swaps." |
-| 0xGHI... | 12/100 | First visit | Weak | "New here? Deposit any token and earn interest automatically. No minimums." |
+| 0xABC... | 8.4/10 | Returning | Strong | "Your WBTC position is live — lending rates up 0.6% this week. Rebalance now." |
+| 0xDEF... | 4.3/10 | First visit | Partial | "You trade — here you can also earn on idle assets between swaps." |
+| 0xGHI... | 1.2/10 | First visit | Weak | "New here? Deposit any token and earn interest automatically. No minimums." |
 | 0xJKL... | — | Excluded | — | Fraud gate — show generic page |
 
 **Summary:** [N] personalised · [N] excluded
@@ -253,7 +254,7 @@ a feature or campaign:
 - If truly unknown: use dominant intent signal as the platform angle
 - Note: *"Platform type inferred from name — provide platform type directly for more accurate message"*
 
-**Wallet experience very low (≤ 15) on a complex platform**
+**Wallet experience very low (≤ 1.5) on a complex platform**
 - Override intent match — always use "first visit / weak match" template regardless of intent signals
 - Simplify vocabulary: no protocol-specific jargon
 - CTA must be the lowest-friction action available on the platform

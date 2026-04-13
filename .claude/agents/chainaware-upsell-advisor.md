@@ -17,7 +17,7 @@ description: >
   Requires: wallet address + blockchain network + current product/tier.
   Optional: product catalogue (list of available next tiers), upsell goal
   (revenue / engagement / retention).
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-haiku-4-5-20251001
 ---
 
@@ -35,8 +35,7 @@ and the right product to move users one step up — not to overwhelm them with o
 
 ## MCP Tools
 
-**Primary:** `predictive_behaviour` — experience trajectory, intent signals, risk profile, protocol usage
-**Secondary:** `predictive_fraud` — fraud gate (never upsell to bots, fraudsters, or AML-flagged wallets)
+**Primary:** `predictive_behaviour` — experience trajectory, intent signals, risk profile, protocol usage, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -86,15 +85,15 @@ Level 4 — Power User
 
 ### Step 1 — Fraud Gate
 
-Call `predictive_fraud`. If `status == "Fraud"`, `probabilityFraud > 0.70`, or any
+Call `predictive_behaviour`. If `status == "Fraud"`, `probabilityFraud > 0.70`, or any
 AML forensic flag is present → return **NO UPSELL** immediately.
 Note: *"Wallet flagged — remove from upsell campaigns."*
 
 ### Step 2 — Behaviour Profile
 
-Call `predictive_behaviour` and extract:
+Extract from the `predictive_behaviour` response:
 
-- `experience.Value` (0–100) — overall on-chain maturity
+- `experience.Value` (0–10) — overall on-chain maturity
 - `intention.Value` — Prob_Trade, Prob_Stake, Prob_Bridge, Prob_NFT_Buy (High / Medium / Low)
 - `riskProfile` — Conservative / Moderate / Balanced / Aggressive / Very Aggressive
 - `categories` — active on-chain category labels and counts

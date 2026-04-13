@@ -34,9 +34,9 @@ of the borrower — not a one-size-fits-all policy.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability, AML forensic flags
-**Secondary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories
-**Tertiary:** `credit_score` — crypto credit/trust rating (1–9) combining fraud + social graph analysis
+**Primary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories, fraud probability, and AML flags
+**Secondary:** `credit_score` — crypto credit/trust rating (1–9) combining fraud + social graph analysis
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -117,7 +117,7 @@ If `credit_score` is unavailable (network limitation — SOLANA, TRON), use defa
 Experienced borrowers have demonstrated ability to manage DeFi positions responsibly.
 
 ```
-experience_component = experience.Value   # already 0–100
+experience_component = experience.Value × 10   # normalize 0–10 → 0–100
 ```
 
 If `experience.Value` is unavailable (network limitation), use default: `25`.
@@ -225,7 +225,7 @@ the wallet passes hard rejection:
 |-----------|------|
 | `probabilityFraud` 0.40–0.70 (borderline) | ⚠️ Elevated fraud signal — monitor position closely |
 | `status == "New Address"` (passed soft) | ⚠️ No on-chain history — apply conservative policy regardless of grade |
-| `Aggressive` riskProfile + experience < 40 | ⚠️ Inexperienced high-risk taker — increased liquidation risk |
+| `Aggressive` riskProfile + experience < 4 | ⚠️ Inexperienced high-risk taker — increased liquidation risk |
 | `Prob_Trade: High` + `Aggressive` riskProfile | ⚠️ Active trader profile — volatile collateral management likely |
 | No protocol history | ⚠️ No DeFi protocol usage detected — first-time borrower behavior unknown |
 | `walletAgeInDays` < 30 (if available) | ⚠️ Very new wallet — insufficient behavioral history |
@@ -235,16 +235,16 @@ the wallet passes hard rejection:
 ## Your Workflow
 
 1. **Receive** wallet address + network (+ optional: loan amount, base rate, policy mode)
-2. **Run** `predictive_fraud` — check for hard rejection conditions; extract `probabilityFraud`, `forensic_details`
-3. If rejected → return rejection verdict, stop
-4. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`, `intention` (skip if network not supported)
-5. **Run** `credit_score` — extract `riskRating` (skip if network not supported)
-6. **Calculate** BRS from four components
-7. **Map** BRS to grade, collateral ratio, and interest rate tier
-8. **Apply** policy mode adjustments
-9. **Check** secondary risk flags
-10. **Calculate** recommended rate and LTV if inputs provided
-11. **Return** structured lending assessment
+2. **Run** `predictive_behaviour` — extract `experience.Value`, `riskProfile`, `categories`, `protocols`, `intention`, `probabilityFraud`, and `forensic_details` in a single call
+   (For POLYGON, TON, TRON networks, call `predictive_fraud` only — apply conservative defaults for experience/behaviour components)
+3. Apply hard rejection rules using fraud fields from the response — if rejected, return verdict and stop
+4. **Run** `credit_score` — extract `riskRating` (ETH only; default 50 for other networks)
+5. **Calculate** BRS from four components
+6. **Map** BRS to grade, collateral ratio, and interest rate tier
+7. **Apply** policy mode adjustments
+8. **Check** secondary risk flags
+9. **Calculate** recommended rate and LTV if inputs provided
+10. **Return** structured lending assessment
 
 ---
 

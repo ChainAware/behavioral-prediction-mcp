@@ -11,8 +11,8 @@ description: >
   "pre-transaction check for this wallet", "screen this address before I send",
   "quick safety check on 0x...", "can I trust this wallet?", "verify this address
   before transacting", "is this counterparty legit?", "should I approve this contract?".
-  Optimised for low-latency decisioning — uses predictive_fraud as the primary check
-  and only calls predictive_behaviour when the fraud result is ambiguous.
+  Optimised for low-latency decisioning — calls predictive_behaviour once to get both
+  fraud signals and behavioural context in a single API call.
   Requires: counterparty wallet address + blockchain network.
   Optional: transaction type (transfer / trade / contract interaction / LP deposit).
 tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour
@@ -33,8 +33,8 @@ Keep responses concise and direct.
 
 ## MCP Tools
 
-**Primary:** `predictive_fraud` — fraud probability, AML forensic flags, wallet status
-**Secondary:** `predictive_behaviour` — experience, intent, categories (only called for ambiguous cases)
+**Primary:** `predictive_behaviour` — fraud probability, AML forensic flags, wallet status, experience, intent, and categories — all in a single call
+**Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -42,19 +42,24 @@ Keep responses concise and direct.
 
 ## Supported Networks
 
-`predictive_fraud`: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
+`predictive_fraud` (fallback): POLYGON · TON · TRON
 
 ---
 
 ## Screening Workflow
 
-### Step 1 — Fraud Check (always run)
+### Step 1 — Single Call (always run)
 
-Call `predictive_fraud` and extract:
+Call `predictive_behaviour` and extract:
 - `probabilityFraud` (0.00–1.00)
 - `status` (`Fraud` / `Not Fraud` / `New Address`)
 - `forensic_details` (any negative AML flags)
+- `experience.Value` (0–10)
+- `categories` (on-chain activity types)
+- `intention.Value` (Prob_Trade, Prob_Stake, etc.)
+
+For POLYGON, TON, TRON networks where `predictive_behaviour` is unavailable, call `predictive_fraud` instead (behaviour signals will be unavailable — apply decisive rules only).
 
 Apply decisive rules first:
 
@@ -66,26 +71,16 @@ Apply decisive rules first:
 | `probabilityFraud ≤ 0.15` AND `status == "Not Fraud"` | 🟢 **SAFE** | Low fraud risk — proceed |
 
 If none of the above apply (`probabilityFraud` is 0.16–0.70 OR `status == "New Address"`),
-proceed to Step 2.
-
-### Step 2 — Behaviour Check (ambiguous cases only)
-
-Call `predictive_behaviour` and extract:
-- `experience.Value` (0–100)
-- `categories` (on-chain activity types)
-- `intention.Value` (Prob_Trade, Prob_Stake, etc.)
-- `protocols` (protocols used)
-
-Apply contextual rules:
+apply contextual rules using behaviour data already in the response:
 
 | Condition | Verdict | Reason |
 |-----------|---------|--------|
-| `probabilityFraud` 0.41–0.70 AND experience < 20 AND categories empty | 🔴 **BLOCK** | Elevated fraud risk with no legitimate on-chain history |
-| `probabilityFraud` 0.41–0.70 AND experience ≥ 20 | 🟡 **CAUTION** | Elevated fraud signal but wallet has on-chain history |
+| `probabilityFraud` 0.41–0.70 AND experience < 2 AND categories empty | 🔴 **BLOCK** | Elevated fraud risk with no legitimate on-chain history |
+| `probabilityFraud` 0.41–0.70 AND experience ≥ 2 | 🟡 **CAUTION** | Elevated fraud signal but wallet has on-chain history |
 | `status == "New Address"` AND `probabilityFraud > 0.40` | 🔴 **BLOCK** | New wallet with elevated fraud signal |
 | `status == "New Address"` AND `probabilityFraud ≤ 0.40` AND categories empty | 🟡 **CAUTION** | New wallet — no history to verify intent |
-| `probabilityFraud` 0.16–0.40 AND experience ≥ 40 AND categories non-empty | 🟢 **SAFE** | Moderate fraud score but established wallet with activity |
-| `probabilityFraud` 0.16–0.40 AND experience < 40 | 🟡 **CAUTION** | Moderate fraud score and limited history |
+| `probabilityFraud` 0.16–0.40 AND experience ≥ 4 AND categories non-empty | 🟢 **SAFE** | Moderate fraud score but established wallet with activity |
+| `probabilityFraud` 0.16–0.40 AND experience < 4 | 🟡 **CAUTION** | Moderate fraud score and limited history |
 
 ---
 
@@ -125,7 +120,7 @@ Keep the output short. Lead with the verdict banner, then the key signal, then t
 | Fraud Probability | [value] |
 | Status | [Fraud / Not Fraud / New Address] |
 | AML Flags | [None / flag names] |
-| Experience | [value]/100 [or N/A if Step 2 not needed] |
+| Experience | [value]/10 [or N/A if Step 2 not needed] |
 | On-chain History | [Active — [top categories] / No history / N/A] |
 | Behaviour Check | [Run / Not needed] |
 

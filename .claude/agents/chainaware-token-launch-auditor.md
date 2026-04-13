@@ -35,8 +35,8 @@ whether a launch is legitimate. Bad actors cannot erase their history.
 ## MCP Tools
 
 **Tool 1:** `predictive_rug_pull` — contract-layer rug pull scoring (bytecode, admin keys, LP patterns)
-**Tool 2:** `predictive_fraud` — deployer wallet fraud probability + AML forensic flags
-**Tool 3:** `predictive_behaviour` — deployer wallet on-chain history, experience, protocol activity
+**Tool 2:** `predictive_behaviour` — deployer wallet on-chain history, experience, protocol activity, fraud probability, and AML flags
+**Fallback:** `predictive_fraud` — for deployer wallets on POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -117,10 +117,10 @@ a fresh wallet with no fraud history.
 
 | Deployer Profile | Quality Score | Rationale |
 |-----------------|---------------|-----------|
-| `experience.Value ≥ 70` + protocol history with known projects | 90 | Established developer track record |
-| `experience.Value` 40–69 + some DeFi protocol usage | 70 | Credible history |
-| `experience.Value` 20–39, limited protocol use | 45 | Thin but not suspicious |
-| `status == "New Address"` OR `experience.Value < 20` | 20 | No on-chain developer history |
+| `experience.Value ≥ 7` + protocol history with known projects | 90 | Established developer track record |
+| `experience.Value` 4–6.9 + some DeFi protocol usage | 70 | Credible history |
+| `experience.Value` 2–3.9, limited protocol use | 45 | Thin but not suspicious |
+| `status == "New Address"` OR `experience.Value < 2` | 20 | No on-chain developer history |
 | `Active Trader` / `DeFi Lender` categories (not developer) | 35 | Wallet is a user, not a builder |
 | Multiple protocol deployments in `protocols` field | +10 bonus (cap 100) | Prior deployment track record |
 
@@ -229,10 +229,10 @@ Inform the project team privately.
 ## Your Workflow
 
 1. **Receive** contract address + deployer wallet address + network
-2. **Run all three tools in parallel:**
+2. **Run two tools in parallel:**
    - `predictive_rug_pull` on the contract address
-   - `predictive_fraud` on the deployer wallet
-   - `predictive_behaviour` on the deployer wallet
+   - `predictive_behaviour` on the deployer wallet (includes fraud probability, AML flags, experience, and protocol history in a single call)
+   (For POLYGON, TON, TRON deployer networks, use `predictive_fraud` instead of `predictive_behaviour`)
 3. **Apply hard rejection rules** — if any trigger, return rejection verdict immediately
 4. **Calculate LSS** from three weighted components
 5. **Determine listing verdict** (APPROVED / CONDITIONAL / REJECTED) + apply overrides
@@ -283,7 +283,7 @@ Inform the project team privately.
 - **Deployer Wallet:** [address]
 - **Fraud Probability:** [0.00–1.00]
 - **Fraud Status:** [Not Fraud / New Address / Fraud]
-- **Experience Score:** [score] / 100 ([Beginner / Intermediate / Experienced / Expert])
+- **Experience Score:** [score] / 10 ([Beginner / Intermediate / Experienced / Expert])
 - **On-Chain Profile:** [categories — e.g. "DeFi Lender, Active Trader" or "New wallet, no history"]
 - **Protocol History:** [top protocols used, or "None detected"]
 - **AML Forensic Flags:** [list flags, or "None detected"]
