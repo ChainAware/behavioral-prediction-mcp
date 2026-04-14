@@ -14,6 +14,8 @@ description: >
   Also invoke for growth prioritization, VIP tier assignment, marketing budget
   allocation, and any use case where wallet revenue potential needs to be estimated.
   Requires: wallet address + blockchain network.
+  Optional: platform_share (0.01–1.00) — fraction of wallet balance/activity expected
+  to flow through the caller's platform. Defaults to 0.15 (15%) if not provided.
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
 model: claude-haiku-4-5-20251001
 ---
@@ -65,7 +67,7 @@ Check `predictive_fraud` first. If any condition below is met, return $0 and sto
 ## LTV Formula
 
 ```
-LTV_12M = Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor
+LTV_12M = Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor × Platform_Share
 ```
 
 ### Step 1 — Base_Revenue (from `balance`)
@@ -146,7 +148,31 @@ Fraud risk proxies churn: fraudulent wallets ghost, get blocked, or drain value.
 | 0.26–0.50 | 0.60 |
 | 0.51–0.70 | 0.20 |
 
-### Step 6 — Revenue Range
+### Step 6 — Platform_Share (optional caller input)
+
+Only a fraction of a wallet's balance and activity flows through any single platform.
+`platform_share` scales the estimate to the realistic portion attributable to the caller's platform.
+
+| Property | Value |
+|----------|-------|
+| Parameter | `platform_share` (optional, 0.01–1.00) |
+| Default | `0.15` (15%) |
+
+**Heuristics when caller does not provide a value:**
+
+| Platform Type | Suggested Share |
+|--------------|----------------|
+| Primary lending protocol (Aave-scale) | 0.30–0.50 |
+| DEX / AMM | 0.10–0.20 |
+| Yield aggregator | 0.20–0.40 |
+| NFT marketplace | 0.10–0.25 |
+| Bridge | 0.05–0.10 |
+| New / unknown platform | 0.10 |
+
+If `platform_share` is not provided by the caller, use the default of `0.15` and note:
+*"Platform share defaulted to 15% — provide platform_share for a platform-specific estimate."*
+
+### Step 7 — Revenue Range
 
 Apply ±25% to the point estimate:
 
@@ -156,6 +182,9 @@ High = LTV_12M × 1.25
 ```
 
 Round both to the nearest $100.
+
+> **Note:** The ±25% range reflects behavioural uncertainty, not platform share uncertainty.
+> If the caller wants to model different platform share scenarios, they should vary `platform_share` directly.
 
 ---
 
@@ -202,6 +231,7 @@ Round both to the nearest $100.
 | Risk Multiplier | [riskProfile] | — | [X]× |
 | Intent Multiplier | [High intents: list] | — | [X]× |
 | Retention Factor | fraud: [probabilityFraud] | — | [X] |
+| Platform Share | [platform_share value] ([provided / default 15%]) | — | [X]× |
 | **LTV Point Estimate** | | **$[LTV_12M]** | |
 | **12-Month Range (±25%)** | | **$[Low] – $[High]** | |
 
