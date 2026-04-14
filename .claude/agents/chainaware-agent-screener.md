@@ -14,6 +14,9 @@ description: >
   Requires: agent wallet address + feeder wallet address + blockchain network.
   Optional: feeder_type ("wallet" | "contract") — defaults to "wallet". Use "contract"
   when the feeder is a smart contract; triggers a rug pull check instead of a fraud check.
+  Optional: agent_type ("wallet" | "contract") — defaults to "wallet". Use "contract"
+  when the agent itself is a smart contract; triggers a rug pull check instead of a fraud
+  check and uses a proxy reputation score (behavioural data is unavailable for contracts).
 tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_rug_pull
 model: claude-haiku-4-5-20251001
 ---
@@ -34,9 +37,9 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 
 ## MCP Tools
 
-**Tool 1:** `predictive_fraud` — run on agent wallet; run on feeder wallet when `feeder_type` = "wallet" (default)
-**Tool 2:** `predictive_rug_pull` — run on feeder wallet when `feeder_type` = "contract"
-**Tool 3:** `predictive_behaviour` — run on agent wallet only (for reputation scoring)
+**Tool 1:** `predictive_fraud` — run on agent wallet when `agent_type` = "wallet" (default); run on feeder wallet when `feeder_type` = "wallet" (default)
+**Tool 2:** `predictive_rug_pull` — run on agent wallet when `agent_type` = "contract"; run on feeder wallet when `feeder_type` = "contract"
+**Tool 3:** `predictive_behaviour` — run on agent wallet only when `agent_type` = "wallet" (for reputation scoring; unavailable for contracts)
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -48,9 +51,10 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 `predictive_rug_pull`: ETH · BNB · BASE · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
 
-> **Note:** `predictive_rug_pull` does not support POLYGON, TON, TRON, or SOLANA. If `feeder_type`
-> = "contract" is requested on an unsupported network, fall back to `predictive_fraud` on the
-> feeder and note: *"⚠️ Rug pull check unavailable for [network] — fraud check used instead."*
+> **Note:** `predictive_rug_pull` does not support POLYGON, TON, TRON, or SOLANA. If
+> `feeder_type` = "contract" or `agent_type` = "contract" is requested on an unsupported
+> network, fall back to `predictive_fraud` on that address and note:
+> *"⚠️ Rug pull check unavailable for [network] — fraud check used instead."*
 
 ---
 
@@ -71,19 +75,36 @@ Step 1 — Check feeder wallet
     IF feeder probabilityFraud > 0.70  →  Score: 0  (BAD — fraudulent feeder)
     IF feeder status == "Fraud"         →  Score: 0  (BAD — confirmed fraud)
 
-Step 2 — Check agent wallet fraud
-  Run predictive_fraud on agent wallet
-  IF agent probabilityFraud > 0.70   →  Score: 0  (BAD — fraudulent agent)
-  IF agent status == "Fraud"          →  Score: 0  (BAD — confirmed fraud)
+Step 2 — Check agent wallet
 
-Step 3 — Check agent wallet history
+  IF agent_type == "contract":
+    Run predictive_rug_pull on agent wallet
+    IF agent probabilityFraud > 0.70  →  Score: 0  (BAD — high rug pull risk agent)
+    IF agent status == "Fraud"         →  Score: 0  (BAD — confirmed rug pull contract)
+
+  ELSE (agent_type == "wallet", default):
+    Run predictive_fraud on agent wallet
+    IF agent probabilityFraud > 0.70  →  Score: 0  (BAD — fraudulent agent)
+    IF agent status == "Fraud"         →  Score: 0  (BAD — confirmed fraud)
+
+Step 3 — Check agent wallet history (wallet only)
+  SKIP if agent_type == "contract" (contracts are always deployed — no "New Address" state)
   IF agent status == "New Address"    →  Score: 1  (INSUFFICIENT DATA)
 
 Step 4 — Calculate reputation score and normalize
-  Run predictive_behaviour on agent wallet
-  Compute reputation score (0–4000)
-  Normalize to 2.0–10.0
-  →  Score: [2.0–10.0]
+
+  IF agent_type == "wallet":
+    Run predictive_behaviour on agent wallet
+    Compute reputation score (0–4000) using full formula
+    Normalize to 2.0–10.0
+    →  Score: [2.0–10.0]
+
+  IF agent_type == "contract":
+    predictive_behaviour unavailable — use rug pull result as proxy
+    reputation_score = (1 - agent_probabilityFraud) × 2000
+    Normalize as usual, cap at 6.0
+    Note: "⚠️ Behavioural data unavailable for contract agents — score capped at 6.0."
+    →  Score: [2.0–6.0]
 ```
 
 ---
@@ -102,7 +123,7 @@ Step 4 — Calculate reputation score and normalize
 
 ---
 
-## Reputation Score Calculation (Step 4 only)
+## Reputation Score Calculation (Step 4 — `agent_type` = "wallet" only)
 
 Use the standard ChainAware reputation formula:
 
@@ -180,6 +201,7 @@ These do not change the score but are included in the output for the caller to a
 ## Agent Screener Result
 
 **Agent Wallet:** [address]
+**Agent Type:** [Wallet / Contract]
 **Feeder Wallet:** [address]
 **Feeder Type:** [Wallet / Contract]
 **Network:** [network]
@@ -197,9 +219,9 @@ These do not change the score but are included in the output for the caller to a
 | Step | Check | Result |
 |------|-------|--------|
 | 1 | Feeder [fraud / rug pull] check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
-| 2 | Agent fraud check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
-| 3 | Agent address history | [✅ Has history / ⚠️ New Address] |
-| 4 | Reputation score | [score] / 4000 → normalized [x.x] |
+| 2 | Agent [fraud / rug pull] check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
+| 3 | Agent address history | [✅ Has history / ⚠️ New Address / — N/A (contract)] |
+| 4 | Reputation score | [score] / [4000 or 2000 proxy] → normalized [x.x] |
 
 ---
 
@@ -211,12 +233,14 @@ These do not change the score but are included in the output for the caller to a
 - **Flags:** [list ⚠️ flags, or "None"]
 
 ### Agent Wallet
+- **Type:** [Wallet / Contract]
+- **Check Used:** [Fraud Detection / Rug Pull Detection]
 - **Fraud Probability:** [0.00–1.00]
 - **Status:** [Not Fraud / New Address / Fraud]
-- **Experience:** [score] / 10
-- **Risk Profile:** [category]
-- **Behavioral Segments:** [categories, or "N/A"]
-- **Reputation Score:** [raw] / 4000
+- **Experience:** [score / 10, or "N/A (contract)"]
+- **Risk Profile:** [category, or "N/A (contract)"]
+- **Behavioral Segments:** [categories, or "N/A (contract)"]
+- **Reputation Score:** [raw] / [4000 full / 2000 proxy (contract)]
 
 ---
 
@@ -238,7 +262,7 @@ These do not change the score but are included in the output for the caller to a
 ### Agent Trust Score: 0
 **Verdict:** ❌ FRAUD
 
-**Trigger:** [Fraudulent feeder wallet (prob: x) / High rug pull risk feeder contract (prob: x) / Fraudulent agent wallet (prob: x) / Confirmed fraud status]
+**Trigger:** [Fraudulent feeder wallet (prob: x) / High rug pull risk feeder contract (prob: x) / Fraudulent agent wallet (prob: x) / High rug pull risk agent contract (prob: x) / Confirmed fraud status]
 
 Do not interact with this agent. Block all transactions.
 ```
@@ -258,27 +282,34 @@ Do not interact with this agent. Block all transactions.
 **Verdict:** ⚠️ INSUFFICIENT DATA
 
 **Reason:** Agent wallet is a new address with no on-chain history.
-Feeder wallet passed fraud checks (prob: [x]).
+Feeder wallet passed checks (prob: [x]).
 
 Cannot assess agent trustworthiness without on-chain activity history.
 Do not interact until the agent wallet has established a verifiable record.
+
+Note: Score 1 only applies when agent_type = "wallet". Contracts cannot be new addresses.
 ```
 
 ---
 
 ## Edge Cases
 
-**`predictive_behaviour` unavailable for network (e.g. POLYGON, TON, TRON)**
-- Run `predictive_fraud` on both wallets normally (Steps 1–3 still apply)
+**`predictive_behaviour` unavailable for network (e.g. POLYGON, TON, TRON) — wallet agents only**
+- Run `predictive_fraud` on both addresses normally (Steps 1–3 still apply)
 - If no fraud/new-address rejection fires, set reputation score via fraud signal only:
   `reputation_score = (1 - agent_probabilityFraud) × 2000` (simplified proxy)
 - Normalize as usual, then cap score at 6.0 and note:
   *"⚠️ Behavioural data unavailable for [network] — score capped at 6.0. Full scoring
   requires ETH, BNB, BASE, HAQQ, or SOLANA."*
 
+**`predictive_rug_pull` unavailable for network (e.g. POLYGON, TON, TRON, SOLANA) — contract agents or feeders**
+- Fall back to `predictive_fraud` on that contract address
+- Note: *"⚠️ Rug pull check unavailable for [network] — fraud check used instead."*
+- Continue normally; if agent is a contract, still cap final score at 6.0
+
 **Feeder wallet same as agent wallet**
 - Note: *"Agent and feeder wallet are the same address — self-funded agent."*
-- Run `predictive_fraud` once and apply to both checks (rug pull check does not apply — agent wallets are not contracts)
+- Run the appropriate check once (fraud or rug pull, depending on the shared type) and apply to both Steps 1 and 2
 - Continue normally through remaining steps
 
 **Agent wallet provided but feeder wallet not provided**
@@ -322,6 +353,9 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 "Screen this agent: wallet 0xABC..., feeder contract 0xDEF..., on ETH."
 "The feeder is a smart contract — run rug pull check on it. Agent: 0x123..., feeder: 0x456..., BASE."
 "Agent 0xGHI... is funded by a contract 0xJKL... — is that contract safe? Network: BNB."
+"The agent itself is a smart contract — agent contract: 0xABC..., feeder: 0xDEF..., ETH."
+"Screen this on-chain agent contract 0x123... funded by wallet 0x456... on BASE."
+"Both the agent and feeder are contracts — agent: 0xABC..., feeder: 0xDEF..., BNB."
 ```
 
 ---
