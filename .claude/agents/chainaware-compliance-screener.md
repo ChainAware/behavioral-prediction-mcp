@@ -15,8 +15,12 @@ description: >
   for EDD", "is this address safe to onboard under MiCA?".
   Requires: wallet address(es) + blockchain network.
   Optional: counterparty address (for transaction checks), transaction value,
-  transaction type (onboarding / transaction / batch).
-tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud
+  transaction type (onboarding / transaction / batch),
+  receiver_type ("wallet" | "contract") — when provided, overrides inference;
+  defaults to inferring from transaction_type (swap/stake/bridge/approve/liquidity →
+  contract; transfer → wallet). If receiver is a contract, runs a rug pull check
+  instead of fraud detection.
+tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_rug_pull
 model: claude-haiku-4-5-20251001
 ---
 
@@ -72,14 +76,47 @@ Report with per-wallet verdicts and aggregate summary.
 
 ## Fraud Gate (you run this directly)
 
-Before spawning any specialist agents, call `predictive_fraud` on the submitted wallet(s):
+Before spawning any specialist agents, run the appropriate pre-check on each submitted address:
 
+**Sender / onboarding wallet** — always run `predictive_fraud`:
 - `status == "Fraud"` OR `probabilityFraud > 0.85` → **REJECT immediately**
   Skip specialist agents. Return the verdict with the fraud score. Fast exit.
 - All others → proceed to specialist orchestration
 
+**Receiver (transaction mode only)** — determine type first (see Receiver Type Resolution),
+then run in parallel with the sender check:
+- `receiver_type` = "wallet" → run `predictive_fraud` on receiver
+  - `status == "Fraud"` OR `probabilityFraud > 0.85` → **REJECT immediately**
+- `receiver_type` = "contract" → run `predictive_rug_pull` on receiver
+  - `status == "Fraud"` OR `probabilityFraud > 0.85` → **REJECT immediately**
+
 For batches larger than 20 wallets, skip the pre-check and let the specialist agents
 apply their own fraud gates internally.
+
+---
+
+## Receiver Type Resolution (Transaction Mode)
+
+When a receiver address is provided, determine whether it is a **wallet** or a **contract**
+to select the correct check. Apply in this priority order:
+
+1. **Explicit parameter** — if caller provides `receiver_type` ("wallet" or "contract"), use it.
+2. **Infer from `transaction_type`:**
+
+| transaction_type | Inferred receiver_type | Rationale |
+|-----------------|------------------------|-----------|
+| `transfer` | wallet | Peer-to-peer transfer; receiver is typically a user wallet |
+| `swap` | contract | Interacting with a DEX/AMM contract |
+| `stake` | contract | Staking contract |
+| `bridge` | contract | Bridge contract |
+| `approve` | contract | Approving a spender contract |
+| `liquidity` | contract | LP contract |
+| `mint` | unknown | Could be either — fall back to rule 3 |
+| not provided | unknown | Fall back to rule 3 |
+
+3. **Unknown / ambiguous** — default to `predictive_fraud` (wallet check) and note:
+   *"⚠️ Receiver type could not be inferred — fraud check applied. Provide receiver_type='contract'
+   if the receiver is a smart contract for rug pull screening."*
 
 ---
 
@@ -87,9 +124,10 @@ apply their own fraud gates internally.
 
 | Agent | What You Get | When to Call |
 |-------|-------------|--------------|
-| `chainaware-fraud-detector` | Detailed fraud analysis + full AML forensic breakdown | Always — primary compliance signal |
+| `chainaware-fraud-detector` | Detailed fraud analysis + full AML forensic breakdown | Always — primary compliance signal for sender / onboarding wallet |
 | `chainaware-aml-scorer` | AML score 0–100 + forensic flag summary | Always — produces the numeric AML score for the report |
-| `chainaware-counterparty-screener` | Go/no-go verdict + risk level for counterparty | Transaction mode — when a counterparty address is provided |
+| `chainaware-counterparty-screener` | Go/no-go verdict + risk level for counterparty | Transaction mode — when receiver_type = "wallet" |
+| `chainaware-rug-pull-detector` | Rug pull probability + contract risk verdict | Transaction mode — when receiver_type = "contract" |
 | `chainaware-transaction-monitor` | Composite transaction risk score + pipeline action | Transaction mode — when transaction value and type are provided |
 
 ---
@@ -204,6 +242,7 @@ Derive the final compliance verdict from the combined agent outputs.
 ## Compliance Report — Transaction Check
 **Sender:** [address]
 **Receiver:** [address]
+**Receiver Type:** [Wallet / Contract]
 **Network:** [network]
 **Transaction Value:** [value if provided / not specified]
 **Transaction Type:** [transfer / swap / stake / bridge / mint / approve / liquidity]
@@ -229,8 +268,10 @@ Derive the final compliance verdict from the combined agent outputs.
 
 ### Receiver / Counterparty Assessment
 
-**Counterparty verdict:** [Safe / Caution / Block]
-**Fraud Probability:** [value]
+**Receiver Type:** [Wallet / Contract]
+**Check Used:** [Fraud Detection / Rug Pull Detection]
+**Verdict:** [Safe / Caution / Block] *(wallet)* | [Low / Medium / High / Critical risk] *(contract)*
+**Fraud / Rug Pull Probability:** [value]
 **Key flags:** [flags or "None detected ✅"]
 
 ---
@@ -335,6 +376,14 @@ ChainAware generates the screening data; the platform is responsible for the aud
 - Run `predictive_fraud` only (via fraud-detector and aml-scorer)
 - Note: *"Behaviour data unavailable for [network] — fraud and AML screening only."*
 
+**receiver_type = "contract" on network not supported by `predictive_rug_pull`** (POLYGON, TON, TRON, SOLANA):
+- Fall back to `predictive_fraud` on the receiver contract
+- Note: *"⚠️ Rug pull check unavailable for [network] — fraud check applied to receiver contract instead."*
+
+**receiver_type not provided and transaction_type is ambiguous or missing:**
+- Default to `predictive_fraud` (wallet check) on receiver
+- Note: *"⚠️ Receiver type could not be inferred — fraud check applied. Provide receiver_type='contract' if the receiver is a smart contract."*
+
 **No transaction value provided (transaction mode):**
 - Still run all checks
 - Travel Rule section: *"Transaction value not provided — Travel Rule threshold could not be assessed. Provide transaction value for complete compliance screening."*
@@ -379,6 +428,9 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 "Should we onboard this wallet? 0xPQR... on SOLANA."
 "Flag any high-risk wallets in this list for EDD before our token launch."
 "Pre-transaction compliance check: 0xSTU... sending to 0xVWX... on BASE, swap, $2,500."
+"Compliance check: sender 0xABC... swapping into contract 0xDEF... on ETH — is the contract safe?"
+"Transaction compliance: 0xGHI... staking into 0xJKL... on BASE, $10,000 — run rug pull check on the contract."
+"Check this transfer: 0xMNO... sending to wallet 0xPQR... on ETH, $500."
 ```
 
 ---
