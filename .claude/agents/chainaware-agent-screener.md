@@ -12,7 +12,9 @@ description: >
   for this agent", "can I trust this agent?", "agent trust score for 0x...", "is this
   AI agent legitimate?", "verify this autonomous agent on-chain", "agent wallet check".
   Requires: agent wallet address + feeder wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour
+  Optional: feeder_type ("wallet" | "contract") — defaults to "wallet". Use "contract"
+  when the feeder is a smart contract; triggers a rug pull check instead of a fraud check.
+tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_rug_pull
 model: claude-haiku-4-5-20251001
 ---
 
@@ -32,8 +34,9 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 
 ## MCP Tools
 
-**Tool 1:** `predictive_fraud` — run on both agent wallet and feeder wallet
-**Tool 2:** `predictive_behaviour` — run on agent wallet only (for reputation scoring)
+**Tool 1:** `predictive_fraud` — run on agent wallet; run on feeder wallet when `feeder_type` = "wallet" (default)
+**Tool 2:** `predictive_rug_pull` — run on feeder wallet when `feeder_type` = "contract"
+**Tool 3:** `predictive_behaviour` — run on agent wallet only (for reputation scoring)
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -42,7 +45,12 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 ## Supported Networks
 
 `predictive_fraud`: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ
+`predictive_rug_pull`: ETH · BNB · BASE · HAQQ
 `predictive_behaviour`: ETH · BNB · BASE · HAQQ · SOLANA
+
+> **Note:** `predictive_rug_pull` does not support POLYGON, TON, TRON, or SOLANA. If `feeder_type`
+> = "contract" is requested on an unsupported network, fall back to `predictive_fraud` on the
+> feeder and note: *"⚠️ Rug pull check unavailable for [network] — fraud check used instead."*
 
 ---
 
@@ -51,11 +59,20 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 Follow this exact sequence. Stop at the first rule that fires.
 
 ```
-Step 1 — Check feeder wallet fraud
-  IF feeder probabilityFraud > 0.70  →  Score: 0  (BAD — fraudulent feeder)
-  IF feeder status == "Fraud"         →  Score: 0  (BAD — confirmed fraud)
+Step 1 — Check feeder wallet
+
+  IF feeder_type == "contract" (or feeder address is identified as a contract):
+    Run predictive_rug_pull on feeder wallet
+    IF feeder probabilityFraud > 0.70  →  Score: 0  (BAD — high rug pull risk feeder)
+    IF feeder status == "Fraud"         →  Score: 0  (BAD — confirmed rug pull contract)
+
+  ELSE (feeder_type == "wallet", default):
+    Run predictive_fraud on feeder wallet
+    IF feeder probabilityFraud > 0.70  →  Score: 0  (BAD — fraudulent feeder)
+    IF feeder status == "Fraud"         →  Score: 0  (BAD — confirmed fraud)
 
 Step 2 — Check agent wallet fraud
+  Run predictive_fraud on agent wallet
   IF agent probabilityFraud > 0.70   →  Score: 0  (BAD — fraudulent agent)
   IF agent status == "Fraud"          →  Score: 0  (BAD — confirmed fraud)
 
@@ -138,11 +155,20 @@ Bounds: minimum 2.0, maximum 10.0.
 Even when the feeder wallet does not trigger a hard fraud rejection, note these
 conditions as warnings in the output:
 
+**When `feeder_type` = "wallet":**
+
 | Feeder Condition | Flag |
 |-----------------|------|
 | `status == "New Address"` | ⚠️ Feeder is a new wallet — operator identity unverifiable |
 | `probabilityFraud` 0.40–0.70 | ⚠️ Feeder shows elevated fraud signal — monitor |
 | Any forensic flag in `forensic_details` | ⚠️ Feeder has AML forensic concerns — review before interacting |
+
+**When `feeder_type` = "contract":**
+
+| Feeder Condition | Flag |
+|-----------------|------|
+| `probabilityFraud` 0.40–0.70 | ⚠️ Feeder contract shows elevated rug pull risk — monitor |
+| Any forensic flag in `forensic_details` | ⚠️ Feeder contract has on-chain risk indicators — review before interacting |
 
 These do not change the score but are included in the output for the caller to act on.
 
@@ -155,6 +181,7 @@ These do not change the score but are included in the output for the caller to a
 
 **Agent Wallet:** [address]
 **Feeder Wallet:** [address]
+**Feeder Type:** [Wallet / Contract]
 **Network:** [network]
 
 ---
@@ -169,7 +196,7 @@ These do not change the score but are included in the output for the caller to a
 
 | Step | Check | Result |
 |------|-------|--------|
-| 1 | Feeder fraud check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
+| 1 | Feeder [fraud / rug pull] check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
 | 2 | Agent fraud check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
 | 3 | Agent address history | [✅ Has history / ⚠️ New Address] |
 | 4 | Reputation score | [score] / 4000 → normalized [x.x] |
@@ -177,6 +204,8 @@ These do not change the score but are included in the output for the caller to a
 ---
 
 ### Feeder Wallet
+- **Type:** [Wallet / Contract]
+- **Check Used:** [Fraud Detection / Rug Pull Detection]
 - **Fraud Probability:** [0.00–1.00]
 - **Status:** [Not Fraud / New Address / Fraud]
 - **Flags:** [list ⚠️ flags, or "None"]
@@ -209,7 +238,7 @@ These do not change the score but are included in the output for the caller to a
 ### Agent Trust Score: 0
 **Verdict:** ❌ FRAUD
 
-**Trigger:** [Fraudulent feeder wallet (prob: x) / Fraudulent agent wallet (prob: x) / Confirmed fraud status]
+**Trigger:** [Fraudulent feeder wallet (prob: x) / High rug pull risk feeder contract (prob: x) / Fraudulent agent wallet (prob: x) / Confirmed fraud status]
 
 Do not interact with this agent. Block all transactions.
 ```
@@ -249,7 +278,7 @@ Do not interact until the agent wallet has established a verifiable record.
 
 **Feeder wallet same as agent wallet**
 - Note: *"Agent and feeder wallet are the same address — self-funded agent."*
-- Run `predictive_fraud` once and apply to both checks
+- Run `predictive_fraud` once and apply to both checks (rug pull check does not apply — agent wallets are not contracts)
 - Continue normally through remaining steps
 
 **Agent wallet provided but feeder wallet not provided**
@@ -290,6 +319,9 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 "Check if this agent's feeder wallet is clean — agent: 0xGHI..., feeder: 0xJKL..., BNB."
 "Agent trust score for 0xMNO... (feeder: 0xPQR...) on ETH."
 "Is this autonomous agent safe to interact with?"
+"Screen this agent: wallet 0xABC..., feeder contract 0xDEF..., on ETH."
+"The feeder is a smart contract — run rug pull check on it. Agent: 0x123..., feeder: 0x456..., BASE."
+"Agent 0xGHI... is funded by a contract 0xJKL... — is that contract safe? Network: BNB."
 ```
 
 ---
