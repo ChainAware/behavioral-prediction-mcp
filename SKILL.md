@@ -556,7 +556,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-gamefi-screener` | Web3 game / P2E bot detection, player tier classification, reward eligibility |
 | `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull scan, risk grade (A–F), rebalancing plan |
 | `chainaware-rwa-investor-screener` | RWA investor suitability — QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED |
-| `chainaware-ltv-estimator` | 12-month revenue potential (LTV) as a USD range based on behavioral signals |
+| `chainaware-ltv-estimator` | 12-month revenue potential (LTV) as a USD range — tx count × avg tx value × fee rate, scaled by behavioral multipliers. Optional: platform_share, fee_rate |
 
 ---
 

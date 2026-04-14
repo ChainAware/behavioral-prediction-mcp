@@ -370,11 +370,11 @@ export CHAINAWARE_API_KEY="your-key-here"
 **File:** `.claude/agents/chainaware-ltv-estimator.md`
 **Model:** claude-haiku-4-5-20251001
 **Tools:** `predictive_behaviour`, `predictive_fraud`
-**Purpose:** Estimates 12-month lifetime value (LTV) as a USD revenue range using behavioral signals — experience, activity categories, risk profile, forward-looking intent, and fraud-based retention probability. Hard rejects fraudulent wallets ($0).
-**Formula:** `Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor` ±25%
+**Purpose:** Estimates 12-month lifetime value (LTV) as a USD revenue range. Models projected transaction count, average transaction value on the platform, and the platform's fee rate — scaled by category breadth, risk profile, and fraud-based retention. Hard rejects fraudulent wallets ($0).
+**Formula:** `(annual_tx × Intent_Multiplier) × (balance × platform_share) × fee_rate × Category_Multiplier × Risk_Multiplier × Retention_Factor` ±25%
 **Triggers:** "what is the LTV of 0x...", "revenue potential for this wallet", "12-month revenue estimate", "estimate lifetime value for this address", "rank these wallets by revenue potential", "prioritize wallets by LTV"
-**Input:** wallet address + network
-**Output:** USD revenue range (Low–High), LTV tier (Dormant / Low / Medium / High / Very High), score breakdown, key revenue drivers
+**Input:** wallet address + network. Optional: platform_share (default 0.15), fee_rate (default 0.001)
+**Output:** USD revenue range (Low–High), LTV tier (Dormant / Low / Medium / High / Very High), full calculation breakdown
 
 ---
 

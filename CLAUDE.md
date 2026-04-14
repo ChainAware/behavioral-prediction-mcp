@@ -61,7 +61,7 @@ behavioral-prediction-mcp/
 | `chainaware-aml-scorer` | Haiku | `predictive_fraud` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Haiku | `predictive_fraud` | Simple trust score 0.00–1.00 |
 | `chainaware-credit-scorer` | Haiku | `credit_score` | Crypto credit score 1–9 combining fraud probability + social graph analysis |
-| `chainaware-ltv-estimator` | Haiku | `predictive_behaviour` + `predictive_fraud` | 12-month revenue potential (LTV) as a USD range — experience, categories, risk profile, intent, and retention combined |
+| `chainaware-ltv-estimator` | Haiku | `predictive_behaviour` + `predictive_fraud` | 12-month revenue potential (LTV) as a USD range — models tx count × avg tx value × fee rate, scaled by categories, risk, and retention. Optional: platform_share (default 0.15), fee_rate (default 0.001) |
 | `chainaware-wallet-ranker` | Haiku | `predictive_behaviour` | Wallet experience rank + leaderboard |
 | `chainaware-token-ranker` | Haiku | `token_rank_list` | Discover/rank tokens by holder community strength |
 | `chainaware-token-analyzer` | Haiku | `token_rank_single` + `predictive_fraud` | Single token deep-dive + top holders |
