@@ -36,6 +36,7 @@ about each wallet they interact with, instead of serving generic responses.
   "walletAddress": "string",
   "status": "Fraud | Not Fraud | New Address",
   "probabilityFraud": "0.00–1.00",
+  "balance": 12450.75,
   "lastChecked": "ISO-8601 timestamp",
   "forensic_details": { },
   "categories": [

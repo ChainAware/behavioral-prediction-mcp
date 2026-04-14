@@ -68,9 +68,21 @@ Check `predictive_fraud` first. If any condition below is met, return $0 and sto
 LTV_12M = Base_Revenue × Category_Multiplier × Risk_Multiplier × Intent_Multiplier × Retention_Factor
 ```
 
-### Step 1 — Base_Revenue (from `experience.Value`)
+### Step 1 — Base_Revenue (from `balance`)
 
-Experience is the primary proxy for a wallet's historical transaction activity level.
+Wallet balance is the primary driver of Base_Revenue — it is the most direct signal
+of a wallet's spending capacity and revenue potential.
+
+| balance (USD) | Tier | Base Revenue |
+|--------------|------|-------------|
+| 0–100 | Micro | $500 |
+| 101–1,000 | Low | $2,000 |
+| 1,001–10,000 | Mid | $8,000 |
+| 10,001–100,000 | High | $25,000 |
+| > 100,000 | Whale | $80,000 |
+
+**Fallback — if `balance` is unavailable:** use `experience.Value` with the table below.
+This applies when the network does not return balance data.
 
 | experience.Value | Tier | Base Revenue |
 |-----------------|------|-------------|
@@ -80,7 +92,7 @@ Experience is the primary proxy for a wallet's historical transaction activity l
 | 6.1–8 | Active | $25,000 |
 | 8.1–10 | Expert | $80,000 |
 
-If `experience.Value` is unavailable (network limitation), use default: `$500` (conservative).
+Note in the output when the fallback is used: *"⚠️ Balance unavailable — Base Revenue estimated from experience level."*
 
 ### Step 2 — Category_Multiplier (from `categories`)
 
@@ -162,7 +174,7 @@ Round both to the nearest $100.
 ## Your Workflow
 
 1. **Receive** wallet address + network
-2. **Run** `predictive_behaviour` — extract experience, categories, riskProfile, intention, and `probabilityFraud`
+2. **Run** `predictive_behaviour` — extract `balance`, experience, categories, riskProfile, intention, and `probabilityFraud`
    (For POLYGON, TON, TRON networks, call `predictive_fraud` only — use conservative defaults for behaviour components)
 3. Check hard reject conditions using fraud fields from the response — if rejected, return $0 verdict and stop
 4. **Calculate** each component and LTV_12M point estimate
@@ -185,7 +197,7 @@ Round both to the nearest $100.
 
 | Component | Input | Value | Multiplier |
 |-----------|-------|-------|-----------|
-| Base Revenue | experience: [value] ([tier]) | $[base] | — |
+| Base Revenue | balance: $[value] ([tier]) | $[base] | — |
 | Category Multiplier | [list of categories] ([count]) | — | [X]× |
 | Risk Multiplier | [riskProfile] | — | [X]× |
 | Intent Multiplier | [High intents: list] | — | [X]× |
@@ -261,12 +273,16 @@ For multiple wallets, run in sequence and return a ranked table:
 - Use Risk_Multiplier default: 1.00× (neutral)
 
 **`predictive_behaviour` unavailable (network limitation)**
-- Use Base_Revenue default: $500
+- Use Base_Revenue default: $500 (balance and experience both unavailable)
 - Use Category_Multiplier default: 1.00×
 - Use Risk_Multiplier default: 1.00×
 - Use Intent_Multiplier default: 1.00×
 - Apply Retention_Factor from fraud score only
 - Add note: *"Behavioural data unavailable for [network] — estimate based on fraud signal only"*
+
+**`balance` unavailable but `predictive_behaviour` returned (partial response)**
+- Fall back to experience-based Base_Revenue table
+- Add note: *"⚠️ Balance unavailable — Base Revenue estimated from experience level."*
 
 ---
 
