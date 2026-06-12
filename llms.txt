@@ -26,7 +26,7 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-fraud-detector` — Fast wallet fraud screening. Returns status, probability, and forensic flags.
 - `chainaware-rug-pull-detector` — Smart contract and LP safety checks before depositing.
 - `chainaware-wallet-marketer` — Generates a personalised marketing message (≤20 words) per wallet.
-- `chainaware-reputation-scorer` — Reputation score 0–4000 using the ChainAware formula.
+- `chainaware-reputation-scorer` — Reputation score 0–1000 using the ChainAware formula.
 - `chainaware-aml-scorer` — AML compliance score 0–100 for KYC and regulatory workflows.
 - `chainaware-trust-scorer` — Simple trust score 0.00–1.00 as `1 - fraud_probability`.
 - `chainaware-wallet-ranker` — Wallet experience rank and global leaderboard position.
@@ -57,7 +57,7 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 
 ## Key Scoring Formulas
 
-- **Reputation Score:** `1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)`
+- **Reputation Score:** `(1000/110) × (experience + 1) × (riskCapability + 1) × (1 - fraud_probability)` — max 1000; `experience` 0–10, `riskCapability` 0–9 (both direct fields from `predictive_behaviour`)
 - **AML Score:** `(1 - probabilityFraud) × 100` — returns 0 if any forensic flag is present
 - **Trust Score:** `1 - probabilityFraud` → 0.00–1.00
 
