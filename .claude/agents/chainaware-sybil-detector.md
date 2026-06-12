@@ -31,7 +31,12 @@ detect reliably:
 
 ## Supported Networks
 
-`ETH` · `BNB` · `BASE` · `HAQQ` · `SOLANA`
+**Primary (`predictive_behaviour`):** `ETH` · `BNB` · `BASE` · `HAQQ` · `SOLANA`
+**Fallback (`predictive_fraud`):** `POLYGON` · `TON` · `TRON`
+
+For POLYGON, TON, and TRON wallets, call `predictive_fraud` instead of `predictive_behaviour`.
+Fraud gate still applies; reputation scoring is skipped (no experience/riskProfile available) —
+classify non-excluded wallets as REVIEW.
 
 ---
 
@@ -53,9 +58,10 @@ experience > 3) than a small community DAO.
 ## Your Workflow
 
 1. **Receive** wallet list + network (+ optional custom thresholds)
-2. **For each wallet**, call `predictive_behaviour` — fetches experience, riskProfile, intentions, categories, probabilityFraud, and status in a single call
+2. **For each wallet**, call `predictive_behaviour` — fetches experience, riskCapability, intentions, categories, probabilityFraud, and status in a single call
+   (For POLYGON, TON, TRON networks, call `predictive_fraud` instead — skip reputation scoring, apply fraud gate only)
 3. **Calculate** Reputation Score for each wallet using the standard formula:
-   `1000 × (experience + 1) × (risk + 1) × (1 − fraud)`
+   `(1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 − fraud_probability)`
 4. **Classify** each wallet into ELIGIBLE / REVIEW / EXCLUDE
 5. **Detect** Sybil patterns across the full voter set
 6. **Return** structured output: cleaned voter list, excluded list, weighted
@@ -65,23 +71,19 @@ experience > 3) than a small community DAO.
 
 ## Variable Extraction
 
-### `experience` (normalize to 0.00–1.00)
+### `experience` (use raw integer — no normalization)
 
 ```
-experience = experience.Value / 10.0
+experience = experience.Value    # integer 0–10; use directly
 ```
 
-### `willingness_to_take_risk` (normalize to 0.00–1.00)
+### `risk_capability` (direct field, range 0–9)
 
-| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-|----------------------|---------------|----------------------------|
-| Conservative | 0–2 | 0.10 |
-| Moderate | 3–4 | 0.35 |
-| Balanced | 5–6 | 0.55 |
-| Aggressive | 7–8 | 0.75 |
-| Very Aggressive / High Risk | 9–10 | 0.95 |
+```
+risk_capability = riskCapability    # integer 0–9, direct field from predictive_behaviour
+```
 
-Default if missing: `0.25`
+If missing or null, default to `2`.
 
 ### `fraud_probability`
 
@@ -137,17 +139,17 @@ vote_weight = reputation_score / sum(all eligible reputation scores)
 weighted_vote_power = raw_token_balance × vote_weight_multiplier
 ```
 
-Where `vote_weight_multiplier` maps to:
+Where `vote_weight_multiplier` maps to (max score = 1000):
 
-| Reputation Score | Multiplier |
-|-----------------|------------|
-| 3000+ | 1.50× |
-| 2000–2999 | 1.25× |
-| 1000–1999 | 1.00× |
-| 500–999 | 0.75× |
-| 300–499 | 0.50× |
-| < 300 or REVIEW | 0.25× |
-| EXCLUDE | 0.00× |
+| Reputation Score | Band | Multiplier |
+|-----------------|------|------------|
+| 751–1000 | Elite | 1.50× |
+| 501–750 | Very High | 1.25× |
+| 251–500 | High | 1.00× |
+| 126–250 | Medium | 0.75× |
+| 51–125 | Low | 0.50× |
+| < 51 or REVIEW | Very Low | 0.25× |
+| EXCLUDE | — | 0.00× |
 
 ---
 
@@ -184,8 +186,8 @@ Where `vote_weight_multiplier` maps to:
 
 | Rank | Wallet | Reputation Score | Experience | Fraud Prob | Risk Profile | Vote Multiplier |
 |------|--------|-----------------|------------|------------|--------------|-----------------|
-| 1 | 0xABC... | 3,241 | 0.91 | 0.01 | Aggressive | 1.50× |
-| 2 | 0xDEF... | 2,890 | 0.72 | 0.04 | Balanced | 1.25× |
+| 1 | 0xABC... | 812 | 9/10 Expert | 0.01 | Aggressive | 1.50× |
+| 2 | 0xDEF... | 559 | 7/10 Experienced | 0.04 | Balanced | 1.25× |
 | ... | | | | | | |
 
 ---
@@ -235,7 +237,7 @@ do not return partial results.
 > pattern analysis (pattern detection requires minimum 5 wallets).
 
 **New Address** (`status == "New Address"`)
-> Set experience = 0.0, apply conservative fraud default of 0.25.
+> Set experience = 0, risk_capability = 2 (default), use probabilityFraud as returned.
 > Auto-classify as EXCLUDE.
 > Note: "New address — no on-chain history available. High Sybil risk."
 

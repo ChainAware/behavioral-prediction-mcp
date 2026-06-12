@@ -62,12 +62,12 @@ export CHAINAWARE_API_KEY="your-key-here"
 ### chainaware-reputation-scorer
 **File:** `.claude/agents/chainaware-reputation-scorer.md`
 **Model:** claude-haiku-4-5-20251001
-**Tools:** `predictive_behaviour`, `predictive_fraud`
+**Tools:** `predictive_behaviour`
 **Purpose:** Calculates a numeric reputation score using the ChainAware formula.
-**Formula:** `1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)`
+**Formula:** `(1000 / 110) × (experience + 1) × (riskCapability + 1) × (1 - probabilityFraud)` — max score = 1000; `experience` (0–10) and `riskCapability` (0–9) are direct fields from `predictive_behaviour`
 **Triggers:** "reputation score for 0x...", "score this wallet", "rank these wallets", "which wallet is better?"
 **Input:** wallet address + network
-**Output:** Reputation score (0–4000), tier label, component breakdown
+**Output:** Reputation score (0–1000), band label, component breakdown
 
 ---
 

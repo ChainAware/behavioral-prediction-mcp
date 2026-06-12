@@ -123,20 +123,11 @@ If the user specifies a governance model, adapt the output:
 - Note: *"Apply this multiplier to the wallet's token holdings when calculating final voting power"*
 
 ### Reputation-Weighted
-- Use the ChainAware Reputation Score directly as the weight:
+- Use the ChainAware Reputation Score directly as the weight (max = 1000):
   ```
-  Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+  Reputation Score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
   ```
-  Where `willingness_to_take_risk` maps from `riskProfile`:
-
-  | riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-  |---------------------|---------------|----------------------------|
-  | Conservative | 0–2 | 0.10 |
-  | Moderate | 3–4 | 0.35 |
-  | Balanced | 5–6 | 0.55 |
-  | Aggressive | 7–8 | 0.75 |
-  | Very Aggressive / High Risk | 9–10 | 0.95 |
-  | Missing / unavailable | — | 0.25 |
+  Where `experience` = `experience.Value` raw (0–10) and `risk_capability` = `riskCapability` raw (0–9) — both direct fields from `predictive_behaviour`. Default `risk_capability = 2` if missing.
 
 - Output the raw reputation score alongside the tier
 
@@ -204,13 +195,13 @@ and return a ranked governance leaderboard:
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xABC... | 9.2/10 | 0.01 | 8 | 2.0× | 3,241 |
+| 0xABC... | 9/10 Expert | 0.01 | 8 | 2.0× | 812 |
 
 #### ✅ Active Members ([N] wallets)
 
 | Wallet | Experience | Fraud Prob | Protocols | Multiplier | Rep Score |
 |--------|------------|------------|-----------|------------|-----------|
-| 0xDEF... | 6.7/10 | 0.08 | 4 | 1.5× | 1,876 |
+| 0xDEF... | 6/10 Experienced | 0.08 | 4 | 1.5× | 430 |
 
 #### ✅ Participants ([N] wallets)
 ...

@@ -77,37 +77,28 @@ For every eligible wallet, calculate the reputation score using the standard
 ChainAware formula:
 
 ```
-Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+Reputation Score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
 ```
+
+Max score = 1000.
 
 ### Variable Mapping
 
 | Variable | Source | Extraction |
 |----------|--------|------------|
-| `experience` | `experience.Value` ÷ 10 | Normalize 0–10 → 0.00–1.00 |
-| `willingness_to_take_risk` | `riskProfile[].Category` | Map category to numeric (see below) |
+| `experience` | `experience.Value` | Raw integer 0–10 — do NOT normalize |
+| `risk_capability` | `riskCapability` | Raw integer 0–9 — direct field; default 2 if missing |
 | `fraud_probability` | `probabilityFraud` | Included in `predictive_behaviour` response |
-
-### Risk Category Mapping
-
-| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-|---------------------|---------------|----------------------------|
-| `Conservative` | 0–2 | 0.10 |
-| `Moderate` | 3–4 | 0.35 |
-| `Balanced` | 5–6 | 0.55 |
-| `Aggressive` | 7–8 | 0.75 |
-| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
-| Missing / unavailable | — | 0.25 (default) |
 
 ### Score Tiers
 
 | Score | Tier | Allocation Multiplier |
 |-------|------|-----------------------|
-| 3000–4000 | 🥇 Elite | 4× base allocation |
-| 2000–2999 | 🥈 Power User | 3× base allocation |
-| 1000–1999 | 🥉 Active User | 2× base allocation |
-| 500–999 | ⬜ Regular User | 1× base allocation |
-| 0–499 | 🔵 Low Score | 0.5× base allocation |
+| 751–1000 | 🥇 Elite | 4× base allocation |
+| 501–750 | 🥈 Power User | 3× base allocation |
+| 251–500 | 🥉 Active User | 2× base allocation |
+| 126–250 | ⬜ Regular User | 1× base allocation |
+| 0–125 | 🔵 Low Score | 0.5× base allocation |
 
 ---
 
@@ -131,7 +122,7 @@ If no budget is provided, output multipliers only and let the project apply them
 
 1. **Receive** list of wallet addresses + network (+ optional: fraud threshold, token budget)
 2. **For each wallet:**
-   a. Run `predictive_behaviour` — extract experience, riskProfile, categories, `probabilityFraud`, and `forensic_details` in a single call
+   a. Run `predictive_behaviour` — extract experience, riskCapability, categories, `probabilityFraud`, and `forensic_details` in a single call
       (For POLYGON, TON, TRON networks, call `predictive_fraud` only — skip reputation scoring)
    b. Apply disqualification rules using fraud fields from the response
    c. If not disqualified, calculate reputation score
@@ -157,11 +148,11 @@ If no budget is provided, output multipliers only and let the project apply them
 
 | Rank | Wallet | Reputation Score | Tier | Experience | Risk Profile | Fraud Prob | Multiplier | Allocation |
 |------|--------|-----------------|------|------------|--------------|------------|------------|------------|
-| 1 | 0xABC... | 3,241 | 🥇 Elite | 9.1/10 | Aggressive | 0.01 | 4× | [X tokens] |
-| 2 | 0xDEF... | 2,156 | 🥈 Power User | 7.4/10 | Balanced | 0.03 | 3× | [X tokens] |
-| 3 | 0xGHI... | 1,489 | 🥉 Active User | 5.5/10 | Moderate | 0.08 | 2× | [X tokens] |
-| 4 | 0xJKL... | 743 | ⬜ Regular | 3.8/10 | Conservative | 0.05 | 1× | [X tokens] |
-| 5 | 0xMNO... | 312 | 🔵 Low Score | 1.8/10 | Conservative | 0.12 | 0.5× | [X tokens] |
+| 1 | 0xABC... | 812 | 🥇 Elite | 9/10 Expert | Aggressive | 0.01 | 4× | [X tokens] |
+| 2 | 0xDEF... | 617 | 🥈 Power User | 7/10 Experienced | Balanced | 0.03 | 3× | [X tokens] |
+| 3 | 0xGHI... | 372 | 🥉 Active User | 5/10 Experienced | Moderate | 0.08 | 2× | [X tokens] |
+| 4 | 0xJKL... | 182 | ⬜ Regular | 3/10 Intermediate | Conservative | 0.05 | 1× | [X tokens] |
+| 5 | 0xMNO... | 74 | 🔵 Low Score | 1/10 Beginner | Conservative | 0.12 | 0.5× | [X tokens] |
 
 ---
 

@@ -755,7 +755,7 @@ This repository includes **32 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-trust-scorer` | Trust score (0.00–1.00) |
 | `chainaware-credit-scorer` | Crypto credit score (1–9) for lending and creditworthiness decisions |
 | `chainaware-ltv-estimator` | 12-month revenue potential (LTV) as a USD range based on behavioral signals |
-| `chainaware-reputation-scorer` | Reputation score (0–4000) |
+| `chainaware-reputation-scorer` | Reputation score (0–1000) |
 | `chainaware-aml-scorer` | AML compliance scoring (0–100) |
 | `chainaware-wallet-ranker` | Wallet experience rank + leaderboard |
 | `chainaware-wallet-marketer` | Personalized marketing messages |

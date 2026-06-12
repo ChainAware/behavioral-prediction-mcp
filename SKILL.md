@@ -529,7 +529,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-fraud-detector` | Fast fraud screening, batch wallet checks |
 | `chainaware-rug-pull-detector` | Contract/LP safety with deployer analysis |
 | `chainaware-wallet-marketer` | Personalized marketing messages per wallet segment |
-| `chainaware-reputation-scorer` | Reputation score 0–4000 |
+| `chainaware-reputation-scorer` | Reputation score 0–1000 |
 | `chainaware-aml-scorer` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Simple composable trust score 0.00–1.00 |
 | `chainaware-credit-scorer` | Crypto credit score 1–9 for lending and creditworthiness decisions |

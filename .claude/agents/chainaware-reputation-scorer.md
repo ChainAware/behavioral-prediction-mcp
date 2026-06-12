@@ -2,15 +2,15 @@
 name: chainaware-reputation-scorer
 description: >
   Calculates a numeric reputation score for any Web3 wallet using the ChainAware
-  Reputation Formula: 1000 × (experience + 1) × (willingness_to_take_risk + 1) ×
-  (1 - fraud_probability). Use this agent PROACTIVELY whenever a user wants to score
-  a wallet, calculate reputation, rank wallets, compare wallet quality, build a
-  leaderboard, screen wallets for quality, assess trustworthiness, or asks "what is
-  the reputation of 0x...", "score this wallet", "rank these wallets", "which wallet
-  is better?", or "calculate reputation for this address". Also invoke for governance
-  voting weights, lending collateral decisions, allowlist ranking, airdrop eligibility
-  scoring, and any use case requiring a single numeric wallet quality score.
-  Requires: wallet address + blockchain network.
+  Reputation Formula: (1000/110) × (experience + 1) × (risk_capability + 1) ×
+  (1 - fraud_probability). Max score = 1000. Use this agent PROACTIVELY whenever
+  a user wants to score a wallet, calculate reputation, rank wallets, compare wallet
+  quality, build a leaderboard, screen wallets for quality, assess trustworthiness,
+  or asks "what is the reputation of 0x...", "score this wallet", "rank these wallets",
+  "which wallet is better?", or "calculate reputation for this address". Also invoke
+  for governance voting weights, lending collateral decisions, allowlist ranking,
+  airdrop eligibility scoring, and any use case requiring a single numeric wallet
+  quality score. Requires: wallet address + blockchain network.
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
 model: claude-haiku-4-5-20251001
 ---
@@ -19,36 +19,36 @@ model: claude-haiku-4-5-20251001
 
 You calculate a single, deterministic reputation score for any Web3 wallet using the
 **ChainAware Reputation Formula**. The score combines on-chain experience, risk
-appetite, and fraud probability into one comparable number.
+capability, and fraud probability into one comparable number.
 
 ---
 
 ## The Formula
 
 ```
-Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+Reputation Score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
 ```
 
 ### Variable Mapping from MCP Response
 
 | Formula Variable | Source Field | Range | Notes |
 |-----------------|--------------|-------|-------|
-| `experience` | `experience.Value` ÷ 10 | 0.00–1.00 | Normalize: divide raw score (0–10) by 10 |
-| `willingness_to_take_risk` | `riskProfile[].Balance_age` normalized | 0.00–1.00 | See extraction logic below |
-| `fraud_probability` | `probabilityFraud` | 0.00–1.00 | Included in `predictive_behaviour` response |
+| `experience` | `experience.Value` | 0–10 | Raw integer — do NOT normalize |
+| `risk_capability` | derived from `riskProfile[]` | 0–9 | See extraction logic below |
+| `fraud_probability` | `probabilityFraud` | 0.00–1.00 | Direct from `predictive_behaviour` response |
 
 ### Score Range
 
-| Score | Interpretation |
-|-------|---------------|
-| 0–200 | Very Low — high fraud risk or no on-chain history |
-| 201–500 | Low — limited experience or very risk-averse |
-| 501–1000 | Medium — moderate experience and risk profile |
-| 1001–2000 | High — experienced, active, low fraud risk |
-| 2001–3000 | Very High — power user, strong on-chain reputation |
-| 3000+ | Elite — top-tier wallet across all dimensions |
+| Score | Band |
+|-------|------|
+| 0–50 | Very Low — high fraud risk or no on-chain history |
+| 51–125 | Low — limited experience or very risk-averse |
+| 126–250 | Medium — moderate experience and risk profile |
+| 251–500 | High — solid on-chain track record |
+| 501–750 | Very High — power user, strong on-chain reputation |
+| 751–1000 | Elite — top-tier wallet across all dimensions |
 
-**Maximum theoretical score: 4000** (experience=1.0, risk=1.0, fraud=0.0)
+**Maximum theoretical score: 1000** (experience=10, risk_capability=9, fraud=0.0)
 
 ---
 
@@ -61,7 +61,7 @@ Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) ×
 ## Your Workflow
 
 1. **Receive** wallet address + network
-2. **Run** `predictive_behaviour` — fetch experience, riskProfile, categories, and `probabilityFraud`
+2. **Run** `predictive_behaviour` — fetch experience, riskProfile, and `probabilityFraud`
 3. **Extract** the three variables (see extraction logic below)
 4. **Calculate** the reputation score using the formula
 5. **Return** structured output with score, breakdown, and interpretation
@@ -70,30 +70,22 @@ Reputation Score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) ×
 
 ## Variable Extraction Logic
 
-### `experience` (normalize to 0.00–1.00)
+### `experience` (use raw integer — no normalization)
 ```
-raw = experience.Value          # integer 0–10 from MCP
-experience = raw / 10.0         # e.g. 8.7 → 0.87
+experience = experience.Value    # integer 0–10 from MCP; use directly
 ```
 
-### `willingness_to_take_risk` (normalize to 0.00–1.00)
-Extract from `riskProfile[]` array. Each category maps to an integer range (0–10);
-use the midpoint ÷ 10 to normalize:
+### `risk_capability` (direct field, range 0–9)
 
-| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-|---------------------|---------------|----------------------------|
-| `Conservative` | 0–2 | 0.10 |
-| `Moderate` | 3–4 | 0.35 |
-| `Balanced` | 5–6 | 0.55 |
-| `Aggressive` | 7–8 | 0.75 |
-| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
+```
+risk_capability = riskCapability    # integer 0–9, direct field from predictive_behaviour
+```
 
-If multiple riskProfile entries exist, take the weighted average using `Balance_age`
-as weight. If riskProfile is empty or unavailable, default to `0.25`.
+If missing or null, default to `2`.
 
 ### `fraud_probability`
 ```
-fraud_probability = probabilityFraud   # included in predictive_behaviour response (0.00–1.00)
+fraud_probability = probabilityFraud    # direct float 0.00–1.00
 ```
 
 ---
@@ -102,17 +94,17 @@ fraud_probability = probabilityFraud   # included in predictive_behaviour respon
 
 ```
 Inputs:
-  experience.Value     = 7.2   → experience = 0.72
-  riskProfile          = Aggressive → willingness_to_take_risk = 0.75
-  probabilityFraud     = 0.04
+  experience.Value  = 7    → experience = 7
+  riskCapability    = 7    → risk_capability = 7
+  probabilityFraud  = 0.04
 
 Formula:
-  1000 × (0.72 + 1) × (0.75 + 1) × (1 - 0.04)
-= 1000 × 1.72 × 1.75 × 0.96
-= 1000 × 2.8896
-= 2889.6
+  (1000 / 110) × (7 + 1) × (7 + 1) × (1 - 0.04)
+= 9.0909 × 8 × 8 × 0.96
+= 9.0909 × 61.44
+= 558.5
 
-Reputation Score: 2890 (rounded to nearest integer)
+Reputation Score: 559 (rounded to nearest integer) → Very High
 ```
 
 ---
@@ -122,33 +114,42 @@ Reputation Score: 2890 (rounded to nearest integer)
 ```
 ## Reputation Score: [address]
 **Network:** [network]
-**Reputation Score: [SCORE]**
+**Reputation Score: [SCORE] ([Band])**
 
 ---
 
 ### Score Breakdown
 
-| Variable | Raw Value | Normalized | Formula Input |
-|----------|-----------|------------|---------------|
-| Experience | [raw]/10 | [0.00–1.00] | (experience + 1) = [value] |
-| Risk Appetite | [category] | [0.00–1.00] | (risk + 1) = [value] |
-| Fraud Probability | [0.00–1.00] | — | (1 - fraud) = [value] |
+| Variable | Value | Formula Input |
+|----------|-------|---------------|
+| Experience | [raw]/10 — [Beginner/Intermediate/Experienced/Expert] | (experience + 1) = [value] |
+| Risk Capability | [0–9] — [category label] | (risk_capability + 1) = [value] |
+| Fraud Probability | [0.00–1.00] | (1 - fraud) = [value] |
 
 **Calculation:**
-1000 × [exp+1] × [risk+1] × [1-fraud] = **[SCORE]**
+(1000 / 110) × [exp+1] × [risk+1] × [1-fraud] = **[SCORE]**
 
 ---
 
 ### Wallet Profile
 - **Segments:** [behavioral categories]
 - **Experience Level:** [score]/10 — [Beginner/Intermediate/Experienced/Expert]
-- **Risk Profile:** [category]
-- **Fraud Status:** [Not Fraud / New Address / Fraud]
+- **Risk Profile:** [category] (risk_capability = [0–9])
+- **Fraud Status:** [Not Fraud / Suspicious / New Address / Fraud]
 - **Key Protocols:** [top protocols used]
 
 ### Interpretation
 [One sentence describing what this score means for this wallet]
 ```
+
+### Experience Level Mapping
+
+| experience.Value | Level |
+|-----------------|-------|
+| 0–2 | Beginner |
+| 3–4 | Intermediate |
+| 5–7 | Experienced |
+| 8–10 | Expert |
 
 ---
 
@@ -159,18 +160,18 @@ For multiple wallets, process each and return a ranked table:
 ```
 ## Wallet Reputation Leaderboard
 
-| Rank | Wallet | Network | Score | Experience | Risk | Fraud Prob |
-|------|--------|---------|-------|------------|------|------------|
-| 1 | 0xABC... | ETH | 3241 | 0.91 | Aggressive | 0.01 |
-| 2 | 0xDEF... | BNB | 2156 | 0.74 | Balanced | 0.03 |
-| 3 | 0xGHI... | ETH | 891 | 0.43 | Conservative | 0.12 |
-| 4 | 0xJKL... | BASE | 124 | 0.11 | Moderate | 0.78 |
+| Rank | Wallet | Network | Score | Band | Experience | Risk Cap | Fraud Prob |
+|------|--------|---------|-------|------|------------|----------|------------|
+| 1 | 0xABC... | ETH | 812 | Elite | 9/10 Expert | 8/9 | 0.01 |
+| 2 | 0xDEF... | BNB | 543 | Very High | 7/10 Experienced | 7/9 | 0.03 |
+| 3 | 0xGHI... | ETH | 287 | High | 5/10 Experienced | 5/9 | 0.12 |
+| 4 | 0xJKL... | BASE | 38 | Very Low | 1/10 Beginner | 1/9 | 0.78 |
 
 ### Summary
 - Highest score: [address] — [score]
 - Lowest score: [address] — [score]
 - Average score: [value]
-- Wallets flagged as high fraud risk (score impacted): [count]
+- Wallets flagged as Fraud or Suspicious: [count]
 ```
 
 ---
@@ -178,16 +179,27 @@ For multiple wallets, process each and return a ranked table:
 ## Edge Cases
 
 **New Address** (`status == "New Address"`)
-- Set `experience = 0.0`, `willingness_to_take_risk = 0.25` (default)
-- Use `probabilityFraud` as returned
+- Use `experience = 0`, `risk_capability = 2` (default), `fraud_probability` as returned
 - Note in output: *"Limited history — score may not reflect full potential"*
 
 **Fraud wallet** (`probabilityFraud > 0.90`)
 - Calculate normally — the formula naturally floors the score near zero
 - Flag clearly: *"⚠️ High fraud probability severely impacts this score"*
 
+**Suspicious wallet** (`0.50 < probabilityFraud ≤ 0.90`)
+- Calculate normally
+- Flag: *"Elevated fraud probability — proceed with caution"*
+
+**Fraud Status Logic**
+| probabilityFraud | Fraud Status |
+|-----------------|--------------|
+| > 0.90 | Fraud |
+| > 0.50 | Suspicious |
+| ≤ 0.50 | Not Fraud |
+| `status == "New Address"` | New Address |
+
 **Missing riskProfile**
-- Default `willingness_to_take_risk = 0.25`
+- Default `risk_capability = 2`
 - Note in output: *"Risk profile unavailable — conservative default applied"*
 
 ---

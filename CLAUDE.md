@@ -57,7 +57,7 @@ behavioral-prediction-mcp/
 | `chainaware-fraud-detector` | Sonnet | `predictive_fraud` | Fast fraud screening, batch checks |
 | `chainaware-rug-pull-detector` | Haiku | `predictive_rug_pull` + `predictive_fraud` | Contract/LP safety checks |
 | `chainaware-wallet-marketer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Personalized marketing messages |
-| `chainaware-reputation-scorer` | Haiku | `predictive_behaviour` + `predictive_fraud` | Reputation score 0–4000 |
+| `chainaware-reputation-scorer` | Haiku | `predictive_behaviour` | Reputation score 0–1000 |
 | `chainaware-aml-scorer` | Haiku | `predictive_fraud` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Haiku | `predictive_fraud` | Simple trust score 0.00–1.00 |
 | `chainaware-credit-scorer` | Haiku | `credit_score` | Crypto credit score 1–9 combining fraud probability + social graph analysis |
@@ -88,7 +88,7 @@ behavioral-prediction-mcp/
 
 ### Key Scoring Formulas
 
-**Reputation Score:** `1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)`
+**Reputation Score:** `(1000 / 110) × (experience + 1) × (riskCapability + 1) × (1 - probabilityFraud)` (max = 1000; `experience` raw 0–10, `riskCapability` raw 0–9 — both direct fields from `predictive_behaviour`)
 
 **AML Score:** `(1 - probabilityFraud) × 100` (only when forensic_details has no negative flags; else score = 0)
 

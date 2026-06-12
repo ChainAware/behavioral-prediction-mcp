@@ -95,13 +95,13 @@ Step 4 — Calculate reputation score and normalize
 
   IF agent_type == "wallet":
     Run predictive_behaviour on agent wallet
-    Compute reputation score (0–4000) using full formula
+    Compute reputation score (0–1000) using full formula
     Normalize to 2.0–10.0
     →  Score: [2.0–10.0]
 
   IF agent_type == "contract":
     predictive_behaviour unavailable — use rug pull result as proxy
-    reputation_score = (1 - agent_probabilityFraud) × 2000
+    reputation_score = (1 - agent_probabilityFraud) × 500
     Normalize as usual, cap at 6.0
     Note: "⚠️ Behavioural data unavailable for contract agents — score capped at 6.0."
     →  Score: [2.0–6.0]
@@ -125,35 +125,24 @@ Step 4 — Calculate reputation score and normalize
 
 ## Reputation Score Calculation (Step 4 — `agent_type` = "wallet" only)
 
-Use the standard ChainAware reputation formula:
+Use the standard ChainAware reputation formula (max score = 1000):
 
 ```
-reputation_score = 1000 × (experience + 1) × (willingness_to_take_risk + 1) × (1 - fraud_probability)
+reputation_score = (1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 - fraud_probability)
 ```
 
 ### Variable Extraction
 
 | Variable | Source | Extraction |
 |----------|--------|------------|
-| `experience` | `experience.Value` from `predictive_behaviour` | Divide by 10 → range 0.00–1.00 |
-| `willingness_to_take_risk` | `riskProfile[].Category` from `predictive_behaviour` | Map to numeric (see below) |
-| `fraud_probability` | `probabilityFraud` from `predictive_fraud` on agent wallet | Direct value 0.00–1.00 |
+| `experience` | `experience.Value` from `predictive_behaviour` | Raw integer 0–10 — do NOT normalize |
+| `risk_capability` | `riskCapability` from `predictive_behaviour` | Raw integer 0–9 — direct field; default 2 if missing |
+| `fraud_probability` | `probabilityFraud` from `predictive_behaviour` on agent wallet | Direct value 0.00–1.00 |
 
-### Risk Category Mapping
-
-| riskProfile Category | Integer Range | Normalized (midpoint ÷ 10) |
-|---------------------|---------------|----------------------------|
-| `Conservative` | 0–2 | 0.10 |
-| `Moderate` | 3–4 | 0.35 |
-| `Balanced` | 5–6 | 0.55 |
-| `Aggressive` | 7–8 | 0.75 |
-| `Very Aggressive` / `High Risk` | 9–10 | 0.95 |
-| Missing / unavailable | — | 0.25 (default) |
-
-### Normalization (0–4000 → 2.0–10.0)
+### Normalization (0–1000 → 2.0–10.0)
 
 ```
-agent_trust_score = round(2.0 + (reputation_score / 4000) × 8.0, 1)
+agent_trust_score = round(2.0 + (reputation_score / 1000) × 8.0, 1)
 ```
 
 Bounds: minimum 2.0, maximum 10.0.
@@ -163,11 +152,11 @@ Bounds: minimum 2.0, maximum 10.0.
 | reputation_score | agent_trust_score |
 |-----------------|------------------|
 | 0 | 2.0 |
-| 500 | 3.0 |
-| 1000 | 4.0 |
-| 2000 | 6.0 |
-| 3000 | 8.0 |
-| 4000 | 10.0 |
+| 125 | 3.0 |
+| 250 | 4.0 |
+| 500 | 6.0 |
+| 750 | 8.0 |
+| 1000 | 10.0 |
 
 ---
 
@@ -221,7 +210,7 @@ These do not change the score but are included in the output for the caller to a
 | 1 | Feeder [fraud / rug pull] check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
 | 2 | Agent [fraud / rug pull] check | [✅ Clean (prob: x) / ❌ FRAUD (prob: x)] |
 | 3 | Agent address history | [✅ Has history / ⚠️ New Address / — N/A (contract)] |
-| 4 | Reputation score | [score] / [4000 or 2000 proxy] → normalized [x.x] |
+| 4 | Reputation score | [score] / [1000 or 500 proxy] → normalized [x.x] |
 
 ---
 
@@ -240,7 +229,7 @@ These do not change the score but are included in the output for the caller to a
 - **Experience:** [score / 10, or "N/A (contract)"]
 - **Risk Profile:** [category, or "N/A (contract)"]
 - **Behavioral Segments:** [categories, or "N/A (contract)"]
-- **Reputation Score:** [raw] / [4000 full / 2000 proxy (contract)]
+- **Reputation Score:** [raw] / [1000 full / 500 proxy (contract)]
 
 ---
 
