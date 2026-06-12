@@ -148,9 +148,9 @@ subagents:
 
   - id: chainaware-reputation-scorer
     display_name: "Reputation Scorer"
-    description: "Calculates a reputation score (0–4000) using the ChainAware formula."
+    description: "Calculates a reputation score (0–1000) using the ChainAware formula."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour]
     file: .claude/agents/chainaware-reputation-scorer.md
 
   - id: chainaware-aml-scorer

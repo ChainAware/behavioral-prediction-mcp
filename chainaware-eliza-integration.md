@@ -131,7 +131,7 @@ elizaos start --character eliza/characters/chainaware-fraud-detector.json
 | `chainaware-trust-scorer.json` | Trust Scorer | Simple trust score 0.00–1.00 (`1 - fraud_probability`) |
 | `chainaware-rug-pull-detector.json` | Rug Pull Detector | Smart contract and LP safety — probabilistic rug pull scoring |
 | `chainaware-wallet-marketer.json` | Wallet Marketer | Personalized marketing message (≤20 words) per wallet |
-| `chainaware-reputation-scorer.json` | Reputation Scorer | Reputation score 0–4000 using the ChainAware formula |
+| `chainaware-reputation-scorer.json` | Reputation Scorer | Reputation score 0–1000 using the ChainAware formula |
 | `chainaware-wallet-ranker.json` | Wallet Ranker | Global wallet rank by experience, points, and behavioral tier |
 | `chainaware-token-ranker.json` | Token Ranker | Discover and rank tokens by holder community strength |
 | `chainaware-token-analyzer.json` | Token Analyzer | Single-token deep dive — community rank + top holder quality |
