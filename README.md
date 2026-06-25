@@ -117,7 +117,55 @@ Error cases:
     • `500 Internal Server Error` → temporary downstream failure  
 ---
 
-### 2. Predictive Behaviour Analysis Tool
+### 2. Batch Predictive Fraud Detection Tool 
+
+**ID:** `predictive_fraud_batch`
+
+**Description:**
+This AI‑powered algorithm forecasts the likelihood of fraudulent activity on a given wallet address *before* it happens (≈98% accuracy), and performs AML/Anti‑Money‑Laundering checks in batch. 
+Schedule a batch fraud calculation job for a list of wallet addresses. 
+Use this when the user provides a CSV or list of addresses to analyse.
+Returns a job_id and signature immediately — report the job_id to the user and store both job_id and signature in context, they are required for all follow-up calls.
+Do NOT poll or wait for results after scheduling.
+
+➡️ Example Use Cases:
+
+    • Run fraud batch for this list of addresses on ETH network ?
+    • What is the fraudulent status of this addresses on BNB ? 
+
+**Inputs:**
+
+| Name            | Type               | Required | Description                                                               |
+| --------------- | -----------------  | -------- | ------------------------------------------------------------------------- |
+| `apiKey`        | string             | ✅        | API key for authentication                                               |
+| `network`       | string             | ✅        | Blockchain network (`ETH`, `BNB`,`POLYGON`,`TON`,`BASE`, `TRON`, `HAQQ`) |
+| `addresses`     | array[objects]     | ✅        | The list ofwallet address to evaluate                                    |
+
+
+
+**Outputs (JSON):**
+
+  ```json
+  {
+    "message": "Job scheduled successfully.",
+    "job_id": "0fc5897a-ad64-4f21-88b5-1274d1cfec46",
+    "signature": "260866090d88bf61bdfb54f0533fe876bfd8ded7339691c50ada9de59a48124a",
+    "total_items": 5,
+    "chunks_enqueued": 1,
+    "status": "pending"
+  }
+
+```
+
+Error cases:
+
+    • `403 Unauthorized` → invalid `apiKey`  
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+---
+
+
+### 3. Predictive Behaviour Analysis Tool
 
 **ID:** `predictive_behaviour`
 
@@ -275,8 +323,66 @@ Error cases:
     • `500 Internal Server Error` → temporary downstream failure  
 ---
 
+### 4. Batch Predictive Behaviour Analysis Tool
 
-### 3. Predictive Rug‑Pull Detection Tool
+**ID:** `predictive_behaviour_batch`
+
+**Description:**
+    This AI‑driven engine projects what a wallet address intentions or what address is likely to do next,
+    profiles its past on‑chain history, and recommends personalized actions.
+    Schedule a batch audit (behavioral prediction batch) calculation job for a list of wallet addresses.
+    Use this when the user provides a CSV or list of addresses to analyse.
+    Returns a job_id and signature immediately — report the job_id to the user and 
+    store both job_id and signature in context, they are required for all follow-up calls.
+    Do NOT poll or wait for results after scheduling.
+
+    Use this when you need:
+
+      • Next‑best‑action predictions and intentions(“Will this addresses deposit, trade, or stake?”)  
+      • A risk‑tolerance and experience profile for given list of addresses
+      • Category segmentation (e.g. NFT, DeFi, Bridge usage)  
+      • Custom recommendations based on historical patterns
+
+
+➡️ Example Use Cases:
+
+    • “What will this addresses do next?”  
+    • “Are these users high‑risk or experienced?”  
+    • “Recommend the best DeFi strategies for [{ox1..,0x2,0x3}] on ETH network.”
+
+**Inputs:**
+
+| Name            | Type           | Required           | Description                                                               |
+| --------------- | -------------- | ------------------ | ------------------------------------------------------------------------- |
+| `apiKey`        | string         | ✅                 | API key for authentication                                                |
+| `network`       | string         | ✅                 | Blockchain network (`ETH`, `BNB`,`BASE`,`HAQQ`,`SOLANA`)                  |
+| `addresses`     | array[objects] | ✅                 | The wallet address to evaluate                                            |
+
+
+
+**Outputs (JSON):**
+
+  ```json
+  {
+    "message": "Job scheduled successfully.",
+    "job_id": "0fc5897a-ad64-4f21-88b5-1274d1cfec46",
+    "signature": "260866090d88bf61bdfb54f0533fe876bfd8ded7339691c50ada9de59a48124a",
+    "total_items": 5,
+    "chunks_enqueued": 1,
+    "status": "pending"
+  }
+
+```
+
+Error cases:
+
+    • `403 Unauthorized` → invalid `apiKey`  
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+---
+
+
+### 5. Predictive Rug‑Pull Detection Tool
 
 **ID:** `predictive_rug_pull`
 
@@ -404,7 +510,7 @@ Error cases:
 ---
 
 
-### 4. Credit Score Tool
+### 6. Credit Score Tool
 
 **ID:** `credit_score`
 
@@ -453,7 +559,7 @@ Error cases:
 
 ---
 
-### 5. Token Rank List Tool
+### 7. Token Rank List Tool
 
 
 **ID:** `token_rank_list`
@@ -514,7 +620,7 @@ Error cases:
 
 ---
 
-### 6. Token Rank Single Tool
+### 8. Token Rank Single Tool
 
 **ID:** `token_rank_single`
 
@@ -579,6 +685,211 @@ Error cases:
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 
+---
+
+### 9. Check Batch Job Status 
+
+**ID:** `check_job_status`
+
+**Description:**
+Check the progress of a scheduled batch calculation job.
+Returns counts only (completed, failed, pending) — no wallet data.
+Call this when the user asks whether a job is done or how it is progressing.
+If status is 'processing' or 'pending', inform the user and do not call get_job_results.
+Only suggest fetching results when status is 'completed' or 'partial'.
+Both job_id and signature from schedule_calculation are required to call this tool.
+Never call this without both values present in context.
+
+➡️ Example Use Cases:
+
+    • What is the status of the job id 0fc5897a-ad64-4f21-88b5-1274d1cfec46 using this signature 260866090d88bf61bdfb54f0533fe876bfd8ded7339691c50ada9de59a48124a ?
+
+**Inputs:**
+
+| Name            | Type               | Required  | Description                                                                                                                 |
+| --------------- | -----------------  | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `job_id`        | string             | ✅        | The job ID returned by scheduled calculation (predictive_fraud_batch or predictive_behaviour_batch)                         |
+| `signature`     | string             | ✅        | The signature returned by scheduled calculation (predictive_fraud_batch or predictive_behaviour_batch). Required for access |
+
+
+
+**Outputs (JSON):**
+
+  ```json
+  {
+      "job_id": "0fc5897a-ad64-4f21-88b5-1274d1cfec46",
+      "status": "partial",
+      "chain": "ETH",
+      "total_items": 5,
+      "completed_items": 1,
+      "failed_items": 4,
+      "pending_items": 0,
+      "expires_at": "2026-07-01T13:51:20.000Z"
+  }
+
+```
+
+Error cases:
+
+    • `403 Unauthorized` → invalid `apiKey` 
+    • `403 Unauthorized` → invalid `signature` 
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+---
+
+### `10. Get Batch Job Results 
+
+**ID:** `get_job_results`
+
+**Description:**
+Retrieve the results of a completed or partially completed batch job.
+Only call this when check_job_status shows status is 'completed' or 'partial'.
+Returns a list of completed wallet addresses and the shared chain/network — 
+use these to query the main backend for actual wallet analysis data.
+This does NOT return wallet data directly, only the address list needed to fetch it.
+Both job_id and signature from schedule_calculation are required to call this tool.
+Never call this without both values present in context.
+
+➡️ Example Use Cases:
+
+    • What is the result of the job id 0fc5897a-ad64-4f21-88b5-1274d1cfec46 using this signature 260866090d88bf61bdfb54f0533fe876bfd8ded7339691c50ada9de59a48124a ?
+
+**Inputs:**
+
+| Name            | Type               | Required  | Description                                                                                                                 |
+| --------------- | -----------------  | --------- | --------------------------------------------------------------------------------------------------------------------------- |
+| `job_id`        | string             | ✅        | The job ID returned by scheduled calculation (predictive_fraud_batch or predictive_behaviour_batch)                         |
+| `signature`     | string             | ✅        | The signature returned by scheduled calculation (predictive_fraud_batch or predictive_behaviour_batch). Required for access |
+
+
+
+**Outputs (JSON):**
+
+  ```json
+{    
+    "message": "string",                               // e.g. “Success” or error description
+    "data":[{
+        "walletAddress": "string",                     // blockchain wallet address analyzed
+        "status": "string",                            // fraud classification result (e.g. “Fraud” | “Not Fraud” | “New Address”)
+
+        "probabilityFraud": "0.00–1.00",               // decimal probability score indicating fraud risk
+        "token": "string | null",                      // optional token context for the analysis
+        "chain": "string",                             // blockchain network identifier (e.g. ETH, BNB,BASE,HAQQ,SOLANA)
+
+        "lastChecked": "ISO-8601 timestamp",           // last time the wallet was analyzed
+
+        "forensic_details": {
+            "cybercrime": "string",                      // indicator of cybercrime association
+            "money_laundering": "string",                // money laundering activity indicator
+            "number_of_malicious_contracts_created": "string", // malicious contracts deployed by wallet
+            "gas_abuse": "string",                       // abnormal gas usage indicator
+            "financial_crime": "string",                 // financial crime activity indicator
+            "darkweb_transactions": "string",            // interaction with darkweb-linked wallets
+            "reinit": "string",                          // contract reinitialization exploit indicator
+            "phishing_activities": "string",             // phishing activity indicator
+            "fake_kyc": "string",                        // fake KYC interaction indicator
+            "blacklist_doubt": "string",                 // suspected blacklist association
+            "fake_standard_interface": "string",         // fake token interface indicator
+            "data_source": "string",                     // source of forensic intelligence
+            "stealing_attack": "string",                 // stealing attack indicator
+            "blackmail_activities": "string",            // blackmail activity indicator
+            "sanctioned": "string",                      // sanction exposure indicator
+            "malicious_mining_activities": "string",     // malicious mining activity indicator
+            "mixer": "string",                           // interaction with mixing services
+            "fake_token": "string",                      // fake token creation/use indicator
+            "honeypot_related_address": "string"         // honeypot contract interaction indicator
+        },
+
+        "categories": [
+            {
+            "Category": "string",                      // wallet interaction category (e.g. DeFi, NFT, Bridge)
+            "Count": 0                                 // number of transactions/interactions in this category
+            }
+        ],
+
+        "riskProfile": [
+            {
+            "Category": "Risk_Profile",                 // willingnes to take risk object
+            "Balance_age": 0.0                         // 1-10 willingnes to take risk value
+            }
+        ],
+
+        "segmentInfo": "string (JSON encoded)",        // serialized JSON containing protocol engagement flags (e.g "{\"Maker\":0,\"Aave_borrow\":0,\"Aave_lend\":1,\"Lido\":0,\"Uniswap\":1,\"Compound_lend\":0,\"Compound_borrow\":0}")
+
+        "experience": {
+            "Type": "string",                            // descriptor label (e.g. “Experience”)
+            "Value": 0                                   // numeric experience score level
+        },
+
+        "intention": {
+            "Type": "string",                            // descriptor label (e.g. “Intentions”)
+            "Value": {
+            "Prob_Lend": "Low | Medium | High",
+            "Prob_Trade": "Low | Medium | High",
+            "Prob_Game": "Low | Medium | High",
+            "Prob_NFT": "Low | Medium | High",
+            "Prob_Stake_ETH": "Low | Medium | High",
+            "Prob_Borrow": "Low | Medium | High",
+            "Prob_Gamble": "Low | Medium | High",
+            "Prob_Stake": "Low | Medium | High",
+            "Prob_Yield_Farm": "Low | Medium | High",
+            "Prob_Leveraged_Stake": "Low | Medium | High",
+            "Prob_Leveraged_Stake_ETH": "Low | Medium | High",
+            "Prob_Leveraged_Lend": "Low | Medium | High",
+            "Prob_Leverage_Long_ETH": "Low | Medium | High",
+            "Prob_Leverage_Long": "Low | Medium | High"
+            }
+        },
+
+        "protocols": [
+            {
+            "Protocol": "string",                      // protocol name (e.g. Uniswap, Curve, MakerDAO)
+            "Count": 0                                 // number of interactions with this protocol
+            }
+        ],
+
+        "userDetails": {
+            "wallet_age_days": 0,                        // age of wallet in days
+            "total_balance_usd": 0.0,                    // current wallet balance in USD
+            "transaction_count": 0,                      // total number of transactions executed
+            "wallet_rank": 0                             // ranking of wallet in the scoring system
+        },
+
+        "riskCapability": 0,                           // numeric risk capability score
+
+        "recommendation": {
+            "Type": "string",                            // descriptor label (e.g. “Recommendation”)
+            "Value": [
+            "string"                                   // recommended strategies or actions
+            ]
+        },
+
+        "checked_times": 0,                            // number of times the wallet analysis was executed
+        "createdAt": "ISO-8601 timestamp",             // record creation timestamp
+        "updatedAt": "ISO-8601 timestamp",             // record last update timestamp
+
+        "sanctionData": [
+            {
+            "category": "string | null",               // sanction category
+            "name": "string | null",                   // sanction list name
+            "description": "string | null",            // sanction description
+            "url": "string | null",                    // reference source URL
+            "isSanctioned": false,                     // whether the wallet is officially sanctioned
+            "createdAt": "ISO-8601 timestamp",
+            "updatedAt": "ISO-8601 timestamp"
+            }
+        ]
+    }]
+}
+
+```
+
+Error cases:
+
+    • `403 Unauthorized` → invalid `apiKey` 
+    • `403 Unauthorized` → invalid `signature` 
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
 ---
 
 ## 🧠 Example Client Usage
