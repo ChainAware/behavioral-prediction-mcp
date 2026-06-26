@@ -20,7 +20,7 @@ description: >
   defaults to inferring from transaction_type (swap/stake/bridge/approve/liquidity →
   contract; transfer → wallet). If receiver is a contract, runs a rug pull check
   instead of fraud detection.
-tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_rug_pull
+tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_rug_pull, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -90,8 +90,12 @@ then run in parallel with the sender check:
 - `receiver_type` = "contract" → run `predictive_rug_pull` on receiver
   - `status == "Fraud"` OR `probabilityFraud > 0.85` → **REJECT immediately**
 
-For batches larger than 20 wallets, skip the pre-check and let the specialist agents
-apply their own fraud gates internally.
+For batches of 5+ wallets, run the fraud gate using the batch pipeline instead of per-wallet calls:
+1. Call `predictive_fraud_batch` with all submitted addresses and network
+2. Store both `job_id` and `signature` from the response
+3. Poll `check_job_status` until status is `completed` or `partial`
+4. Call `get_job_results` — apply the same REJECT threshold (`probabilityFraud > 0.85`) to each wallet in `data[]`
+5. Fast-exit the rejected wallets; pass the remainder to specialist orchestration
 
 ---
 

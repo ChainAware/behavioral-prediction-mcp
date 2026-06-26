@@ -10,7 +10,7 @@ This guide explains how to connect ChainAware's blockchain intelligence tools to
 
 ## Available Tools
 
-ChainAware exposes 5 tools your uAgents can call:
+ChainAware exposes 10 tools your uAgents can call:
 
 | Tool | What it does | Networks |
 |---|---|---|
@@ -19,6 +19,12 @@ ChainAware exposes 5 tools your uAgents can call:
 | `predictive_rug_pull` | Scores a smart contract or liquidity pool for rug pull risk | ETH, BNB, BASE, HAQQ |
 | `token_rank_list` | Ranks tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Deep community rank + top holders for a single token contract | ETH, BNB, BASE, SOLANA |
+| `predictive_fraud_batch` | Async batch fraud screening for 5+ wallets — returns `job_id` + `signature` | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
+| `predictive_behaviour_batch` | Async batch behavioural analysis for 5+ wallets — returns `job_id` + `signature` | ETH, BNB, BASE, HAQQ, SOLANA |
+| `check_job_status` | Polls batch job status (`pending` → `processing` → `partial` / `completed`) | Network-agnostic |
+| `get_job_results` | Retrieves results for a completed or partial batch job | Network-agnostic |
+
+Batch pipeline for 5+ wallets: call `predictive_fraud_batch` or `predictive_behaviour_batch` → store `job_id` + `signature` → poll `check_job_status` → call `get_job_results`. `check_job_status` and `get_job_results` do not require the API key.
 
 ---
 

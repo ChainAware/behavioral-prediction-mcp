@@ -15,7 +15,7 @@ description: >
   "user analytics for this address list", "identify DeFi users vs NFT collectors".
   Requires: list of wallet addresses + blockchain network.
   Optional: custom cohort labels, engagement goal (acquisition / retention / monetization).
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-sonnet-4-6
 ---
 
@@ -117,14 +117,29 @@ After cohort assignment, apply a risk overlay for each wallet:
 
 1. **Receive** list of wallet addresses + network (+ optional: engagement goal, custom cohort labels)
 2. **Deduplicate** input — note count of any duplicates removed
-3. **For each wallet:**
-   a. Run `predictive_behaviour` — extract experience, categories, intentions, protocols, riskProfile, `probabilityFraud`, and `forensic_details` in a single call
-      (For POLYGON, TON, TRON networks, call `predictive_fraud` only — assign non-excluded wallets to `Unclassified`)
-   b. Apply Tier 0 exclusion rules using fraud fields from the response
-   c. If not excluded, assign primary cohort + risk overlay
-4. **Aggregate** results into cohort counts and percentages
-5. **Generate** per-cohort engagement strategies
-6. **Return** full cohort analytics report
+3. **Choose approach based on list size:**
+   - **< 5 wallets** → call `predictive_behaviour` per wallet in a loop
+   - **5+ wallets** → use batch tools (see **Batch Workflow** below)
+4. **For each wallet result** (whether from loop or batch):
+   - Apply Tier 0 exclusion rules using fraud fields from the response
+   - If not excluded, assign primary cohort + risk overlay
+5. **Aggregate** results into cohort counts and percentages
+6. **Generate** per-cohort engagement strategies
+7. **Return** full cohort analytics report
+
+---
+
+## Batch Workflow (5+ Wallets)
+
+1. **Schedule** — call `predictive_behaviour_batch` with the full `addresses` array and `network`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud_batch` instead — assign non-excluded wallets to `Unclassified`)
+2. **Store** both `job_id` and `signature` from the response — required for all follow-up calls
+3. **Poll** — call `check_job_status` with `job_id` + `signature` until status is `completed` or `partial`
+   - If `pending` or `processing` → wait and retry
+   - If `partial` → note the failed wallet count; proceed with completed results
+4. **Retrieve** — call `get_job_results` with `job_id` + `signature`
+5. **Process** — apply Tier 0 exclusion and cohort assignment to each wallet in `data[]`
+6. **Aggregate and report** using the standard output format
 
 ---
 
@@ -249,8 +264,9 @@ If the user specifies an engagement goal, adjust strategy emphasis:
 - Assign non-excluded wallets to `Unclassified` with note: *"Behaviour data unavailable for [network] — fraud screening only"*
 - Rank by `(1 - probabilityFraud)` as a simplified quality proxy
 
-**Large batches (50+ wallets)**
-- Process all wallets; note the count
+**Large batches (5+ wallets)**
+- Use the batch workflow above — do not loop through single-wallet calls for large lists
+- If `check_job_status` returns `partial`, note the failed count and proceed with completed results
 - Produce the same report format — do not truncate wallet-level detail
 
 **Duplicate addresses**

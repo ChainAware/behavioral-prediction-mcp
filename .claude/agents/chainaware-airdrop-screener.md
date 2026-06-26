@@ -13,7 +13,7 @@ description: >
   my airdrop list", "fair airdrop allocation for these addresses".
   Requires: list of wallet addresses + blockchain network. Optional: minimum reputation
   score threshold, maximum fraud probability cutoff, allocation budget (total tokens).
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -121,15 +121,30 @@ If no budget is provided, output multipliers only and let the project apply them
 ## Your Workflow
 
 1. **Receive** list of wallet addresses + network (+ optional: fraud threshold, token budget)
-2. **For each wallet:**
-   a. Run `predictive_behaviour` — extract experience, riskCapability, categories, `probabilityFraud`, and `forensic_details` in a single call
-      (For POLYGON, TON, TRON networks, call `predictive_fraud` only — skip reputation scoring)
-   b. Apply disqualification rules using fraud fields from the response
-   c. If not disqualified, calculate reputation score
-   d. Assign tier and allocation multiplier
-3. **Sort** eligible wallets by reputation score (descending)
-4. **Calculate** token allocations if budget provided
-5. **Return** full screening report
+2. **Choose approach based on list size:**
+   - **< 5 wallets** → call `predictive_behaviour` per wallet in a loop (immediate, no polling needed)
+   - **5+ wallets** → use batch tools (see **Batch Workflow** below)
+3. **For each wallet result** (whether from loop or batch):
+   - Apply disqualification rules using fraud fields from the response
+   - If not disqualified, calculate reputation score
+   - Assign tier and allocation multiplier
+4. **Sort** eligible wallets by reputation score (descending)
+5. **Calculate** token allocations if budget provided
+6. **Return** full screening report
+
+---
+
+## Batch Workflow (5+ Wallets)
+
+1. **Schedule** — call `predictive_behaviour_batch` with the full `addresses` array and `network`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud_batch` instead — skip reputation scoring)
+2. **Store** both `job_id` and `signature` from the response — required for all follow-up calls
+3. **Poll** — call `check_job_status` with `job_id` + `signature` until status is `completed` or `partial`
+   - If `pending` or `processing` → wait and retry
+   - If `partial` → some wallets failed; proceed with the completed subset and note the failures
+4. **Retrieve** — call `get_job_results` with `job_id` + `signature`
+5. **Process** — apply disqualification rules and reputation scoring to each wallet in `data[]`
+6. **Sort and report** using the standard output format
 
 ---
 
@@ -254,8 +269,9 @@ Always state which thresholds were applied at the top of the report.
 - Deduplicate before screening
 - Note: *"[N] duplicate addresses removed before screening"*
 
-**Large batches (50+ wallets)**
-- Process all wallets but note that results may take longer
+**Large batches (5+ wallets)**
+- Use the batch workflow above — do not loop through single-wallet calls for large lists
+- If `check_job_status` returns `partial`, note how many wallets failed and proceed with completed results
 - Output the same format; do not truncate the results
 
 ---

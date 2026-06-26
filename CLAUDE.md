@@ -11,16 +11,28 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 
 ---
 
-## MCP Tools (6 total)
+## MCP Tools (10 total)
 
 | Tool | Purpose | Networks |
 |---|---|---|
 | `predictive_fraud` | Fraud probability + AML forensics for a wallet | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
+| `predictive_fraud_batch` | Schedule batch fraud detection for a list of wallets; returns job_id + signature | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | `predictive_behaviour` | Wallet segmentation, intent, experience, recommendations | ETH, BNB, BASE, HAQQ, SOLANA |
+| `predictive_behaviour_batch` | Schedule batch behavioural analysis for a list of wallets; returns job_id + signature | ETH, BNB, BASE, HAQQ, SOLANA |
+| `check_job_status` | Poll progress of a batch job (completed / failed / pending counts) | — |
+| `get_job_results` | Retrieve full per-wallet results from a completed or partial batch job | — |
 | `predictive_rug_pull` | Smart contract rug pull risk scoring | ETH, BNB, BASE, HAQQ |
 | `credit_score` | Crypto credit/trust score (1–9) combining fraud + social graph analysis | ETH |
 | `token_rank_list` | Ranked list of tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Token rank + top holders for a specific contract | ETH, BNB, BASE, SOLANA |
+
+### Batch Pipeline
+
+The four batch tools form a sequential pipeline:
+```
+predictive_fraud_batch / predictive_behaviour_batch → check_job_status → get_job_results
+```
+Always store `job_id` + `signature` from the schedule call — both are required for all follow-up calls. Do not call `get_job_results` until `check_job_status` returns `completed` or `partial`.
 
 ---
 
@@ -35,6 +47,7 @@ behavioral-prediction-mcp/
 ├── references/              # Deep tool documentation
 │   ├── tools-fraud.md
 │   ├── tools-behaviour.md
+│   ├── tools-batch.md
 │   ├── tools-rug-pull.md
 │   ├── tools-credit-score.md
 │   ├── tools-token-rank-list.md
@@ -144,6 +157,7 @@ behavioral-prediction-mcp/
 ### Tool Reference Docs (this repo)
 - `references/tools-fraud.md` — `predictive_fraud` full schema, thresholds, forensic flags
 - `references/tools-behaviour.md` — `predictive_behaviour` full schema, intent signals, personalization patterns
+- `references/tools-batch.md` — `predictive_fraud_batch`, `predictive_behaviour_batch`, `check_job_status`, `get_job_results` — full batch pipeline, job lifecycle, Node.js examples
 - `references/tools-rug-pull.md` — `predictive_rug_pull` full schema, 3-layer scoring model
 - `references/tools-credit-score.md` — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - `references/tools-token-rank-list.md` — `token_rank_list` full schema, categories, sorting, pagination

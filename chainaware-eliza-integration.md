@@ -10,7 +10,7 @@ This guide explains how to connect ChainAware's blockchain intelligence tools to
 
 ## Available Tools
 
-ChainAware exposes 5 MCP tools your Eliza agents can call:
+ChainAware exposes 10 MCP tools your Eliza agents can call:
 
 | Tool ID | What it does |
 |---|---|
@@ -19,6 +19,12 @@ ChainAware exposes 5 MCP tools your Eliza agents can call:
 | `predictive_rug_pull` | Scores a liquidity pool or contract for rug pull risk |
 | `token_rank_list` | Ranks a list of tokens by quality and risk |
 | `token_rank_single` | Deep risk and quality score for a single token |
+| `predictive_fraud_batch` | Async batch fraud screening for 5+ wallets — returns `job_id` + `signature` |
+| `predictive_behaviour_batch` | Async batch behavioural analysis for 5+ wallets — returns `job_id` + `signature` |
+| `check_job_status` | Polls batch job status (`pending` → `processing` → `partial` / `completed`) |
+| `get_job_results` | Retrieves results for a completed or partial batch job |
+
+Batch pipeline: call `predictive_fraud_batch` or `predictive_behaviour_batch` → store `job_id` + `signature` → poll `check_job_status` until `completed` or `partial` → call `get_job_results`. Use for lists of 5+ wallets.
 
 Supported networks: ETH, BNB, POLYGON, BASE, TON, TRON, HAQQ, SOLANA (varies by tool).
 
@@ -26,7 +32,7 @@ Supported networks: ETH, BNB, POLYGON, BASE, TON, TRON, HAQQ, SOLANA (varies by 
 
 ## Option A — Raw Tool Access (quickest)
 
-Connect any existing Eliza agent to all 5 ChainAware tools in minutes. The agent's LLM decides which tool to call based on user input.
+Connect any existing Eliza agent to all 10 ChainAware tools in minutes. The agent's LLM decides which tool to call based on user input.
 
 ### Step 1 — Install the MCP plugin
 

@@ -31,7 +31,7 @@ Run through these before uploading anything:
 - [ ] `openai.yaml` → `interface.display_name` is correct
 - [ ] `openai.yaml` → `interface.short_description` is under 150 characters
 - [ ] `openai.yaml` → `interface.icon_small` and `icon_large` paths match actual files
-- [ ] `openai.yaml` → all 6 capabilities listed (`predictive_fraud`, `predictive_behaviour`, `predictive_rug_pull`, `credit_score`, `token_rank_list`, `token_rank_single`)
+- [ ] `openai.yaml` → all 10 capabilities listed (`predictive_fraud`, `predictive_behaviour`, `predictive_rug_pull`, `credit_score`, `token_rank_list`, `token_rank_single`, `predictive_fraud_batch`, `predictive_behaviour_batch`, `check_job_status`, `get_job_results`)
 - [ ] `openai.yaml` → all 32 subagents listed
 - [ ] `openai.yaml` → `dependencies.tools[].url` is the live MCP endpoint
 - [ ] MCP endpoint responds — test with: `curl -I https://prediction.mcp.chainaware.ai/sse`
@@ -86,7 +86,7 @@ Some OpenAI registry tiers accept a public GitHub repository directly:
 | `brand_color` | `#0066FF` |
 | `MCP endpoint` | `https://prediction.mcp.chainaware.ai/sse` |
 | `auth type` | API Key (`X-API-Key` header) |
-| `capabilities` | 6 tools |
+| `capabilities` | 10 tools |
 | `subagents` | 32 specialist agents |
 
 ---

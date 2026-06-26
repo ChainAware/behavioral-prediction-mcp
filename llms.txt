@@ -9,7 +9,7 @@
 - **GitHub:** https://github.com/ChainAware/behavioral-prediction-mcp
 - **Website:** https://chainaware.ai
 
-## MCP Tools (6)
+## MCP Tools (10)
 
 - `predictive_fraud` — Fraud probability (0–1) + AML forensic flags for a wallet. Networks: ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ.
 - `predictive_behaviour` — Wallet segmentation, intent, experience level, protocol history, personalized recommendations. Networks: ETH, BNB, BASE, HAQQ, SOLANA.
@@ -17,6 +17,10 @@
 - `credit_score` — Crypto credit/trust score (1–9) combining fraud probability and social graph analysis. Networks: ETH only.
 - `token_rank_list` — Ranked list of tokens by holder community strength, with search, filter, sort, and pagination. Networks: ETH, BNB, BASE, SOLANA.
 - `token_rank_single` — Token community rank + top holders for a specific contract address. Networks: ETH, BNB, BASE, SOLANA.
+- `predictive_fraud_batch` — Async batch fraud screening for 5+ wallets. Returns `job_id` + `signature`; follow up with `check_job_status` → `get_job_results`. Networks: same as `predictive_fraud`.
+- `predictive_behaviour_batch` — Async batch behavioural analysis for 5+ wallets. Returns `job_id` + `signature`; follow up with `check_job_status` → `get_job_results`. Networks: same as `predictive_behaviour`.
+- `check_job_status` — Polls the status of a batch job (`pending` → `processing` → `partial` / `completed`). Requires `job_id` + `signature`. No API key required.
+- `get_job_results` — Retrieves results for a completed or partial batch job. Requires `job_id` + `signature`. No API key required.
 
 ## Claude Code Subagents (32)
 
@@ -87,6 +91,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 - [references/tools-token-rank-list.md](./references/tools-token-rank-list.md) — `token_rank_list` full schema
 - [references/tools-credit-score.md](./references/tools-credit-score.md) — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - [references/tools-token-rank-single.md](./references/tools-token-rank-single.md) — `token_rank_single` full schema
+- [references/tools-batch.md](./references/tools-batch.md) — `predictive_fraud_batch`, `predictive_behaviour_batch`, `check_job_status`, `get_job_results` — async batch pipeline
 
 ## Further Reading
 

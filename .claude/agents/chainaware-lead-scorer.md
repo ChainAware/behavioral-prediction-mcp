@@ -16,7 +16,7 @@ description: >
   Requires: wallet address + blockchain network.
   Optional: product context (what you are selling), outreach goal
   (acquisition / upsell / reactivation), batch list of wallets.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -207,7 +207,16 @@ If product context is provided, tailor the angle specifically to that product.
 
 ## Batch Mode
 
-For ranking a list of wallets by lead quality (e.g. before a marketing campaign):
+For ranking a list of wallets by lead quality, choose approach by list size:
+- **< 5 wallets** → call `predictive_behaviour` per wallet in a loop (fallback: `predictive_fraud` for POLYGON/TON/TRON)
+- **5+ wallets** → use the batch pipeline:
+  1. Call `predictive_behaviour_batch` with the full address list and network (fallback: `predictive_fraud_batch` for POLYGON/TON/TRON)
+  2. Store both `job_id` and `signature` from the response
+  3. Poll `check_job_status` until status is `completed` or `partial`
+  4. Call `get_job_results` to retrieve all wallet data
+  5. Apply the full scoring workflow to each wallet in `data[]`, then rank and report
+
+Output format for batch lead reports (e.g. before a marketing campaign):
 
 ```
 ## Lead Scoring Report — [N] wallets on [network]

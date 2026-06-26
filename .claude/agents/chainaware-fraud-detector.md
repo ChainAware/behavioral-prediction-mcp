@@ -9,7 +9,7 @@ description: >
   "AML", "fraud", "risk", or "suspicious". Also use for onboarding wallet screening,
   compliance checks, and pre-transaction safety verification. Triggers on any
   blockchain address (0x..., ENS names, Solana addresses) paired with a safety concern.
-tools: mcp__chainaware-behavioral-prediction__predictive_fraud, WebSearch
+tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results, WebSearch
 model: claude-sonnet-4-6
 ---
 
@@ -130,7 +130,16 @@ Key fields returned by `predictive_fraud`:
 
 ## Batch Screening
 
-If the user provides multiple addresses, screen them in sequence and return a summary table:
+For multiple addresses, choose the approach based on list size:
+- **< 5 wallets** → call `predictive_fraud` per address in sequence
+- **5+ wallets** → use the batch pipeline:
+  1. Call `predictive_fraud_batch` with the full address list and network
+  2. Store both `job_id` and `signature` from the response
+  3. Poll `check_job_status` until status is `completed` or `partial`
+  4. Call `get_job_results` to retrieve all results
+  5. Apply the same risk thresholds and output format to each wallet in `data[]`
+
+Return a summary table:
 
 ```
 ## Batch Fraud Screening Results

@@ -1,7 +1,7 @@
 ---
 name: chainaware-sybil-detector
 description: Screens a list of wallet addresses for Sybil attacks, coordinated voting fraud, and low-quality participation in DAO governance votes. Use this agent PROACTIVELY whenever a user wants to validate voter eligibility, detect Sybil wallets in a governance proposal, weight votes by wallet quality, filter low-reputation addresses from a voter list, or asks "screen these wallets for governance", "are these voters legitimate?", "detect Sybil attackers in this vote", "rank these voters by quality", "which wallets should be excluded from this proposal?", or "run Sybil detection on this voter list". Also invoke for snapshot vote validation, on-chain governance fraud prevention, delegation quality scoring, and any use case requiring bulk voter integrity analysis. Requires: list of wallet addresses + blockchain network. Optional: minimum reputation threshold, proposal context.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -58,14 +58,27 @@ experience > 3) than a small community DAO.
 ## Your Workflow
 
 1. **Receive** wallet list + network (+ optional custom thresholds)
-2. **For each wallet**, call `predictive_behaviour` — fetches experience, riskCapability, intentions, categories, probabilityFraud, and status in a single call
-   (For POLYGON, TON, TRON networks, call `predictive_fraud` instead — skip reputation scoring, apply fraud gate only)
-3. **Calculate** Reputation Score for each wallet using the standard formula:
-   `(1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 − fraud_probability)`
-4. **Classify** each wallet into ELIGIBLE / REVIEW / EXCLUDE
-5. **Detect** Sybil patterns across the full voter set
-6. **Return** structured output: cleaned voter list, excluded list, weighted
-   vote table, and Sybil risk summary
+2. **Choose approach based on list size:**
+   - **< 5 wallets** → call `predictive_behaviour` per wallet in a loop
+   - **5+ wallets** → use batch tools (see **Batch Workflow** below)
+3. **For each wallet result** (whether from loop or batch):
+   - Calculate Reputation Score: `(1000 / 110) × (experience + 1) × (risk_capability + 1) × (1 − fraud_probability)`
+   - Classify as ELIGIBLE / REVIEW / EXCLUDE
+4. **Detect** Sybil patterns across the full voter set
+5. **Return** structured output: cleaned voter list, excluded list, weighted vote table, and Sybil risk summary
+
+---
+
+## Batch Workflow (5+ Wallets)
+
+1. **Schedule** — call `predictive_behaviour_batch` with the full `addresses` array and `network`
+   (For POLYGON, TON, TRON networks, call `predictive_fraud_batch` instead — skip reputation scoring, apply fraud gate only)
+2. **Store** both `job_id` and `signature` from the response — required for all follow-up calls
+3. **Poll** — call `check_job_status` with `job_id` + `signature` until status is `completed` or `partial`
+   - If `pending` or `processing` → wait and retry
+   - If `partial` → note the failed wallet count; treat failed wallets as REVIEW pending manual check
+4. **Retrieve** — call `get_job_results` with `job_id` + `signature`
+5. **Process** — apply classification logic and Sybil pattern detection to the full `data[]` array
 
 ---
 
@@ -219,10 +232,13 @@ and the main attack patterns detected, if any]
 
 ## Batch Processing
 
-Process wallets in parallel where possible. For large voter lists (100+
-wallets), process in batches of 20 and aggregate results before producing
-the final report. Always complete all wallets before returning output —
-do not return partial results.
+For voter lists of 5+ wallets, use the batch workflow above instead of looping through
+single-wallet calls. The batch pipeline (`predictive_behaviour_batch` → `check_job_status`
+→ `get_job_results`) processes all wallets server-side and returns the same schema as
+single-wallet calls — apply classification and Sybil pattern detection identically.
+
+Always complete all wallets before producing the final report. If `check_job_status`
+returns `partial`, treat failed wallets as REVIEW and note the count in the output.
 
 ---
 

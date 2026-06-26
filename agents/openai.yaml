@@ -117,6 +117,66 @@ capabilities:
         type: string
         required: true
 
+  - id: predictive_fraud_batch
+    display_name: "Batch Fraud Screening"
+    description: >
+      Schedules an async batch fraud screening job for 5+ wallet addresses.
+      Returns a job_id and signature — use check_job_status to poll, then
+      get_job_results to retrieve results. Does not require API key for follow-up calls.
+    networks: [ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ]
+    inputs:
+      - name: addresses
+        type: array
+        required: true
+        description: "Array of wallet addresses to screen"
+      - name: network
+        type: string
+        required: true
+
+  - id: predictive_behaviour_batch
+    display_name: "Batch Behavioural Analysis"
+    description: >
+      Schedules an async batch behavioural analysis job for 5+ wallet addresses.
+      Returns a job_id and signature — use check_job_status to poll, then
+      get_job_results to retrieve results. Does not require API key for follow-up calls.
+    networks: [ETH, BNB, BASE, HAQQ, SOLANA]
+    inputs:
+      - name: addresses
+        type: array
+        required: true
+        description: "Array of wallet addresses to analyse"
+      - name: network
+        type: string
+        required: true
+
+  - id: check_job_status
+    display_name: "Check Job Status"
+    description: >
+      Polls the status of a batch job. Returns pending, processing, partial, or completed.
+      Call get_job_results when status is completed or partial. No API key required.
+    networks: []
+    inputs:
+      - name: job_id
+        type: string
+        required: true
+      - name: signature
+        type: string
+        required: true
+
+  - id: get_job_results
+    display_name: "Get Job Results"
+    description: >
+      Retrieves the results of a completed or partial batch job. Returns wallet data
+      in a data[] array — apply per-wallet logic to each entry. No API key required.
+    networks: []
+    inputs:
+      - name: job_id
+        type: string
+        required: true
+      - name: signature
+        type: string
+        required: true
+
 subagents:
   - id: chainaware-wallet-auditor
     display_name: "Wallet Auditor"
@@ -129,7 +189,7 @@ subagents:
     display_name: "Fraud Detector"
     description: "Fast wallet fraud screening. Returns status, probability (0–1), and forensic AML flags."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud]
+    tools: [predictive_fraud, predictive_fraud_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-fraud-detector.md
 
   - id: chainaware-rug-pull-detector
@@ -199,7 +259,7 @@ subagents:
     display_name: "Whale Detector"
     description: "Classifies wallets into Mega Whale / Whale / Emerging Whale / Not a Whale tiers."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour, predictive_fraud, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-whale-detector.md
 
   - id: chainaware-defi-advisor
@@ -213,7 +273,7 @@ subagents:
     display_name: "Airdrop Screener"
     description: "Batch screens wallets for airdrop eligibility; filters bots and fraud; ranks by reputation score."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud, predictive_behaviour]
+    tools: [predictive_fraud, predictive_behaviour, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-airdrop-screener.md
 
   - id: chainaware-lending-risk-assessor
@@ -241,7 +301,7 @@ subagents:
     display_name: "Cohort Analyzer"
     description: "Segments a batch of wallets into behavioural cohorts with per-cohort engagement strategies."
     model: claude-sonnet-4-6
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour, predictive_fraud, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-cohort-analyzer.md
 
   - id: chainaware-counterparty-screener
@@ -255,14 +315,14 @@ subagents:
     display_name: "Governance Screener"
     description: "DAO voter Sybil detection, governance tier classification, and voting weight multiplier calculation."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour, predictive_fraud, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-governance-screener.md
 
   - id: chainaware-sybil-detector
     display_name: "Sybil Detector"
     description: "Bulk Sybil attack detection for DAO governance votes. Screens a voter list for coordinated fraud, wallet farms, and low-quality participation. Classifies each wallet as ELIGIBLE, REVIEW, or EXCLUDE, detects cross-wallet Sybil patterns, and produces reputation-weighted vote multipliers."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour, predictive_fraud, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-sybil-detector.md
 
   - id: chainaware-platform-greeter
@@ -283,7 +343,7 @@ subagents:
     display_name: "Lead Scorer"
     description: "Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour, predictive_fraud, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-lead-scorer.md
 
   - id: chainaware-transaction-monitor
@@ -304,7 +364,7 @@ subagents:
     display_name: "Compliance Screener"
     description: "First-layer MiCA-aligned compliance screening — orchestrates fraud, AML, transaction, and counterparty checks into a Compliance Report with PASS / EDD / REJECT verdict (~70–75% MiCA coverage for pure DeFi)."
     model: claude-haiku-4-5-20251001
-    tools: [Agent, predictive_fraud]
+    tools: [Agent, predictive_fraud, predictive_fraud_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-compliance-screener.md
 
   - id: chainaware-gamefi-screener
@@ -325,7 +385,7 @@ subagents:
     display_name: "RWA Investor Screener"
     description: "RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud, predictive_behaviour]
+    tools: [predictive_fraud, predictive_behaviour, predictive_fraud_batch, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-rwa-investor-screener.md
 
   - id: chainaware-credit-scorer

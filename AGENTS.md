@@ -383,11 +383,17 @@ export CHAINAWARE_API_KEY="your-key-here"
 | Tool | ETH | BNB | POLYGON | TON | BASE | TRON | HAQQ | SOLANA |
 |------|-----|-----|---------|-----|------|------|------|--------|
 | `predictive_fraud` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
+| `predictive_fraud_batch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
 | `predictive_behaviour` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ |
+| `predictive_behaviour_batch` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ |
+| `check_job_status` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `get_job_results` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | `predictive_rug_pull` | ✅ | ✅ | — | — | ✅ | — | ✅ | — |
 | `credit_score` | ✅ | — | — | — | — | — | — | — |
 | `token_rank_list` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
 | `token_rank_single` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
+
+> `check_job_status` and `get_job_results` are network-agnostic — they use the `job_id` + `signature` from the schedule call, which already encodes the target network.
 
 ## Composability Map
 
@@ -402,27 +408,41 @@ User onboarding              → chainaware-onboarding-router
   └─ personalise message     → chainaware-wallet-marketer
 
 Airdrop campaign             → chainaware-airdrop-screener
+  └─ large list (100+)       → predictive_fraud_batch → check_job_status → get_job_results
   └─ whale tier bonuses      → chainaware-whale-detector
   └─ message each recipient  → chainaware-wallet-marketer
 
 DAO governance vote          → chainaware-governance-screener
+  └─ large voter list        → predictive_behaviour_batch → check_job_status → get_job_results
   └─ full member audit       → chainaware-wallet-auditor
   └─ AML on flagged wallets  → chainaware-aml-scorer
 
 DeFi lending                 → chainaware-lending-risk-assessor
   └─ full borrower profile   → chainaware-wallet-auditor
+  └─ bulk onboarding screen  → predictive_fraud_batch → check_job_status → get_job_results
 
 Token / launchpad vetting    → chainaware-token-launch-auditor
   └─ token holder quality    → chainaware-token-analyzer
   └─ deployer deep dive      → chainaware-wallet-auditor
 
 User analytics               → chainaware-cohort-analyzer
+  └─ large user base         → predictive_behaviour_batch → check_job_status → get_job_results
   └─ per-cohort messaging    → chainaware-wallet-marketer
   └─ onboard new cohort      → chainaware-onboarding-router
 
 AI agent verification        → chainaware-agent-screener
   └─ full agent audit        → chainaware-wallet-auditor
 ```
+
+### Batch Pipeline (MCP tools — not subagents)
+
+```
+predictive_fraud_batch
+predictive_behaviour_batch  ──→  check_job_status  ──→  get_job_results
+      (schedule)                  (poll progress)       (fetch data)
+```
+
+Use batch tools directly when an agent needs to process 100+ wallets efficiently. Subagents call single-wallet tools in a loop — for large lists, call the batch MCP tools instead. Always store both `job_id` and `signature` from the schedule response; both are required for every follow-up call.
 
 ## Further Reading
 

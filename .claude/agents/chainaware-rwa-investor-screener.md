@@ -21,7 +21,7 @@ description: >
   Requires: wallet address + blockchain network. Optional: RWA risk tier
   (conservative / moderate / aggressive), investment cap policy, minimum
   experience threshold override.
-tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour
+tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -271,7 +271,16 @@ Refer to your compliance team if AML flags are present.
 
 ## Batch Screening
 
-For whitelisting multiple investor wallets (e.g. pre-sale access, token round):
+For whitelisting multiple investor wallets (e.g. pre-sale access, token round), choose approach by list size:
+- **< 5 wallets** → run the single-wallet workflow per address in a loop
+- **5+ wallets** → use the batch pipeline:
+  1. Call `predictive_behaviour_batch` with the full address list and network (fallback: `predictive_fraud_batch` for POLYGON/TON/TRON)
+  2. Store both `job_id` and `signature` from the response
+  3. Poll `check_job_status` until status is `completed` or `partial`
+  4. Call `get_job_results` to retrieve all wallet data
+  5. Apply hard disqualification rules, suitability scoring, and tier mapping to each wallet in `data[]`
+
+Output format:
 
 ```
 ## RWA Investor Batch Screening — [N] wallets on [network]

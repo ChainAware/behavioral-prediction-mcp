@@ -8,7 +8,7 @@ description: >
   "high-value user", "whale detection", "whale tier", "find whales", "batch whale
   screening", "classify this wallet", "high-value wallet check".
   Requires: wallet address + blockchain network.
-tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
+tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
 model: claude-haiku-4-5-20251001
 ---
 
@@ -136,8 +136,16 @@ Determine the whale's primary domain from categories:
 
 ## Batch Mode
 
-For screening multiple wallets (e.g. airdrop lists, DAO member lists), process each
-wallet sequentially and output a ranked leaderboard:
+For screening multiple wallets (e.g. airdrop lists, DAO member lists), choose approach by list size:
+- **< 5 wallets** → call `predictive_behaviour` per wallet sequentially
+- **5+ wallets** → use the batch pipeline:
+  1. Call `predictive_behaviour_batch` with the full address list and network
+  2. Store both `job_id` and `signature` from the response
+  3. Poll `check_job_status` until status is `completed` or `partial`
+  4. Call `get_job_results` to retrieve all wallet data
+  5. Apply fraud gate and tier classification to each wallet in `data[]`, then output ranked leaderboard
+
+Output format:
 
 ```
 ## Whale Screening Results — [N] wallets on [network]
