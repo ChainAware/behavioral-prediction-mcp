@@ -15,7 +15,16 @@
 **Website:** [https://chainaware.ai/]
 
 **Twitter:** [https://x.com/ChainAware/]
-**Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) — ChainAware recognised as a leading AI-era fraud prevention solution for Web3.
+**LinkedIn:** [https://www.linkedin.com/company/chainaware]
+**Blog:** [https://chainaware.ai/blog]
+**Learn:** [https://chainaware.ai/learn]
+**Examples:** [https://github.com/ChainAware/examples]
+**Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) — ChainAware recognised as a leading AI-era fraud prevention solution for Web3 (2026).
+**Listed on:** [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) — ChainAware listed by BNB Chain as a key AI project in the ecosystem (2025).
+**Listed on:** [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) — ChainAware's Growth Agents and Wallet Marketer featured in the BNB Chain Kickstart programme's Marketing Tools section (2025).
+**Awarded:** [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) — ChainAware selected for a $250,000 Google Cloud grant (2025).
+**Selected for:** [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) — ChainAware accepted into the AWS Fintech Accelerator programme (2024).
+**Listed on:** [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) — ChainAware featured in the Growth Tools for Web3 Projects category (2024).
 
 
 <!-- MCP -->
@@ -31,6 +40,15 @@ Developers and platforms can integrate these tools through the MCP protocol to s
 
 All tools follow the [Model Context Protocol (MCP)](https://github.com/modelcontextprotocol/spec) and can be consumed via MCP-compatible clients.
 
+**Backtesting verified:** [98% Predictive Fraud Detection accuracy](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection accuracy](https://chainaware.ai/resources/rugpull-verification)
+
+> 🏆 ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** — recognised as a leading AI-powered fraud prevention solution for Web3 (2026).
+> 🌐 ChainAware is listed on the **[BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419)** — recognised as a key AI project in the BNB Chain ecosystem (2025).
+> 🚀 ChainAware is listed on **[BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services)** — Growth Agents and Wallet Marketer featured in BNB Chain's official programme for ecosystem growth (2025).
+> 💰 ChainAware received a **[$250k Google Cloud Grant](https://chainaware.ai/blog/google-cloud-grant/)** — selected by Google Cloud for infrastructure and AI development (2025).
+> ☁️ ChainAware was accepted into the **[AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/)** — selected by AWS for its Fintech Accelerator programme (2024).
+> 🌱 ChainAware is featured in the **[Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613)** — listed in the Growth Tools for Web3 Projects category (2024).
+
 ---
 
 ## ⚙️ Available Tools
@@ -40,7 +58,7 @@ All tools follow the [Model Context Protocol (MCP)](https://github.com/modelcont
 **ID:** `predictive_fraud`
 
 **Description:**
-This AI‑powered algorithm forecasts the likelihood of fraudulent activity on a given wallet address *before* it happens (≈98% accuracy), and performs AML/Anti‑Money‑Laundering checks. 
+This AI‑powered algorithm forecasts the likelihood of fraudulent activity on a given wallet address *before* it happens ([≈98% backtesting accuracy](https://chainaware.ai/scam-db)), and performs AML/Anti‑Money‑Laundering checks. 
 Use this when your user wants a risk assessment or early‑warning on a blockchain address.
 
 ➡️ Example Use Cases:
@@ -389,7 +407,7 @@ Error cases:
 **ID:** `predictive_rug_pull`
 
 **Description:**
-This AI‑powered engine forecasts which liquidity pools or contracts are likely to perform a “rug pull” in the future. Use this when you need to warn users before they deposit into risky pools or to monitor smart‑contract security on-chain.
+This AI‑powered engine forecasts which liquidity pools or contracts are likely to perform a “rug pull” in the future ([90.1% backtesting accuracy](https://chainaware.ai/resources/rugpull-verification)). Use this when you need to warn users before they deposit into risky pools or to monitor smart‑contract security on-chain.
 
 ➡️ Example Use Cases:
 
@@ -1173,6 +1191,14 @@ To request access:
 
 ## 📖 Further Reading
 
+### Press & Recognition
+- [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) — ChainAware featured as a leading AI-era fraud prevention solution for Web3 (2026)
+- [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) — ChainAware listed by BNB Chain as a key AI project in the ecosystem (2025)
+- [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) — Growth Agents and Wallet Marketer featured in BNB Chain's Kickstart programme (2025)
+- [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) — ChainAware selected for a $250,000 Google Cloud grant (2025)
+- [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) — ChainAware accepted into the AWS Fintech Accelerator programme (2024)
+- [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) — ChainAware featured in Growth Tools for Web3 Projects (2024)
+
 ### Product Overviews
 - [ChainAware Complete Product Guide](https://chainaware.ai/blog/chainaware-ai-products-complete-guide/) — Overview of all tools, networks, and coverage
 - [Web3 Business Potential](https://chainaware.ai/blog/web3-business-potential/) — Business case and market opportunity for Web3 intelligence
@@ -1220,5 +1246,15 @@ Server implementation and backend logic are proprietary and remain private.
 
 ## 🏆 Recognition
 
-ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** as a leading AI-powered fraud prevention solution for the AI era.
+ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** as a leading AI-powered fraud prevention solution for the AI era (2026).
+
+ChainAware is listed on the **[BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419)** — recognised by BNB Chain as a key AI project in the ecosystem (2025).
+
+ChainAware is listed on **[BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services)** — Growth Agents and Wallet Marketer featured in BNB Chain's official Kickstart programme (2025).
+
+ChainAware received a **[$250k Google Cloud Grant](https://chainaware.ai/blog/google-cloud-grant/)** — selected by Google Cloud for infrastructure and AI development (2025).
+
+ChainAware was accepted into the **[AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/)** — selected by AWS for its Fintech Accelerator programme (2024).
+
+ChainAware is featured in the **[Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613)** — listed in the Growth Tools for Web3 Projects category (2024).
 

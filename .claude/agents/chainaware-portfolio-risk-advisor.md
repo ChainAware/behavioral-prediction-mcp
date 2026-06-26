@@ -20,7 +20,7 @@ description: >
   sizes or USD values (for weighted scoring), risk tolerance (conservative /
   standard / aggressive).
 tools: mcp__chainaware-behavioral-prediction__predictive_rug_pull, mcp__chainaware-behavioral-prediction__token_rank_single
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Portfolio Risk Advisor

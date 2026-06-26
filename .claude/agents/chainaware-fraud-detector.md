@@ -10,7 +10,7 @@ description: >
   compliance checks, and pre-transaction safety verification. Triggers on any
   blockchain address (0x..., ENS names, Solana addresses) paired with a safety concern.
 tools: mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results, WebSearch
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Fraud Detector

@@ -53,7 +53,7 @@ The **ChainAware Behavioral Prediction MCP** connects any AI agent to a continuo
 Web3 behavioral intelligence layer: **14M+ wallet profiles** across **8 blockchains**, built from
 **1.3 billion+ predictive data points**. It delivers ten capabilities via a single MCP endpoint:
 
-1. **Fraud Detection** — predict fraudulent wallet behavior before it happens (~98% accuracy on ETH)
+1. **Fraud Detection** — predict fraudulent wallet behavior before it happens ([~98% accuracy on ETH](https://chainaware.ai/scam-db))
 2. **Batch Fraud Detection** — async batch job for fraud screening large wallet lists; returns `job_id` + `signature`
 3. **Behavioral Analysis** — profile wallet intent, risk tolerance, experience, and next likely actions
 4. **Batch Behavioral Analysis** — async batch job for behavioral profiling large wallet lists; returns `job_id` + `signature`
@@ -70,13 +70,21 @@ agent what is *about to happen*.
 **MCP Server URL:** `https://prediction.mcp.chainaware.ai/sse`  
 **GitHub:** https://github.com/ChainAware/behavioral-prediction-mcp  
 **Website:** https://chainaware.ai  
-**Pricing / API Key:** https://chainaware.ai/pricing
+**Pricing / API Key:** https://chainaware.ai/pricing  
+**Twitter:** https://x.com/ChainAware/  
+**LinkedIn:** https://www.linkedin.com/company/chainaware  
+**Blog:** https://chainaware.ai/blog  
+**Learn:** https://chainaware.ai/learn  
+**Examples:** https://github.com/ChainAware/examples  
+**Fraud Detection Accuracy:** [98% backtesting verified](https://chainaware.ai/scam-db)  
+**Rug Pull Detection Accuracy:** [90.1% backtesting verified](https://chainaware.ai/resources/rugpull-verification)  
+**Recognition:** [CB Insights Fraud Prevention Market Map](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) (2026) · [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) (2025) · [BNB Chain Kickstart](https://www.bnbchain.org/en/programs/kickstart#services) (2025) · [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) (2025) · [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) (2024) · [Safary Club Web3 Growth Landscape](https://x.com/Safaryclub/status/1822983239734329613) (2024)
 
 ---
 
 ## Capabilities
 
-- **Fraud Detection** — predict fraudulent wallet behavior before it happens (~98% accuracy on ETH)
+- **Fraud Detection** — predict fraudulent wallet behavior before it happens ([~98% accuracy on ETH](https://chainaware.ai/scam-db))
 - **Batch Fraud Detection** — async batch fraud screening for large wallet lists; fire-and-fetch pattern via `predictive_fraud_batch` → `check_job_status` → `get_job_results`
 - **Behavioral Analysis** — profile wallet intent, risk tolerance, experience, and next likely actions across DeFi, NFT, and trading segments
 - **Batch Behavioral Analysis** — async batch behavioral profiling for large wallet lists; same fire-and-fetch pattern via `predictive_behaviour_batch` → `check_job_status` → `get_job_results`

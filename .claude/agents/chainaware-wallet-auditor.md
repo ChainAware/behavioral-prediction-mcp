@@ -10,7 +10,7 @@ description: >
   needs behavioral intelligence. Automatically delegates to this agent for any query
   containing "0x...", ENS names, wallet addresses, or blockchain security questions.
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, WebFetch, WebSearch
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Web3 Intelligence Analyst

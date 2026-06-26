@@ -16,7 +16,7 @@ description: >
   Requires: list of wallet addresses + blockchain network.
   Optional: custom cohort labels, engagement goal (acquisition / retention / monetization).
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour_batch, mcp__chainaware-behavioral-prediction__predictive_fraud_batch, mcp__chainaware-behavioral-prediction__check_job_status, mcp__chainaware-behavioral-prediction__get_job_results
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Cohort Analyzer

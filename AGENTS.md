@@ -4,6 +4,17 @@ Machine-readable index of all 32 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 
+> 🏆 Featured in the [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) (2026)
+> 🌐 Listed on the [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) (2025)
+> 🚀 Listed on [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) (2025)
+> 💰 Awarded a [$250k Google Cloud Grant](https://chainaware.ai/blog/google-cloud-grant/) (2025)
+> ☁️ Accepted into the [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) (2024)
+> 🌱 Featured in the [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) (2024)
+
+**Links:** [Website](https://chainaware.ai) · [Twitter](https://x.com/ChainAware/) · [LinkedIn](https://www.linkedin.com/company/chainaware) · [Blog](https://chainaware.ai/blog) · [Learn](https://chainaware.ai/learn) · [Examples](https://github.com/ChainAware/examples)
+
+**Accuracy:** [98% Fraud Detection](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
+
 **Quick setup:**
 ```bash
 claude mcp add --transport sse chainaware-behavioral-prediction \

@@ -6,6 +6,12 @@ This guide explains how to connect ChainAware's blockchain intelligence tools to
 **API keys & pricing:** [chainaware.ai/pricing](https://chainaware.ai/pricing)
 **GitHub:** [github.com/ChainAware/behavioral-prediction-mcp](https://github.com/ChainAware/behavioral-prediction-mcp)
 
+**Links:** [Website](https://chainaware.ai) · [Twitter](https://x.com/ChainAware/) · [LinkedIn](https://www.linkedin.com/company/chainaware) · [Blog](https://chainaware.ai/blog) · [Learn](https://chainaware.ai/learn) · [Examples](https://github.com/ChainAware/examples)
+
+**Accuracy:** [98% Fraud Detection](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
+
+**Recognition:** [CB Insights Fraud Prevention Market Map](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) (2026) · [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) (2025) · [BNB Chain Kickstart](https://www.bnbchain.org/en/programs/kickstart#services) (2025) · [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) (2025) · [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) (2024) · [Safary Club Web3 Growth Landscape](https://x.com/Safaryclub/status/1822983239734329613) (2024)
+
 ---
 
 ## Available Tools

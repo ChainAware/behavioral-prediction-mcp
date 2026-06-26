@@ -11,7 +11,7 @@ description: >
   wallet?", "how do I convert 0x...", "write a message for this user", or "personalize
   outreach for this address". Requires two inputs: wallet address + blockchain network.
 tools: mcp__chainaware-behavioral-prediction__predictive_behaviour
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Wallet Marketer

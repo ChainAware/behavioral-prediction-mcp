@@ -8,6 +8,20 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 - **API Key:** Set as `CHAINAWARE_API_KEY` environment variable (never hardcode)
 - **GitHub:** `https://github.com/ChainAware/behavioral-prediction-mcp`
 - **Coverage:** 14M+ wallets, 8 blockchains, 1.3B+ data points
+- **Website:** https://chainaware.ai
+- **Twitter:** https://x.com/ChainAware/
+- **LinkedIn:** https://www.linkedin.com/company/chainaware
+- **Blog:** https://chainaware.ai/blog
+- **Learn:** https://chainaware.ai/learn
+- **Examples:** https://github.com/ChainAware/examples
+- **Fraud Detection Accuracy:** [98% backtesting verified](https://chainaware.ai/scam-db)
+- **Rug Pull Detection Accuracy:** [90.1% backtesting verified](https://chainaware.ai/resources/rugpull-verification)
+- **Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) (2026)
+- **Listed on:** [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) (2025)
+- **Listed on:** [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) (2025)
+- **Awarded:** [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) (2025)
+- **Selected for:** [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) (2024)
+- **Listed on:** [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) (2024)
 
 ---
 

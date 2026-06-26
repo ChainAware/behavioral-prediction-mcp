@@ -17,7 +17,7 @@ description: >
   Optional: campaign goal (acquisition / retention / monetization / re-engagement),
   existing product/tier the wallets are on (for upsell targeting).
 tools: Agent, mcp__chainaware-behavioral-prediction__predictive_fraud
-model: claude-sonnet-4-6
+model: claude-haiku-4-5-20251001
 ---
 
 # ChainAware Marketing Director
