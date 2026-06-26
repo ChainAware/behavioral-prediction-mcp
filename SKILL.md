@@ -1,5 +1,6 @@
 ---
 name: chainaware-behavioral-prediction
+version: 1.0.0
 license: MIT
 description: "Use this skill whenever a user asks about wallet safety, fraud risk, rug pull detection,  wallet behavior analysis, DeFi personalization, on-chain reputation scoring, AML checks,  token ranking by holder quality, airdrop screening, lending risk, token launch auditing,  or AI agent trust scoring. Triggers on questions like: is this wallet safe?, will this pool rug pull?, what will this address do next?,  score this wallet, detect fraud for address, personalize my DeFi agent,  rank this token, top AI tokens, best holders of this token,  check this contract, is this token safe?, profile this wallet,  KYC this address, pre-screen this user, AML check this wallet,  is this address suspicious?, screen this wallet before onboarding, what is the risk score of this address?, analyze on-chain behavior,  is this LP safe to deposit?, will this contract rug?,  what DeFi products suit this wallet?, segment this user,  what is this wallet's experience level?, find strong token holders, which token has the best community?,rank tokens by holder quality,  should we list this token?, audit this launch, is this deployer trustworthy?,  vet this IDO, launch safety check, screen this airdrop list, filter bots from airdrop,  rank these wallets for token distribution, fair airdrop allocation,  assess this borrower, what collateral ratio for this wallet?, lending risk for 0x...,  what interest rate for this borrower?, should I lend to this wallet?,  screen this AI agent, is this agent wallet safe?, agent trust score for 0x...,  check the feeder wallet for this agent, can I trust this agent?,  route this wallet to onboarding, is this user a beginner?, skip onboarding for this wallet?,  or any request to analyze a blockchain wallet address, smart contract, token, or AI agent  for risk, behavior, intent, community strength, or trustworthiness.  Also use when integrating the ChainAware MCP server into Claude Code, Cursor,  ChatGPT, or any MCP-compatible AI agent framework."
 metadata:
@@ -623,8 +624,8 @@ result = client.call("predictive_fraud", {
 2. **Run fraud check first** — before any behavioral profiling, gate on fraud score
 3. **Combine tools for full due diligence** — fraud + behaviour + rug pull together give a complete picture
 4. **Use the Deployer Risk Amplifier** — a clean contract from a fraudulent deployer is still high risk
-5. **For small lists (< ~20 wallets)** — use subagents like `chainaware-fraud-detector` or `chainaware-airdrop-screener` which call single-wallet tools in a loop
-6. **For large lists (100+ wallets)** — use batch tools directly: `predictive_fraud_batch` or `predictive_behaviour_batch` → `check_job_status` → `get_job_results`
+5. **For small lists (< 5 wallets)** — use subagents like `chainaware-fraud-detector` or `chainaware-airdrop-screener` which call single-wallet tools in a loop
+6. **For 5+ wallets** — use batch tools directly: `predictive_fraud_batch` or `predictive_behaviour_batch` → `check_job_status` → `get_job_results`
 7. **Always store job_id + signature** — both are required for every follow-up batch call; losing either means you cannot retrieve results
 8. **Surface forensic flags in plain language** — never return raw JSON to end users
 
