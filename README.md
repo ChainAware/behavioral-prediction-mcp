@@ -15,6 +15,8 @@
 **Website:** [https://chainaware.ai/]
 
 **Twitter:** [https://x.com/ChainAware/]
+**Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) — ChainAware recognised as a leading AI-era fraud prevention solution for Web3.
+
 
 <!-- MCP -->
 mcp-name: io.github.ChainAware/chainaware-behavioral-prediction-mcp
@@ -1213,3 +1215,10 @@ Server implementation and backend logic are proprietary and remain private.
 ## Resources and third party 
 
 [![chain-aware-behavioural-prediction-mcp-server MCP server](https://glama.ai/mcp/servers/ChainAware/chain-aware-behavioural-prediction-mcp-server/badges/card.svg)](https://glama.ai/mcp/servers/ChainAware/chain-aware-behavioural-prediction-mcp-server)
+
+---
+
+## 🏆 Recognition
+
+ChainAware is featured in the **[CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/)** as a leading AI-powered fraud prevention solution for the AI era.
+
