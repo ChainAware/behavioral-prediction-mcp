@@ -15,15 +15,25 @@
 **Website:** [https://chainaware.ai/]
 
 **Twitter:** [https://x.com/ChainAware/]
+
 **LinkedIn:** [https://www.linkedin.com/company/chainaware]
+
 **Blog:** [https://chainaware.ai/blog]
+
 **Learn:** [https://chainaware.ai/learn]
+
 **Examples:** [https://github.com/ChainAware/examples]
+
 **Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) — ChainAware recognised as a leading AI-era fraud prevention solution for Web3 (2026).
+
 **Listed on:** [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) — ChainAware listed by BNB Chain as a key AI project in the ecosystem (2025).
+
 **Listed on:** [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) — ChainAware's Growth Agents and Wallet Marketer featured in the BNB Chain Kickstart programme's Marketing Tools section (2025).
+
 **Awarded:** [Google Cloud $250k Grant](https://chainaware.ai/blog/google-cloud-grant/) — ChainAware selected for a $250,000 Google Cloud grant (2025).
+
 **Selected for:** [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) — ChainAware accepted into the AWS Fintech Accelerator programme (2024).
+
 **Listed on:** [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) — ChainAware featured in the Growth Tools for Web3 Projects category (2024).
 
 
@@ -707,7 +717,389 @@ Error cases:
 
 ---
 
-### 9. Check Batch Job Status 
+### 9. Run Token Audit Tool
+
+**ID:** `run_token_audit`
+
+**Description:**
+    Requests a Token Audit for a given token contract or returns already calculated audit data for requested token. This tool is "get-or-create":
+    it first checks if a completed audit already exists for this contract, and if so
+    returns the FULL risk report immediately. If no audit exists yet, it queues a new
+    one and returns a job_id + "queued" status instead.
+
+    Use this tool whenever a user asks to audit, scan, check, or evaluate a token/contract
+    for risk, scam signals, honeypot behavior, ownership risk, or liquidity risk. This should
+    be the FIRST and ONLY tool called for a new request — do not call get_token_audit_result
+    first "just to check."
+
+➡️ Example Use Cases:
+  – "Audit this token contract for me: 0x..."
+  – "Is this BSC token safe? 0x..."
+  – "Run a risk scan on this contract before I buy"
+  – "Check if this address is a honeypot"
+
+**Inputs:**
+
+| Name              | Type   | Required  | Description                                                                                                       |
+| ------------------| ------ | --------- | ----------------------------------------------------------------------------------------------------------------  |
+| `contract_address`| string | ✅        | The contract address of the token to evaluate                                                                     |
+| `network`         | string | ✅        | The network/chain the token lives on (e.g. 'arbitrum', 'avalanche', 'base', 'bsc', 'eth', 'optimism', 'polygon')  |
+
+
+**Outputs (JSON):**
+
+ 📤 Response — TWO possible shapes, check which one you got:
+    1.Cached / already audited → audit_status = "complete"
+      Full risk report is returned immediately (same schema as get_token_audit_result).
+      Answer the user's question directly from this data. No further tool calls needed.
+
+    2.Not yet audited → no honeypot_analysis field, instead:
+
+```json
+ {
+    "contract_address": "string",
+    "chain": "string",
+    "job_id": "string",
+    "status": "queued",
+    "message": "string"  
+  }
+```
+
+⚠️ Notes:
+  • Do not re-trigger a new audit for a contract that returns a "queued"/"running" job already in progress.
+  • Always first check if token was earlier audited based on response so you get directly the audited token result instead of scheduling new calculation.
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
+### 10. Get Token Audit Result Tool
+
+**ID:** `get_token_audit_result`
+
+**Description:**
+    Fetches the current status or final results of a previously triggered Token Audit job for a given contract address and chain. 
+    This is the SECOND step of the audit workflow, used to poll for and retrieve the full risk report after "Run Token Audit" has been called.
+    Call this tool immediately after "Run Token Audit" to check progress, and repeatedly (poll) until the response's audit_status field equals "complete". 
+    While audit_status is anything else (e.g. "queued", "running", "pending"), treat the result as not-yet-ready: do not summarize partial/empty module data to the user, just report that the audit is still in progress (optionally showing elapsed time if available) and poll again shortly.
+    Once audit_status = "complete", this tool returns a full multi-module risk report — covering ownership control, liquidity health, supply/mint risk, transfer integrity, approve/permit safety, reentrancy, honeypot behavior, and an aggregated 0-100 risk score with verdict. Use this data to directly answer the user's question about token safety, risk factors, or red flags — do not fetch or re-trigger a new audit if a completed result already exists for this contract.
+
+➡️ Example Use Cases:
+  – "Is my audit for this token ready yet?"
+  – "What's the risk score and verdict for this contract?"
+  – "Who owns this token, can they mint or blacklist?"
+  – "Is this a honeypot? What are the flags?"
+  – "Give me the full breakdown of this contract's liquidity and ownership risk
+
+**Inputs:**
+
+| Name              | Type   | Required  | Description                                                                                                       |
+| ------------------| ------ | --------- | ----------------------------------------------------------------------------------------------------------------  |
+| `contract_address`| string | ✅        | The contract address of the token to evaluate                                                                     |
+| `network`         | string | ✅        | The network/chain the token lives on (e.g. 'arbitrum', 'avalanche', 'base', 'bsc', 'eth', 'optimism', 'polygon')  |
+
+
+**Outputs (JSON):**
+
+```json
+  {
+      "contract_address": "string",
+      "chain": "string",
+      "audit_status": "string",
+      "token_name": "string",
+      "token_symbol": "string",
+      "token_decimals": "integer",
+      "token_creator": "string",
+      "token_feeder": "string",
+      "source_verified": "boolean",
+      "is_proxy": "boolean",
+      "behavioral_is_honeypot": "boolean",
+      "honeypot_analysis": {
+          "verdict": "string",
+          "score": "integer",
+          "findings": [
+              {
+                  "rule": "string",
+                  "severity": "string",
+                  "function": "string or null" ,
+                  "detail": "string"
+              }
+          ],
+          "flags": [
+              "string"
+          ]
+      },
+      "aggregate": {
+          "verdict": "string",
+          "risk_score": "integer",
+          "primary_signal": "string",
+          "simulate": "boolean",
+          "version": "string",
+          "duration_ms": "integer",
+          "last_run": "ISO-8601"
+      },
+      "quick_stats": [
+          {
+              "label": "string",
+              "value": "string",
+              "tone": "string"
+          },
+          {
+              "label": "string",
+              "value": "string",
+              "tone": "string"
+          },
+          {
+              "label": "string",
+              "value": "string",
+              "tone": "string"
+          }
+      ],
+      "modules": {
+          "ownership": {
+              "status": "string",
+              "risk_score": "integer",
+              "owner_address": "string",
+              "owner_is_eoa": "boolean",
+              "owner_is_renounced": "boolean",
+              "blast_radius": "critical",
+              "can_mint": "boolean",
+              "can_pause": "boolean",
+              "can_blacklist": "boolean",
+              "can_upgrade": "boolean",
+              "can_drain": "boolean",
+              "has_timelock": "boolean",
+              "has_shadow": "boolean"
+          },
+          "liquidity": {
+              "status": "string",
+              "summary": "string",
+              "risk_score": "integer",
+              "pool_count": "integer",
+              "unknown_pool": "boolean",
+              "invariants": [
+                  {
+                      "code": "string",
+                      "label": "string",
+                      "status": "string",
+                      "severity": "string",
+                      "detail": "string"
+                  }
+              ]
+          },
+          "supply": {
+              "status": "pass",
+              "risk_score": "integer",
+              "has_mint": "boolean",
+              "deployer_pct": "decimal",
+              "hidden_mint": "boolean"
+          },
+          "transfer": {
+              "status": "pass",
+              "risk_score": "integer",
+              "method": "string",
+              "monitoring": "boolean",
+              "inv_t1_pass": "boolean",
+              "inv_t2_pass": "boolean",
+              "inv_t3_pass": "boolean",
+              "inv_t4_pass": "boolean",
+              "inv_t5_pass": "boolean",
+              "inv_t6_pass": "boolean",
+              "inv_t7_pass": "boolean"
+          },
+          "pausability": {
+              "status": "string",
+              "applicable": "boolean"
+          },
+          "approve": {
+              "status": "string",
+              "risk_score": "integer",
+              "method": "string",
+              "coverage": "string",
+              "inv1_pass": "boolean",
+              "inv2_pass": "boolean",
+              "inv3_pass": "boolean",
+              "inv5_pass": "boolean",
+              "inv6_pass": "boolean"
+          },
+          "permit": {
+              "status": "string",
+              "applicable": "boolean"
+          },
+          "reentrancy": {
+              "status": "string",
+              "risk_score": "integer"
+          }
+        }
+    }
+```
+
+⚠️ Notes:
+    • If audit_status is not "complete", most module/aggregate fields may be null, empty, or stale — do not present them as final results.
+    • A high risk_score or "high"/"critical" tone/severity fields indicate elevated danger; surface these prominently rather than burying them under passing modules.
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
+### 11. Agents Trust Score List Tool
+
+**ID:** `agents_trust_score_list`
+
+**Description:**
+    The ChainAware Agent Trust Score is a 0-1000 score that measures how safe it is to interact with any ERC-8004 registered AI agent.
+    Unlike voting-based reputation systems - where agents can upvote each other to manufacture trust - the Agent Trust Score is derived entirely from on-chain behavioral history. It cannot be earned in hours. It cannot be faked with a cluster of fresh wallets. It reflects the real-world track record of the human or entity controlling the agent.
+    As agentic commerce scales - with AI agents autonomously completing purchases on behalf of consumers across ChatGPT, Google Gemini, and Shopify - the question of which agents can be trusted to transact is no longer theoretical. ChainAware answers it with on-chain evidence, not peer endorsements.
+    It returns a list of Agents and their result.
+
+➡️ Example Use Cases:
+  – Give me a list of Agents and their trust score?”
+  – “Which is the best Agent registered after 2025-01-01?”  
+
+
+**Inputs:**
+
+| Name              | Type   | Required  | Description                                                                                                       |
+| ------------------| ------ | --------- | ----------------------------------------------------------------------------------------------------------------  |
+| `page`            | string | ✅        | Page number(page) during pagination                                                                               |
+| `limit`           | string | ✅        | Number of items ot fetch during pagination                                                                        |
+| `sort_by`         | string | X         | Sort the returned agents based on e.g.: 'registered_at'                                                           |
+| `sort_order`      | string | X         | but required if sort_by 'asc' or 'desc' sorting the value of sort_by (default desc)                               |
+| `registered_after`| string | X         | Filter based on datetime when the Agent was registered                                                            |
+
+
+**Outputs (JSON):**
+
+```json
+{
+    "total": "integer",
+    "page": 1,
+    "limit": 2,
+    "results": [
+      {
+          "chain_id": "integer",
+          "agent_id": "integer",
+          "owner_address": "string",
+          "agent_wallet": "string",
+          "agent_uri": "string",
+          "meta_name": "string",
+          "registered_at": "ISO-8601",
+          "reputation_score": "integer",
+          "trust_score": "integer",
+          "trust_tier": "string"
+      },
+      {
+          "chain_id": "integer",
+          "agent_id": "integer",
+          "owner_address": "string",
+          "agent_wallet": "string",
+          "agent_uri": "string",
+          "meta_name": "string",
+          "registered_at": "ISO-8601",
+          "reputation_score": "integer",
+          "trust_score": "integer",
+          "trust_tier": "string"
+      }
+      ]
+    }
+```
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
+### 12. Agents Trust Score Single Tool
+
+**ID:** `agents_trust_score_single`
+
+**Description:**
+    Similar to Agent Trust List, Agent Trust Score Single is a 0-1000 score that measures how safe it is to interact with any ERC-8004 registered AI agent.
+    Unlike voting-based reputation systems - where agents can upvote each other to manufacture trust - the Agent Trust Score is derived entirely from on-chain behavioral history. It cannot be earned in hours. It cannot be faked with a cluster of fresh wallets. It reflects the real-world track record of the human or entity controlling the agent.
+    As agentic commerce scales - with AI agents autonomously completing purchases on behalf of consumers across ChatGPT, Google Gemini, and Shopify - the question of which agents can be trusted to transact is no longer theoretical. ChainAware answers it with on-chain evidence, not peer endorsements.
+    It returns the single details in depth for a requested Agent.
+
+➡️ Example Use Cases:
+  – "What is the trust score for this agent id 12314 on chain_id 56?”
+
+**Inputs:**
+
+| Name              | Type   | Required  | Description                                                                                                       |
+| ------------------| ------ | --------- | ----------------------------------------------------------------------------------------------------------------  |
+| `agent_id`        | integer | ✅       | Agent id returned from agents_trust_score_list Tool                                                               |
+| `chain_id`        | integer | ✅       | Chain id where Agent is deployed/registred previously fetched from agents_trust_score_list Tool                   |
+
+
+**Outputs (JSON):**
+
+```json
+{
+    "agent_id": "integer",
+    "chain": "string",
+    "chain_id": "integer",
+    "owner_address": "string",
+    "agent_wallet": "string",
+    "wallet_verified": "boolean",
+    "agent_uri": "string",
+    "registered_at": "ISO-8601",
+    "fetched_at": "ISO-8601",
+    "error": "string",
+    "meta_name": "string",
+    "meta_description": "string",
+    "meta_image": "string",
+    "metadata_json": {
+        "type": "string",
+        "name": "string",
+        "description": "string",
+        "image": "string",
+        "active": "boolean",
+        "supportedTrust": "array[string]"
+    },
+    "registration": {
+        "agent_name": "string",
+        "agent_desc": "string",
+        "fetch_status": "string",
+        "fetched_at": "ISO-8601",
+        "raw_json": {
+            "type": "string",
+            "name": "string",
+            "description": "string",
+            "image": "string",
+            "active": "boolean",
+            "supportedTrust": "array[string]"
+        }
+    },
+    "wallets": [
+        {
+            "wallet_chain_id": "integer",
+            "wallet_address": "string",
+            "source": "registry",
+            "fetched_at": "ISO-8601"
+        }
+    ],
+    "reputation_score": "string",
+    "trust_score": "integer",
+    "trust_tier": "string",
+    "trust_flags": "array[string]"
+}
+```
+
+Error cases:
+
+    • `400 Bad Request` → malformed `network` or `walletAddress`  
+    • `500 Internal Server Error` → temporary downstream failure  
+
+---
+
+### 13. Check Batch Job Status 
 
 **ID:** `check_job_status`
 
@@ -757,7 +1149,7 @@ Error cases:
     • `500 Internal Server Error` → temporary downstream failure  
 ---
 
-### `10. Get Batch Job Results 
+### 14. Get Batch Job Results 
 
 **ID:** `get_job_results`
 
