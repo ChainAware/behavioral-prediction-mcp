@@ -500,4 +500,6 @@ Use batch tools directly when an agent needs to process 100+ wallets efficiently
 - MCP integration guide: https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/
 - 12 agent capabilities: https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/
 - Complete product guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
+- Agent Trust Score for Agentic Commerce: https://chainaware.ai/blog/agent-trust-score-agentic-commerce/
+- Token Audit study (10,000 CoinGecko tokens): https://chainaware.ai/blog/token-audit-10000-coingecko-results/
 - API access: https://chainaware.ai/pricing

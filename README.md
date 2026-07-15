@@ -1608,6 +1608,8 @@ To request access:
 - [Web3 Behavioral User Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — Using `predictive_behaviour` for user analytics and segmentation
 - [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
 - [Credit Scoring Agent Guide](https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/) — How to build and use the ChainAware credit scoring agent
+- [Agent Trust Score for Agentic Commerce](https://chainaware.ai/blog/agent-trust-score-agentic-commerce/) — ERC-8004 agent screening across 274k+ registered agents: trust tiers, fleet-level fraud detection, and DeFi access control using `agents_trust_score_list` / `agents_trust_score_single`
+- [Token Audit: 10,000 CoinGecko Token Results](https://chainaware.ai/blog/token-audit-10000-coingecko-results/) — Real-world study: 55% of top tokens receive HIGH RISK verdict; 127 automated security checks via `run_token_audit`
 
 ### Analytics & Strategy
 - [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth

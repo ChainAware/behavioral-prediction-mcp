@@ -704,6 +704,8 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | Web3 Behavioral Analytics Guide | https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/ |
 | Credit Score Guide | https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/ |
 | Credit Scoring Agent Guide | https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/ |
+| Agent Trust Score for Agentic Commerce | https://chainaware.ai/blog/agent-trust-score-agentic-commerce/ |
+| Token Audit: 10,000 CoinGecko Token Results | https://chainaware.ai/blog/token-audit-10000-coingecko-results/ |
 | Prediction MCP Developer Guide | https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/ |
 | Top 5 Ways Prediction MCP Turbocharges DeFi | https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/ |
 | Why Personalization Is Next for AI Agents | https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/ |

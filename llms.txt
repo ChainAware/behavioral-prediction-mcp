@@ -131,6 +131,8 @@ export CHAINAWARE_API_KEY="your-key-here"
 - https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/
 - https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/
 - https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/
+- https://chainaware.ai/blog/agent-trust-score-agentic-commerce/
+- https://chainaware.ai/blog/token-audit-10000-coingecko-results/
 
 ### Analytics & Strategy
 - https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/
