@@ -22,7 +22,7 @@
 - **Selected for:** [AWS Fintech Accelerator](https://chainaware.ai/blog/aws-grant/) (2024)
 - **Listed on:** [Safary Club Web3 Growth Landscape — Growth Tools](https://x.com/Safaryclub/status/1822983239734329613) (2024)
 
-## MCP Tools (10)
+## MCP Tools (14)
 
 - `predictive_fraud` — Fraud probability (0–1) + AML forensic flags for a wallet. Networks: ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ.
 - `predictive_behaviour` — Wallet segmentation, intent, experience level, protocol history, personalized recommendations. Networks: ETH, BNB, BASE, HAQQ, SOLANA.
@@ -34,8 +34,12 @@
 - `predictive_behaviour_batch` — Async batch behavioural analysis for 5+ wallets. Returns `job_id` + `signature`; follow up with `check_job_status` → `get_job_results`. Networks: same as `predictive_behaviour`.
 - `check_job_status` — Polls the status of a batch job (`pending` → `processing` → `partial` / `completed`). Requires `job_id` + `signature`. No API key required.
 - `get_job_results` — Retrieves results for a completed or partial batch job. Requires `job_id` + `signature`. No API key required.
+- `run_token_audit` — Initiates or retrieves a deep multi-module smart contract audit (get-or-create async pipeline). If cached, returns full audit immediately; if not, queues and returns status == "queued". Covers 8 modules (ownership, liquidity, supply, honeypot, reentrancy, permissions, shadow functions, drainability). ⚠️ Uses **lowercase** networks: `eth`, `bsc`, `base`, `arbitrum`, `avalanche`, `optimism`, `polygon`.
+- `get_token_audit_result` — Polls or retrieves a token audit result. Only call after `run_token_audit` returns `status == "queued"`. Returns full 8-module breakdown when `audit_status == "complete"`. Same lowercase network format as `run_token_audit`.
+- `agents_trust_score_list` — Lists ERC-8004 registered AI agents with their on-chain trust scores (0–1000). Paginated and sortable. Use to discover agents or find agent_id for a single call.
+- `agents_trust_score_single` — Returns the full trust profile for a single ERC-8004 registered AI agent by `agent_id` + `chain_id`. Hard warning: always surface `wallet_verified == false` or non-null `error` before showing the score.
 
-## Claude Code Subagents (32)
+## Claude Code Subagents (34)
 
 Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project after registering the MCP server.
 
@@ -71,6 +75,8 @@ Ready-to-use specialist subagents in `.claude/agents/`. Copy into any project af
 - `chainaware-rwa-investor-screener` — RWA investor suitability screening: assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap.
 - `chainaware-credit-scorer` — Crypto credit score (1–9) for any ETH wallet combining fraud probability and social graph analysis. Fast single-number creditworthiness signal.
 - `chainaware-ltv-estimator` — 12-month lifetime value (LTV) as a USD revenue range. Formula: (annual_tx × intent) × (balance × platform_share) × fee_rate × category × risk × retention. Optional inputs: platform_share (default 15%), fee_rate (default 0.1%). Hard rejects fraudulent wallets ($0).
+- `chainaware-agent-trust-screener` — Screens ERC-8004 registered AI agents via on-chain trust scores (0–1000). List → single workflow. Trust tiers: Elite (800–1000) / High / Moderate / Low / Very Low / Fraud or New (0). Hard warnings on wallet_verified=false. Escalates to fraud/behaviour for second opinion.
+- `chainaware-token-audit-analyst` — STATEFUL AGENT. Deep multi-module smart contract audit (run_token_audit → poll get_token_audit_result). Aggregate risk score 0–100. ⛔ CRITICAL banner if can_drain=true. Never returns module data while queued/running. ⚠️ Lowercase networks: eth, bsc, base, arbitrum, avalanche, optimism, polygon.
 
 ## Key Scoring Formulas
 
@@ -94,7 +100,7 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Key Files
 
-- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 32 subagents with triggers, tools, inputs, outputs, and network support matrix
+- [AGENTS.md](./AGENTS.md) — Machine-readable index of all 34 subagents with triggers, tools, inputs, outputs, and network support matrix
 - [SKILL.md](./SKILL.md) — Full skill definition for Claude Code, Cursor, and OpenClaw ClawHub
 - [CLAUDE.md](./CLAUDE.md) — Project conventions, subagent table, scoring formulas, and blog references
 - [README.md](./README.md) — Full documentation, tool schemas, and integration guides
@@ -105,6 +111,8 @@ export CHAINAWARE_API_KEY="your-key-here"
 - [references/tools-credit-score.md](./references/tools-credit-score.md) — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - [references/tools-token-rank-single.md](./references/tools-token-rank-single.md) — `token_rank_single` full schema
 - [references/tools-batch.md](./references/tools-batch.md) — `predictive_fraud_batch`, `predictive_behaviour_batch`, `check_job_status`, `get_job_results` — async batch pipeline
+- [references/tools-token-audit.md](./references/tools-token-audit.md) — `run_token_audit`, `get_token_audit_result` — async contract audit pipeline, 8 modules, lowercase networks
+- [references/tools-agent-trust-score.md](./references/tools-agent-trust-score.md) — `agents_trust_score_list`, `agents_trust_score_single` — ERC-8004 agent trust scoring, 0–1000
 
 ## Further Reading
 

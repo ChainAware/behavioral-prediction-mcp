@@ -1,6 +1,6 @@
 # ChainAware Subagent Index
 
-Machine-readable index of all 32 Claude Code subagents in `.claude/agents/`.
+Machine-readable index of all 34 Claude Code subagents in `.claude/agents/`.
 Each agent is a specialist that handles a specific Web3 intelligence task using the
 ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`).
 
@@ -389,22 +389,53 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ---
 
+### chainaware-agent-trust-screener
+**File:** `.claude/agents/chainaware-agent-trust-screener.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `agents_trust_score_list`, `agents_trust_score_single`, `predictive_fraud`, `predictive_behaviour`
+**Purpose:** Screens ERC-8004 registered AI agents using on-chain behavioral trust scores (0–1000). List → single workflow: if agent_id + chain_id are known, call single directly; otherwise call list first to find the agent. Hard warnings on `wallet_verified=false` or non-null `error` — surface BEFORE showing score. Escalates to `predictive_fraud`/`predictive_behaviour` on agent_wallet/owner_address for second opinion.
+**Trust Tiers:** Elite (800–1000) / High (600–799) / Moderate (400–599) / Low (200–399) / Very Low (1–199) / Fraud or New (0)
+**Triggers:** "what is the trust score of this agent?", "screen ERC-8004 agent", "agents trust score list", "is this registered AI agent trustworthy?", "verify this ERC-8004 agent", "agent trust score for agent_id..."
+**Input:** agent_id + chain_id (or list query). Optional: escalate to fraud/behaviour checks on agent_wallet or owner_address
+**Output:** Trust score (0–1000), tier label, hard warnings, agent profile, wallet verification status
+
+---
+
+### chainaware-token-audit-analyst
+**File:** `.claude/agents/chainaware-token-audit-analyst.md`
+**Model:** claude-haiku-4-5-20251001
+**Tools:** `run_token_audit`, `get_token_audit_result`
+**Purpose:** **STATEFUL AGENT** — deep multi-module smart contract audit via an async get-or-create pipeline. Step 1: call `run_token_audit` — if Shape A (cached, `audit_status=="complete"`) → answer immediately; if Shape B (`status=="queued"`) → poll `get_token_audit_result` every ~5s until complete. NEVER present module data while still queued/running. `can_drain==true` → prepend ⛔ CRITICAL banner. Honeypot verdict != "No Honeypot" → surface ABOVE aggregate score.
+**⚠️ Network format:** these tools use **lowercase** (`eth`, `bsc`, `base`, `arbitrum`, `avalanche`, `optimism`, `polygon`) — NOT uppercase like other ChainAware tools.
+**Priority signals:** `can_drain`, `has_shadow`, `can_mint`, `can_blacklist`, `owner_is_renounced`
+**Triggers:** "run token audit on this contract", "audit this token", "is this contract safe?", "deep contract analysis for 0x...", "token security audit", "check this token for honeypot/drain risk"
+**Input:** token contract address + network (lowercase: eth, bsc, base, arbitrum, avalanche, optimism, polygon)
+**Output:** Aggregate risk score (0–100), 8-module breakdown (ownership, liquidity, supply, honeypot, reentrancy, etc.), priority signal flags, CRITICAL banner if can_drain
+
+---
+
 ## Network Support Matrix
 
-| Tool | ETH | BNB | POLYGON | TON | BASE | TRON | HAQQ | SOLANA |
-|------|-----|-----|---------|-----|------|------|------|--------|
-| `predictive_fraud` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| `predictive_fraud_batch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — |
-| `predictive_behaviour` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ |
-| `predictive_behaviour_batch` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ |
-| `check_job_status` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `get_job_results` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| `predictive_rug_pull` | ✅ | ✅ | — | — | ✅ | — | ✅ | — |
-| `credit_score` | ✅ | — | — | — | — | — | — | — |
-| `token_rank_list` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
-| `token_rank_single` | ✅ | ✅ | — | — | ✅ | — | — | ✅ |
+| Tool | ETH | BNB | POLYGON | TON | BASE | TRON | HAQQ | SOLANA | ARB | AVAX | OP |
+|------|-----|-----|---------|-----|------|------|------|--------|-----|------|----|
+| `predictive_fraud` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — |
+| `predictive_fraud_batch` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | — | — | — | — |
+| `predictive_behaviour` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ | — | — | — |
+| `predictive_behaviour_batch` | ✅ | ✅ | — | — | ✅ | — | ✅ | ✅ | — | — | — |
+| `check_job_status` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `get_job_results` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `predictive_rug_pull` | ✅ | ✅ | — | — | ✅ | — | ✅ | — | — | — | — |
+| `credit_score` | ✅ | — | — | — | — | — | — | — | — | — | — |
+| `token_rank_list` | ✅ | ✅ | — | — | ✅ | — | — | ✅ | — | — | — |
+| `token_rank_single` | ✅ | ✅ | — | — | ✅ | — | — | ✅ | — | — | — |
+| `run_token_audit` | ✅¹ | ✅¹ | — | — | ✅¹ | — | — | — | ✅¹ | ✅¹ | ✅¹ |
+| `get_token_audit_result` | ✅¹ | ✅¹ | — | — | ✅¹ | — | — | — | ✅¹ | ✅¹ | ✅¹ |
+| `agents_trust_score_list` | — | — | — | — | — | — | — | — | — | — | — |
+| `agents_trust_score_single` | — | — | — | — | — | — | — | — | — | — | — |
 
+> ¹ `run_token_audit` / `get_token_audit_result` use **lowercase** network values: `eth`, `bsc`, `base`, `arbitrum`, `avalanche`, `optimism`, `polygon` — unlike all other ChainAware tools which use uppercase.
 > `check_job_status` and `get_job_results` are network-agnostic — they use the `job_id` + `signature` from the schedule call, which already encodes the target network.
+> `agents_trust_score_list` / `agents_trust_score_single` are chain-id-based (ERC-8004 registry) — not network-filtered the same way as wallet tools.
 
 ## Composability Map
 
@@ -443,6 +474,13 @@ User analytics               → chainaware-cohort-analyzer
 
 AI agent verification        → chainaware-agent-screener
   └─ full agent audit        → chainaware-wallet-auditor
+
+ERC-8004 agent trust         → chainaware-agent-trust-screener
+  └─ wallet second opinion   → chainaware-fraud-detector (on agent_wallet / owner_address)
+
+Token contract deep audit    → chainaware-token-audit-analyst
+  └─ rug pull second opinion → chainaware-rug-pull-detector
+  └─ deployer fraud check    → chainaware-fraud-detector (on token_creator)
 ```
 
 ### Batch Pipeline (MCP tools — not subagents)

@@ -16,19 +16,24 @@ This guide explains how to connect ChainAware's blockchain intelligence tools to
 
 ## Available Tools
 
-ChainAware exposes 10 MCP tools your Eliza agents can call:
+ChainAware exposes 14 MCP tools your Eliza agents can call:
 
 | Tool ID | What it does |
 |---|---|
 | `predictive_fraud` | AML check + fraud probability score for any wallet (~98% accuracy) |
 | `predictive_behaviour` | Predicts next on-chain action, risk profile, and wallet segmentation |
 | `predictive_rug_pull` | Scores a liquidity pool or contract for rug pull risk |
+| `credit_score` | Crypto credit/trust score (1–9) combining fraud probability and social graph analysis |
 | `token_rank_list` | Ranks a list of tokens by quality and risk |
 | `token_rank_single` | Deep risk and quality score for a single token |
 | `predictive_fraud_batch` | Async batch fraud screening for 5+ wallets — returns `job_id` + `signature` |
 | `predictive_behaviour_batch` | Async batch behavioural analysis for 5+ wallets — returns `job_id` + `signature` |
 | `check_job_status` | Polls batch job status (`pending` → `processing` → `partial` / `completed`) |
 | `get_job_results` | Retrieves results for a completed or partial batch job |
+| `run_token_audit` | Deep multi-module contract audit (get-or-create async pipeline); ⚠️ lowercase networks |
+| `get_token_audit_result` | Polls or retrieves completed token audit; full module breakdown when `audit_status == "complete"` |
+| `agents_trust_score_list` | Lists ERC-8004 registered AI agents with on-chain trust scores (0–1000) |
+| `agents_trust_score_single` | Full trust profile for a single ERC-8004 agent by `agent_id` + `chain_id` |
 
 Batch pipeline: call `predictive_fraud_batch` or `predictive_behaviour_batch` → store `job_id` + `signature` → poll `check_job_status` until `completed` or `partial` → call `get_job_results`. Use for lists of 5+ wallets.
 
@@ -38,7 +43,7 @@ Supported networks: ETH, BNB, POLYGON, BASE, TON, TRON, HAQQ, SOLANA (varies by 
 
 ## Option A — Raw Tool Access (quickest)
 
-Connect any existing Eliza agent to all 10 ChainAware tools in minutes. The agent's LLM decides which tool to call based on user input.
+Connect any existing Eliza agent to all 14 ChainAware tools in minutes. The agent's LLM decides which tool to call based on user input.
 
 ### Step 1 — Install the MCP plugin
 
@@ -84,7 +89,7 @@ ChainAware provides ready-to-use character files — one per sub-agent — that 
 
 ### How it works
 
-Each character file sets a focused `system` prompt that instructs the agent on when and how to call ChainAware tools, how to interpret results, and how to respond. The MCP tools are the same as Option A — the character file adds the intelligence layer.
+Each character file sets a focused `system` prompt that instructs the agent on when and how to call ChainAware tools, how to interpret results, and how to respond. The MCP tools are the same as Option A — the character file adds the intelligence layer on top of 14 tools.
 
 ### Step 1 — Install the plugin
 
@@ -127,7 +132,7 @@ elizaos start --character characters/chainaware-aml-agent.json
 
 ## Ready-to-Use Character Files
 
-29 production-ready character files are available in the `eliza/characters/` directory. Each implements a complete specialist agent with full scoring logic, decision thresholds, and output formats — ready to drop in without modification.
+31 production-ready character files are available in the `eliza/characters/` directory. Each implements a complete specialist agent with full scoring logic, decision thresholds, and output formats — ready to drop in without modification.
 
 ```bash
 elizaos start --character eliza/characters/chainaware-fraud-detector.json
@@ -166,6 +171,8 @@ elizaos start --character eliza/characters/chainaware-fraud-detector.json
 | `chainaware-gamefi-screener.json` | GameFi Screener | Web3 game wallet screening — bot detection, P2E reward multiplier |
 | `chainaware-portfolio-risk-advisor.json` | Portfolio Risk Advisor | Portfolio rug pull scan — weighted risk score, grade A–F, rebalancing plan |
 | `chainaware-rwa-investor-screener.json` | RWA Investor Screener | RWA suitability — QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED |
+| `chainaware-agent-trust-screener.json` | Agent Trust Screener | ERC-8004 agent trust score (0–1000) — list → single workflow; hard warnings on wallet_verified=false |
+| `chainaware-token-audit-analyst.json` | Token Audit Analyst | Deep multi-module contract audit (async pipeline) — aggregate risk score 0–100, ⛔ CRITICAL if can_drain=true |
 
 ---
 

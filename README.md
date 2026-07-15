@@ -1468,7 +1468,7 @@ Add the MCP server to your Cursor configuration file (e.g. `mcp.json`):
 
 ## 🤖 Claude Code Subagents
 
-This repository includes **32 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
+This repository includes **34 ready-to-use Claude Code subagents** in `.claude/agents/` — specialist agents that handle common Web3 intelligence tasks out of the box.
 
 | Agent | Purpose |
 |-------|---------|
@@ -1504,6 +1504,8 @@ This repository includes **32 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-gamefi-screener` | Web3 game and P2E wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility |
 | `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull and community health assessment — scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 | `chainaware-rwa-investor-screener` | RWA investor suitability screening — assesses fraud risk, experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with investment cap |
+| `chainaware-agent-trust-screener` | ERC-8004 AI agent trust screening — lists and ranks registered agents by 0–1000 trust score, returns trust tier and flags, hard-warns on unverified wallets, escalates to behavioral checks for second opinion |
+| `chainaware-token-audit-analyst` | Deep multi-module token contract audit — ownership, liquidity, supply/mint, honeypot detection, reentrancy; async pipeline with 0–100 risk score and per-module breakdown |
 
 ### Setup
 

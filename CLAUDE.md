@@ -25,7 +25,7 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 
 ---
 
-## MCP Tools (10 total)
+## MCP Tools (14 total)
 
 | Tool | Purpose | Networks |
 |---|---|---|
@@ -39,6 +39,10 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 | `credit_score` | Crypto credit/trust score (1–9) combining fraud + social graph analysis | ETH |
 | `token_rank_list` | Ranked list of tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Token rank + top holders for a specific contract | ETH, BNB, BASE, SOLANA |
+| `run_token_audit` | Deep multi-module token contract audit (get-or-create; returns full report if cached or queues job) | eth, bsc, base, arbitrum, avalanche, optimism, polygon |
+| `get_token_audit_result` | Poll/retrieve completed token audit — 8 modules, 0–100 risk score, honeypot analysis | eth, bsc, base, arbitrum, avalanche, optimism, polygon |
+| `agents_trust_score_list` | Paginated list of ERC-8004 registered AI agents with trust scores 0–1000 | — |
+| `agents_trust_score_single` | Deep trust profile for a single ERC-8004 agent by agent_id + chain_id | — |
 
 ### Batch Pipeline
 
@@ -55,7 +59,7 @@ Always store `job_id` + `signature` from the schedule call — both are required
 ```
 behavioral-prediction-mcp/
 ├── .claude/
-│   └── agents/              # 24 Claude Code subagents
+│   └── agents/              # 34 Claude Code subagents
 ├── agents/
 │   └── openai.yaml          # Codex/OpenAI metadata
 ├── references/              # Deep tool documentation
@@ -76,7 +80,7 @@ behavioral-prediction-mcp/
 
 ## Subagents
 
-32 specialist subagents in `.claude/agents/`. Use the right one for the task:
+34 specialist subagents in `.claude/agents/`. Use the right one for the task:
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
@@ -112,6 +116,8 @@ behavioral-prediction-mcp/
 | `chainaware-gamefi-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Web3 game and P2E platform wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers (Casual/Active/Veteran/Pro) for matchmaking; outputs P2E reward eligibility and multiplier |
 | `chainaware-portfolio-risk-advisor` | Sonnet | `predictive_rug_pull` + `token_rank_single` | Portfolio-level rug pull and community health assessment — scans every token via predictive_rug_pull (universal), enriches with token_rank_single where available (2,500–3,000 token index), produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 | `chainaware-rwa-investor-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap |
+| `chainaware-agent-trust-screener` | Haiku | `agents_trust_score_list` + `agents_trust_score_single` + `predictive_fraud` + `predictive_behaviour` | ERC-8004 agent discovery and trust screening — lists/ranks registered AI agents by 0–1000 trust score, returns trust_tier and trust_flags, flags wallet_verified=false as a hard warning, escalates to predictive_fraud/predictive_behaviour for behavioral second opinion |
+| `chainaware-token-audit-analyst` | Haiku | `run_token_audit` + `get_token_audit_result` | Deep multi-module token contract audit — ownership control, liquidity health, supply/mint risk, honeypot detection, reentrancy; async get-or-create pipeline; returns 0–100 risk score with module breakdown and verdict (APPROVED / CONDITIONAL / REJECTED) |
 
 ### Key Scoring Formulas
 
@@ -176,6 +182,8 @@ behavioral-prediction-mcp/
 - `references/tools-credit-score.md` — `credit_score` full schema, 1–9 rating scale, DeFi lending use cases
 - `references/tools-token-rank-list.md` — `token_rank_list` full schema, categories, sorting, pagination
 - `references/tools-token-rank-single.md` — `token_rank_single` full schema, top holders, global rank
+- `references/tools-token-audit.md` — `run_token_audit` + `get_token_audit_result` — two-step deep audit pipeline, 8 modules, 0–100 risk score
+- `references/tools-agent-trust-score.md` — `agents_trust_score_list` + `agents_trust_score_single` — ERC-8004 agent trust scores 0–1000
 
 ---
 

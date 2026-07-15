@@ -51,7 +51,7 @@ metadata:
 
 The **ChainAware Behavioral Prediction MCP** connects any AI agent to a continuously updated
 Web3 behavioral intelligence layer: **14M+ wallet profiles** across **8 blockchains**, built from
-**1.3 billion+ predictive data points**. It delivers ten capabilities via a single MCP endpoint:
+**1.3 billion+ predictive data points**. It delivers fourteen capabilities via a single MCP endpoint:
 
 1. **Fraud Detection** — predict fraudulent wallet behavior before it happens ([~98% accuracy on ETH](https://chainaware.ai/scam-db))
 2. **Batch Fraud Detection** — async batch job for fraud screening large wallet lists; returns `job_id` + `signature`
@@ -63,6 +63,10 @@ Web3 behavioral intelligence layer: **14M+ wallet profiles** across **8 blockcha
 8. **Credit Score** — crypto credit/trust score (1–9) combining fraud probability and social graph analysis
 9. **Token Rank List** — rank tokens by holder community strength across chains and categories
 10. **Token Rank Single** — deep-dive into a single token's community quality and top holders
+11. **Token Audit** — deep multi-module smart contract audit via async get-or-create pipeline; 8 modules (ownership, liquidity, supply, honeypot, reentrancy, permissions, shadow functions, drainability); aggregate risk score 0–100; supports eth, bsc, base, arbitrum, avalanche, optimism, polygon (lowercase)
+12. **Token Audit Results** — poll or retrieve completed token audit; full module breakdown when `audit_status == "complete"`; never present data while still queued or running
+13. **Agent Trust Score List** — list ERC-8004 registered AI agents with on-chain trust scores (0–1000); paginated and sortable; use to discover agents or resolve agent_id
+14. **Agent Trust Score Single** — full trust profile for a single ERC-8004 agent by `agent_id` + `chain_id`; includes trust score, tier, `wallet_verified`, `owner_address`; hard warning if `wallet_verified == false` or `error` is non-null
 
 Unlike forensic blockchain tools that describe the past, this MCP is **predictive** — it tells your
 agent what is *about to happen*.
@@ -130,6 +134,10 @@ agent what is *about to happen*.
 | `credit_score` | ETH |
 | `token_rank_list` | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | ETH, BNB, BASE, SOLANA |
+| `run_token_audit` | eth, bsc, base, arbitrum, avalanche, optimism, polygon *(lowercase)* |
+| `get_token_audit_result` | eth, bsc, base, arbitrum, avalanche, optimism, polygon *(lowercase)* |
+| `agents_trust_score_list` | Chain-ID-based (ERC-8004 registry) |
+| `agents_trust_score_single` | Chain-ID-based (ERC-8004 registry) |
 
 ---
 
@@ -677,6 +685,8 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull scan, risk grade (A–F), rebalancing plan |
 | `chainaware-rwa-investor-screener` | RWA investor suitability — QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED |
 | `chainaware-ltv-estimator` | 12-month revenue potential (LTV) as a USD range — tx count × avg tx value × fee rate, scaled by behavioral multipliers. Optional: platform_share, fee_rate |
+| `chainaware-agent-trust-screener` | ERC-8004 agent trust score (0–1000) — list → single workflow; Elite/High/Moderate/Low/Very Low/Fraud tiers; hard warnings on wallet_verified=false |
+| `chainaware-token-audit-analyst` | Deep multi-module contract audit via async pipeline — aggregate risk score 0–100, ⛔ CRITICAL if can_drain=true; ⚠️ lowercase networks |
 
 ---
 

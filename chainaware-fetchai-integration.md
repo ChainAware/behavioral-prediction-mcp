@@ -16,19 +16,24 @@ This guide explains how to connect ChainAware's blockchain intelligence tools to
 
 ## Available Tools
 
-ChainAware exposes 10 tools your uAgents can call:
+ChainAware exposes 14 tools your uAgents can call:
 
 | Tool | What it does | Networks |
 |---|---|---|
 | `predictive_fraud` | AML check + fraud probability score for any wallet (~98% accuracy) | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | `predictive_behaviour` | Predicts next on-chain action, risk profile, and wallet segmentation | ETH, BNB, BASE, HAQQ, SOLANA |
 | `predictive_rug_pull` | Scores a smart contract or liquidity pool for rug pull risk | ETH, BNB, BASE, HAQQ |
+| `credit_score` | Crypto credit/trust score (1–9) combining fraud probability and social graph analysis | ETH |
 | `token_rank_list` | Ranks tokens by holder community strength | ETH, BNB, BASE, SOLANA |
 | `token_rank_single` | Deep community rank + top holders for a single token contract | ETH, BNB, BASE, SOLANA |
 | `predictive_fraud_batch` | Async batch fraud screening for 5+ wallets — returns `job_id` + `signature` | ETH, BNB, POLYGON, TON, BASE, TRON, HAQQ |
 | `predictive_behaviour_batch` | Async batch behavioural analysis for 5+ wallets — returns `job_id` + `signature` | ETH, BNB, BASE, HAQQ, SOLANA |
 | `check_job_status` | Polls batch job status (`pending` → `processing` → `partial` / `completed`) | Network-agnostic |
 | `get_job_results` | Retrieves results for a completed or partial batch job | Network-agnostic |
+| `run_token_audit` | Deep multi-module contract audit (get-or-create async pipeline) | eth, bsc, base, arbitrum, avalanche, optimism, polygon *(lowercase)* |
+| `get_token_audit_result` | Polls or retrieves completed token audit when `audit_status == "complete"` | eth, bsc, base, arbitrum, avalanche, optimism, polygon *(lowercase)* |
+| `agents_trust_score_list` | Lists ERC-8004 registered AI agents with on-chain trust scores (0–1000) | Chain-ID-based |
+| `agents_trust_score_single` | Full trust profile for a single ERC-8004 agent by `agent_id` + `chain_id` | Chain-ID-based |
 
 Batch pipeline for 5+ wallets: call `predictive_fraud_batch` or `predictive_behaviour_batch` → store `job_id` + `signature` → poll `check_job_status` → call `get_job_results`. `check_job_status` and `get_job_results` do not require the API key.
 
@@ -327,7 +332,7 @@ Once live, DeltaV will route requests like *"is this wallet safe?"* or *"check t
 
 ## Multi-Agent Pipelines
 
-Because each ChainAware capability maps cleanly to a separate uAgent, you can build pipelines where a coordinator agent routes to specialist sub-agents — mirroring ChainAware's own 29-subagent architecture.
+Because each ChainAware capability maps cleanly to a separate uAgent, you can build pipelines where a coordinator agent routes to specialist sub-agents — mirroring ChainAware's own 34-subagent architecture.
 
 ### Example: Coordinator → Fraud + Behaviour pipeline
 
@@ -398,7 +403,7 @@ def _try_complete(ctx: Context, wallet: str, state: dict):
 
 ## Mapping ChainAware Subagents to uAgent Patterns
 
-Each of the 29 ChainAware specialist subagents has a direct uAgent equivalent. Build whichever you need:
+Each of the 34 ChainAware specialist subagents has a direct uAgent equivalent. Build whichever you need:
 
 | ChainAware Subagent | uAgent pattern | MCP tools called |
 |---|---|---|
@@ -431,6 +436,8 @@ Each of the 29 ChainAware specialist subagents has a direct uAgent equivalent. B
 | `chainaware-gamefi-screener` | Single handler, returns player tier + P2E multiplier | `predictive_fraud` + `predictive_behaviour` |
 | `chainaware-portfolio-risk-advisor` | Batch handler, returns portfolio grade A–F + rebalancing plan | `predictive_rug_pull` + `token_rank_single` |
 | `chainaware-rwa-investor-screener` | Single handler, returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED | `predictive_fraud` + `predictive_behaviour` |
+| `chainaware-agent-trust-screener` | List → single handler, returns trust score 0–1000 with tier; hard warnings on wallet_verified=false | `agents_trust_score_list` + `agents_trust_score_single` + `predictive_fraud` |
+| `chainaware-token-audit-analyst` | Stateful async handler (run_token_audit → poll get_token_audit_result); returns risk score 0–100, ⛔ CRITICAL if can_drain=true | `run_token_audit` + `get_token_audit_result` |
 
 Full system prompt logic for each subagent is in `.claude/agents/` and the equivalent Eliza character files are in `eliza/characters/`. Use them as the specification for what each uAgent handler should implement.
 

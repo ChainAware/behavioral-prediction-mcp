@@ -177,6 +177,88 @@ capabilities:
         type: string
         required: true
 
+  - id: run_token_audit
+    display_name: "Run Token Audit"
+    description: >
+      Initiates or retrieves a deep multi-module smart contract audit. Get-or-create async pipeline:
+      if cached, returns full audit immediately (audit_status == "complete"); if not cached,
+      queues the job and returns status == "queued" — poll get_token_audit_result every ~5s.
+      Covers 8 modules: ownership, liquidity, supply, honeypot, reentrancy, permissions, shadow functions, drainability.
+      Aggregate risk score 0–100. NOTE: uses lowercase network values (eth, bsc, base, arbitrum, avalanche, optimism, polygon).
+    networks: [eth, bsc, base, arbitrum, avalanche, optimism, polygon]
+    inputs:
+      - name: apiKey
+        type: string
+        required: true
+      - name: network
+        type: string
+        required: true
+        description: "Lowercase network: eth, bsc, base, arbitrum, avalanche, optimism, polygon"
+      - name: contractAddress
+        type: string
+        required: true
+
+  - id: get_token_audit_result
+    display_name: "Get Token Audit Result"
+    description: >
+      Polls or retrieves results for a token audit job. Returns full 8-module audit output when
+      audit_status == "complete". Only call after run_token_audit returns status == "queued".
+      Never present module data while still queued or running.
+    networks: [eth, bsc, base, arbitrum, avalanche, optimism, polygon]
+    inputs:
+      - name: apiKey
+        type: string
+        required: true
+      - name: network
+        type: string
+        required: true
+        description: "Lowercase network: eth, bsc, base, arbitrum, avalanche, optimism, polygon"
+      - name: contractAddress
+        type: string
+        required: true
+
+  - id: agents_trust_score_list
+    display_name: "Agent Trust Score List"
+    description: >
+      Lists ERC-8004 registered AI agents with their on-chain trust scores (0–1000).
+      Trust score is derived from behavioral history, not peer votes. Paginated and sortable.
+      Use to discover registered agents or find agent_id for a follow-up single call.
+    networks: []
+    inputs:
+      - name: apiKey
+        type: string
+        required: true
+      - name: limit
+        type: integer
+        required: false
+      - name: offset
+        type: integer
+        required: false
+      - name: sort_by
+        type: string
+        required: false
+      - name: sort_order
+        type: string
+        required: false
+
+  - id: agents_trust_score_single
+    display_name: "Agent Trust Score Single"
+    description: >
+      Returns the full trust profile for a single ERC-8004 registered AI agent by agent_id + chain_id.
+      Includes trust score (0–1000), tier, wallet_verified flag, owner_address, agent_wallet, and error field.
+      Hard warning: surface wallet_verified == false or non-null error BEFORE showing the score.
+    networks: []
+    inputs:
+      - name: apiKey
+        type: string
+        required: true
+      - name: agent_id
+        type: string
+        required: true
+      - name: chain_id
+        type: integer
+        required: true
+
 subagents:
   - id: chainaware-wallet-auditor
     display_name: "Wallet Auditor"
@@ -401,6 +483,20 @@ subagents:
     model: claude-haiku-4-5-20251001
     tools: [predictive_behaviour, predictive_fraud]
     file: .claude/agents/chainaware-ltv-estimator.md
+
+  - id: chainaware-agent-trust-screener
+    display_name: "Agent Trust Screener"
+    description: "Screens ERC-8004 registered AI agents via on-chain trust scores (0–1000). List → single workflow; surfaces hard warnings on wallet_verified=false or non-null error before showing score. Escalates to predictive_fraud/predictive_behaviour for second opinion."
+    model: claude-haiku-4-5-20251001
+    tools: [agents_trust_score_list, agents_trust_score_single, predictive_fraud, predictive_behaviour]
+    file: .claude/agents/chainaware-agent-trust-screener.md
+
+  - id: chainaware-token-audit-analyst
+    display_name: "Token Audit Analyst"
+    description: "Deep multi-module smart contract audit via async get-or-create pipeline (run_token_audit → get_token_audit_result). Returns aggregate risk score 0–100 across 8 modules. Surfaces ⛔ CRITICAL banner if can_drain=true. Never returns module data while status is queued or running."
+    model: claude-haiku-4-5-20251001
+    tools: [run_token_audit, get_token_audit_result]
+    file: .claude/agents/chainaware-token-audit-analyst.md
 
 dependencies:
   tools:
