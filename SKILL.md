@@ -655,7 +655,7 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 |---|---|
 | `chainaware-wallet-auditor` | Full due diligence — deep behavioural profiling including fraud signals |
 | `chainaware-fraud-detector` | Fast fraud screening, batch wallet checks |
-| `chainaware-rug-pull-detector` | Contract/LP safety with deployer analysis |
+| `chainaware-rug-pull-detector` | Contract/LP safety checks |
 | `chainaware-wallet-marketer` | Personalized marketing messages per wallet segment |
 | `chainaware-reputation-scorer` | Reputation score 0–1000 |
 | `chainaware-aml-scorer` | AML compliance scoring 0–100 |

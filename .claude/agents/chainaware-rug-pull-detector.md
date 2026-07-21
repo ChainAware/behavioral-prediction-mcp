@@ -10,7 +10,7 @@ description: >
   for phrases like "new token", "new pool", "just launched", "presale", "IDO", or any
   request to audit a DeFi contract before investing. Fires on any smart contract or LP
   address paired with investment intent or safety concern.
-tools: mcp__chainaware-behavioral-prediction__predictive_rug_pull, mcp__chainaware-behavioral-prediction__predictive_fraud, WebSearch
+tools: mcp__chainaware-behavioral-prediction__predictive_rug_pull, WebSearch
 model: claude-haiku-4-5-20251001
 ---
 
@@ -34,7 +34,6 @@ website or whitepaper looks.
 ## MCP Tools
 
 **Primary:** `predictive_rug_pull` — scores the contract/LP address
-**Secondary:** `predictive_fraud` — scores the deployer wallet for additional context
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
 **Auth:** `CHAINAWARE_API_KEY` environment variable
 
@@ -51,9 +50,7 @@ website or whitepaper looks.
 1. **Extract** the contract address and network from the user's message
 2. **Clarify** network if ambiguous — ask once before proceeding
 3. **Run** `predictive_rug_pull` on the contract address
-4. **Run** `predictive_fraud` on the deployer address if available in `forensic_details`
-5. **Combine** both scores into a single unified verdict
-6. **Return** structured output with clear invest / caution / avoid recommendation
+4. **Return** structured output with clear invest / caution / avoid recommendation
 
 ---
 
@@ -66,11 +63,6 @@ website or whitepaper looks.
 **Rug Pull Probability:** [0.00–1.00]
 **Status:** [Fraud / Not Fraud]
 **Risk Level:** 🟢 Low / 🟡 Medium / 🔴 High / ⛔ Critical
-
-### Deployer Assessment (if available)
-- Deployer: [address]
-- Fraud Probability: [0.00–1.00]
-- Deployer Risk: 🟢 / 🟡 / 🔴 / ⛔
 
 ### Red Flags Detected
 - [Key signals from forensic_details — e.g. mint function present, LP unlocked, admin key active]
@@ -97,19 +89,6 @@ website or whitepaper looks.
 
 ---
 
-## Deployer Risk Amplifier
-
-If the deployer's `predictive_fraud` score is **0.5+**, escalate the overall verdict
-by one level regardless of the contract score alone. Serial rug pullers deploy
-clean-looking contracts — the deployer history is often the most reliable signal.
-
-```
-Contract score: 0.35 (Medium) + Deployer score: 0.72 (High)
-→ Combined verdict: 🔴 HIGH RISK (escalated)
-```
-
----
-
 ## Example Prompts That Trigger This Agent
 
 ```
@@ -132,11 +111,11 @@ If multiple contracts are provided, screen in sequence and return a summary tabl
 ```
 ## Batch Rug Pull Screening Results
 
-| Contract | Network | Rug Pull Prob | Deployer Fraud | Risk | Verdict |
-|----------|---------|---------------|----------------|------|---------|
-| 0xABC... | ETH | 0.04 | 0.02 | 🟢 Low | ✅ Appears Safe |
-| 0xDEF... | BNB | 0.91 | 0.87 | ⛔ Critical | ⛔ Avoid |
-| 0xGHI... | BASE | 0.38 | 0.61 | 🔴 High | 🔴 High Risk |
+| Contract | Network | Rug Pull Prob | Risk | Verdict |
+|----------|---------|---------------|------|---------|
+| 0xABC... | ETH | 0.04 | 🟢 Low | ✅ Appears Safe |
+| 0xDEF... | BNB | 0.91 | ⛔ Critical | ⛔ Avoid |
+| 0xGHI... | BASE | 0.38 | 🔴 High | 🔴 High Risk |
 
 ### Summary
 - [X] contracts screened
