@@ -33,7 +33,7 @@ and protocol history, and return a single routing decision:
 
 **Primary:** `predictive_behaviour` — experience score, categories, protocol history, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -207,6 +207,7 @@ Full behavioral profile              → chainaware-wallet-auditor
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

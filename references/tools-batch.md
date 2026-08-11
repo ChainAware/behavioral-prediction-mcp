@@ -35,7 +35,7 @@ Schedule a batch fraud detection job for a list of wallet addresses (~98% accura
 
 | Field       | Type            | Required | Description                                                                 |
 |-------------|-----------------|----------|-----------------------------------------------------------------------------|
-| `apiKey`    | string          | ✅        | ChainAware API key (obtain at chainaware.ai/pricing)                        |
+| `apiKey`    | string          | ✅*       | ChainAware API key — or omit when using x402 payments                        |
 | `network`   | string          | ✅        | One of: `ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `TRON`, `HAQQ`             |
 | `addresses` | array[objects]  | ✅        | List of wallet address objects to evaluate                                  |
 
@@ -89,7 +89,7 @@ Schedule a batch behavioural analysis job — projects intent, experience, risk 
 
 | Field       | Type            | Required | Description                                                                 |
 |-------------|-----------------|----------|-----------------------------------------------------------------------------|
-| `apiKey`    | string          | ✅        | ChainAware API key (obtain at chainaware.ai/pricing)                        |
+| `apiKey`    | string          | ✅*       | ChainAware API key — or omit when using x402 payments                        |
 | `network`   | string          | ✅        | One of: `ETH`, `BNB`, `BASE`, `HAQQ`, `SOLANA`                             |
 | `addresses` | array[objects]  | ✅        | List of wallet address objects to evaluate                                  |
 
@@ -292,7 +292,8 @@ console.log(results.data);
 
 | Code  | Meaning                                                  |
 |-------|----------------------------------------------------------|
-| `403` | Invalid or missing `apiKey` or `signature`               |
+| `403` | Invalid or missing `apiKey` or `signature` (not applicable when using x402 payments) |
+| `402 Payment Required` | x402 payment required — compatible clients settle automatically |
 | `400` | Malformed `network` or `walletAddress`                   |
 | `500` | Temporary backend failure — retry after a short delay    |
 

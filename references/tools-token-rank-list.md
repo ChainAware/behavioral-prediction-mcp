@@ -166,7 +166,8 @@ for i, token in enumerate(result["data"]["contracts"]):
 
 | Code  | Meaning                                                  |
 |-------|----------------------------------------------------------|
-| `403` | Invalid or missing API key                               |
+| `403` | Invalid or missing API key (not applicable when using x402 payments) |
+| `402 Payment Required` | x402 payment required — compatible clients settle automatically |
 | `400` | Malformed `network`, `category`, or pagination params    |
 | `500` | Temporary backend failure — retry after a short delay    |
 

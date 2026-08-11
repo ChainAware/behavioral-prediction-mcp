@@ -39,7 +39,7 @@ on that value, and behavioral multipliers that scale it up or down.
 **Primary:** `predictive_behaviour` — balance, experience, categories, risk profile, intention, fraud probability, and AML flags
 **Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -361,6 +361,7 @@ Upsell path for high-LTV users  → chainaware-upsell-advisor
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

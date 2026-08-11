@@ -19,7 +19,7 @@ description: >
   Requires: agent_id + chain_id (from list call), OR a filter/sort intent to
   discover agents first. Optional: registered_after datetime, sort preference,
   pagination parameters.
-tools: mcp__chainaware-behavioral-prediction__agents_trust_score_list, mcp__chainaware-behavioral-prediction__agents_trust_score_single, mcp__chainaware-behavioral-prediction__predictive_fraud, mcp__chainaware-behavioral-prediction__predictive_behaviour
+tools: mcp__chainaware-behavioral-prediction__agents_trust_score_list, mcp__chainaware-behavioral-prediction__agents_trust_score_single
 model: claude-haiku-4-5-20251001
 ---
 
@@ -43,10 +43,8 @@ a raw number. Flags are the actionable signal; surface them first.
 
 **Tool 1:** `agents_trust_score_list` — paginated list of all ERC-8004 registered agents with scores
 **Tool 2:** `agents_trust_score_single` — full in-depth trust profile for a single agent by `agent_id` + `chain_id`
-**Tool 3:** `predictive_fraud` — independent behavioral fraud check on `agent_wallet` or `owner_address` (escalation path)
-**Tool 4:** `predictive_behaviour` — full behavioral profile on `agent_wallet` (escalation path)
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -179,27 +177,6 @@ These do not override the trust score calculation, but must be resolved before t
 
 ---
 
-## Escalation: Independent Behavioral Second Opinion
-
-For higher-stakes decisions, you can run an independent check on the agent's wallet
-or its owner's wallet using ChainAware's behavioral tools. This is a stronger signal
-than the registry data alone.
-
-**To escalate:**
-
-1. Extract `agent_wallet` or `owner_address` from the `agents_trust_score_single` response
-2. Call `predictive_fraud` on either address (networks: ETH · BNB · POLYGON · TON · BASE · TRON · HAQQ)
-3. Call `predictive_behaviour` on the agent wallet if on a supported network (ETH · BNB · BASE · HAQQ · SOLANA) for full behavioral profile, intent signals, and experience scoring
-4. Surface any `forensic_details` flags or elevated `probabilityFraud` alongside the trust tier
-
-When to escalate proactively:
-- `trust_tier` is Moderate or lower
-- `trust_flags` contains any entry
-- `wallet_verified == false`
-- The caller is authorizing high-value transactions or fund delegation
-
----
-
 ## Example Prompts That Trigger This Agent
 
 ```
@@ -220,6 +197,7 @@ When to escalate proactively:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment before running agent trust checks.
 > Get an API key at https://chainaware.ai/pricing"*
@@ -232,9 +210,9 @@ Never log, print, or expose the API key in output.
 
 | Need | Agent |
 |------|-------|
+| Screen agent wallet + feeder wallet by address (not registry ID) | `chainaware-agent-screener` |
 | Full behavioral deep-dive on agent wallet | `chainaware-wallet-auditor` |
 | AML compliance report on owner address | `chainaware-aml-scorer` |
-| Screen agent wallet + feeder wallet by address (not registry ID) | `chainaware-agent-screener` |
 | Standalone fraud check only | `chainaware-fraud-detector` |
 
 ---

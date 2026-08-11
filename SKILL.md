@@ -74,7 +74,7 @@ agent what is *about to happen*.
 **MCP Server URL:** `https://prediction.mcp.chainaware.ai/sse`  
 **GitHub:** https://github.com/ChainAware/behavioral-prediction-mcp  
 **Website:** https://chainaware.ai  
-**Pricing / API Key:** https://chainaware.ai/pricing  
+**Pricing / API Key:** https://chainaware.ai/pricing · x402 payment supported  
 **Twitter:** https://x.com/ChainAware/  
 **LinkedIn:** https://www.linkedin.com/company/chainaware  
 **Blog:** https://chainaware.ai/blog  
@@ -526,7 +526,8 @@ Recommendation:
 
 ## Requirements
 
-- **API Key** — a `CHAINAWARE_API_KEY` environment variable is required. Obtain one at https://chainaware.ai/pricing
+- **API Key** — a `CHAINAWARE_API_KEY` environment variable is required for subscription-based access. Obtain one at https://chainaware.ai/pricing
+- **x402 payments** — the MCP server supports the [x402 protocol](https://x402.org) for pay-per-call access without a subscription; compatible clients settle payment automatically on HTTP 402 responses
 - **MCP-compatible host** — Claude Code, Cursor, Claude Desktop, ChatGPT Connectors, or any MCP client that supports SSE transport
 - **Network awareness** — different tools support different blockchains; see the Supported Blockchains table above
 - **No local installation** — the MCP server runs remotely at `https://prediction.mcp.chainaware.ai/sse`; no packages to install
@@ -734,6 +735,8 @@ Every tool call transmits the following to `https://prediction.mcp.chainaware.ai
 
 `CHAINAWARE_API_KEY` is read from the environment and passed as the `apiKey` parameter in each tool call. It is never included in output, never written to disk, and never logged by this skill. Treat it as a secret and rotate it regularly.
 
+The MCP server also supports **x402 payments** — if your client supports the x402 protocol, payment is settled automatically on HTTP 402 responses with no API key required.
+
 ### Integration-specific privacy notes
 
 - **Claude Code / Cursor**: key passed via `X-API-Key` header — does not appear in URLs or logs
@@ -759,7 +762,8 @@ Wallet addresses are pseudonymous identifiers. Whether they constitute personal 
 
 | Code | Meaning |
 |---|---|
-| `403 Unauthorized` | Invalid or missing `apiKey` |
+| `403 Unauthorized` | Invalid or missing `apiKey` (not applicable when using x402 payments) |
+| `402 Payment Required` | x402 payment required — compatible clients settle automatically |
 | `400 Bad Request` | Malformed `network` or `walletAddress` |
 | `500 Internal Server Error` | Temporary backend failure — retry after a short delay |
 
@@ -767,4 +771,7 @@ Wallet addresses are pseudonymous identifiers. Whether they constitute personal 
 
 ## Access & Pricing
 
-API key required. Subscribe at: https://chainaware.ai/pricing
+Two access methods are supported:
+
+- **API key** — subscribe at https://chainaware.ai/pricing and pass the key via `CHAINAWARE_API_KEY` env var
+- **x402 payments** — pay-per-call via the [x402 protocol](https://x402.org); no subscription required, compatible clients handle payment automatically on HTTP 402 responses

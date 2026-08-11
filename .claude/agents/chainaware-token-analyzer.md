@@ -31,7 +31,7 @@ any good?**
 **Primary:** `token_rank_single` — token rank + top holders
 **Secondary:** `predictive_fraud` — screen top holders for fraud risk
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** Via MCP server configuration (API key in header). `predictive_fraud` requires `CHAINAWARE_API_KEY` environment variable.
+**Auth:** Via MCP server configuration (API key in header) · x402 payment supported. `predictive_fraud` requires `CHAINAWARE_API_KEY` environment variable.
 
 ---
 

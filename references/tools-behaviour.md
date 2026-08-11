@@ -22,7 +22,7 @@ about each wallet they interact with, instead of serving generic responses.
 
 | Field           | Type   | Required | Description                              |
 |----------------|--------|----------|------------------------------------------|
-| `apiKey`        | string | ✅        | ChainAware API key                       |
+| `apiKey`        | string | ✅*       | ChainAware API key — or omit when using x402 payments |
 | `network`       | string | ✅        | One of: `ETH`, `BNB`, `BASE`, `HAQQ`, `SOLANA` |
 | `walletAddress` | string | ✅        | The wallet address to profile            |
 
@@ -179,7 +179,8 @@ agent.setContext(recommendation.Value.join("\n"));
 
 | Code  | Meaning                                                  |
 |-------|----------------------------------------------------------|
-| `403` | Invalid or missing `apiKey`                              |
+| `403` | Invalid or missing `apiKey` (not applicable when using x402 payments) |
+| `402 Payment Required` | x402 payment required — compatible clients settle automatically |
 | `400` | Malformed `network` or `walletAddress`                   |
 | `500` | Temporary backend failure — retry after a short delay    |
 

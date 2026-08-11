@@ -26,7 +26,7 @@ usage, and scoring metrics across the entire ChainAware network of 14M+ wallets.
 
 **Tool:** `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 **Key output fields used:**
 - `experience.Value` — experience score 0–100
@@ -132,6 +132,7 @@ Marketing        → chainaware-wallet-marketer (personalized message)
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

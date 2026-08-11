@@ -400,6 +400,7 @@ Example platform descriptions and what to extract:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

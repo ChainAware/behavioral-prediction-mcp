@@ -31,7 +31,7 @@ The stronger the holders, the stronger the token.
 
 **Tool:** `token_rank_list`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** Via MCP server configuration (API key in header)
+**Auth:** Via MCP server configuration (API key in header) · x402 payment supported
 
 ---
 

@@ -486,9 +486,9 @@ subagents:
 
   - id: chainaware-agent-trust-screener
     display_name: "Agent Trust Screener"
-    description: "Screens ERC-8004 registered AI agents via on-chain trust scores (0–1000). List → single workflow; surfaces hard warnings on wallet_verified=false or non-null error before showing score. Escalates to predictive_fraud/predictive_behaviour for second opinion."
+    description: "Screens ERC-8004 registered AI agents via on-chain trust scores (0–1000). List → single workflow; surfaces hard warnings on wallet_verified=false or non-null error before showing score."
     model: claude-haiku-4-5-20251001
-    tools: [agents_trust_score_list, agents_trust_score_single, predictive_fraud, predictive_behaviour]
+    tools: [agents_trust_score_list, agents_trust_score_single]
     file: .claude/agents/chainaware-agent-trust-screener.md
 
   - id: chainaware-token-audit-analyst

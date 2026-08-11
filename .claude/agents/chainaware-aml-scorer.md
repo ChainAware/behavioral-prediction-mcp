@@ -50,7 +50,7 @@ ELSE (all forensic details are clean):
 
 **Tool:** `predictive_fraud`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -196,6 +196,7 @@ For multiple wallets, process each and return a compliance table:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment.
 > Get an API key at https://chainaware.ai/pricing"*

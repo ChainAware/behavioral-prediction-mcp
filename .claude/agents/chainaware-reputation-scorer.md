@@ -218,6 +218,7 @@ For multiple wallets, process each and return a ranked table:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment.
 > Get an API key at https://chainaware.ai/pricing"*

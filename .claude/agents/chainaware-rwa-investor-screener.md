@@ -43,7 +43,7 @@ This agent fills that gap with a data-driven, repeatable suitability verdict.
 **Primary:** `predictive_behaviour` — experience score, risk profile, protocol history, categories, fraud probability, and AML flags
 **Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -337,6 +337,7 @@ Token safety of RWA token contract      → chainaware-rug-pull-detector
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

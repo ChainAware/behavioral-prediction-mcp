@@ -27,7 +27,7 @@ fraud scores, behavioral profiles, rug pull risk, and personalized recommendatio
 ## MCP Server
 
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** API key via `X-API-Key` header or `apiKey` parameter
+**Auth:** API key via `X-API-Key` header or `apiKey` parameter · x402 payment supported
 **GitHub:** https://github.com/ChainAware/behavioral-prediction-mcp
 
 ---
@@ -97,6 +97,7 @@ Always structure your analysis as:
 ## API Key
 
 Retrieve the API key from the `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If not set, prompt the user: *"Please set CHAINAWARE_API_KEY in your environment
 or provide it directly. Get a key at https://chainaware.ai/pricing"*
 

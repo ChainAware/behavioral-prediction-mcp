@@ -40,7 +40,7 @@ positions are dangerous and what to do about them.
 **Primary:** `predictive_rug_pull` — rug pull probability, deployer risk, liquidity analysis
 **Supplementary:** `token_rank_single` — community rank and holder quality (pre-calculated index only)
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -330,6 +330,7 @@ DAO treasury token risk               → chainaware-wallet-auditor
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

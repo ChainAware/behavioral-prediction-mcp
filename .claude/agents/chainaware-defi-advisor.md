@@ -34,7 +34,7 @@ products.** Every recommendation is grounded in real on-chain data, not guesses.
 
 **Primary:** `predictive_behaviour` — experience score, risk profile, intent signals, protocol history, categories, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -253,6 +253,7 @@ Reputation score for feature gating → chainaware-reputation-scorer
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

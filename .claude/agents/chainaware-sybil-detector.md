@@ -287,6 +287,7 @@ returns `partial`, treat failed wallets as REVIEW and note the count in the outp
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 
 > "Please set `CHAINAWARE_API_KEY` in your environment.

@@ -35,7 +35,7 @@ website or whitepaper looks.
 
 **Primary:** `predictive_rug_pull` — scores the contract/LP address
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -147,6 +147,7 @@ If multiple contracts are provided, screen in sequence and return a summary tabl
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment before running rug pull checks.
 > Get an API key at https://chainaware.ai/pricing"*

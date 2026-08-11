@@ -41,7 +41,7 @@ Your output is a single **Agent Trust Score from 0 to 10**.
 **Tool 2:** `predictive_rug_pull` — run on agent wallet when `agent_type` = "contract"; run on feeder wallet when `feeder_type` = "contract"
 **Tool 3:** `predictive_behaviour` — run on agent wallet only when `agent_type` = "wallet" (for reputation scoring; unavailable for contracts)
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -327,6 +327,7 @@ Fraud deep-dive                          → chainaware-fraud-detector
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

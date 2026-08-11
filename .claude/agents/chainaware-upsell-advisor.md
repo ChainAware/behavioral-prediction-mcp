@@ -37,7 +37,7 @@ and the right product to move users one step up — not to overwhelm them with o
 
 **Primary:** `predictive_behaviour` — experience trajectory, intent signals, risk profile, protocol usage, fraud probability, and AML flags
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -356,6 +356,7 @@ Full wallet profile for top targets  → chainaware-wallet-auditor
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---

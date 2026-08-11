@@ -29,7 +29,7 @@ You do one thing and do it well: **is this wallet safe?**
 
 **Tool:** `predictive_fraud`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -175,6 +175,7 @@ Return a summary table:
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing, respond:
 > *"Please set `CHAINAWARE_API_KEY` in your environment before running fraud checks.
 > Get an API key at https://chainaware.ai/pricing"*

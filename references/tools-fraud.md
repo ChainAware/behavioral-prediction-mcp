@@ -22,7 +22,7 @@ any transaction takes place. Also performs AML (Anti-Money Laundering) checks.
 
 | Field           | Type   | Required | Description                              |
 |----------------|--------|----------|------------------------------------------|
-| `apiKey`        | string | ✅        | ChainAware API key (obtain at chainaware.ai/pricing) |
+| `apiKey`        | string | ✅*       | ChainAware API key — or omit when using x402 payments |
 | `network`       | string | ✅        | One of: `ETH`, `BNB`, `POLYGON`, `TON`, `BASE`, `TRON`, `HAQQ` |
 | `walletAddress` | string | ✅        | The wallet address to evaluate (hex or ENS) |
 
@@ -122,7 +122,8 @@ print(result["probabilityFraud"]) # 0.02
 
 | Code  | Meaning                                                  |
 |-------|----------------------------------------------------------|
-| `403` | Invalid or missing `apiKey`                              |
+| `403` | Invalid or missing `apiKey` (not applicable when using x402 payments) |
+| `402 Payment Required` | x402 payment required — compatible clients settle automatically |
 | `400` | Malformed `network` or `walletAddress`                   |
 | `500` | Temporary backend failure — retry after a short delay    |
 

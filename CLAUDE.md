@@ -5,7 +5,7 @@
 This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-native Web3 intelligence layer that gives AI agents predictive capabilities over blockchain wallets and smart contracts.
 
 - **MCP Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-- **API Key:** Set as `CHAINAWARE_API_KEY` environment variable (never hardcode)
+- **API Key:** Set as `CHAINAWARE_API_KEY` environment variable (never hardcode) · x402 payment also supported
 - **GitHub:** `https://github.com/ChainAware/behavioral-prediction-mcp`
 - **Coverage:** 14M+ wallets, 8 blockchains, 1.3B+ data points
 - **Website:** https://chainaware.ai
@@ -116,7 +116,7 @@ behavioral-prediction-mcp/
 | `chainaware-gamefi-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Web3 game and P2E platform wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers (Casual/Active/Veteran/Pro) for matchmaking; outputs P2E reward eligibility and multiplier |
 | `chainaware-portfolio-risk-advisor` | Sonnet | `predictive_rug_pull` + `token_rank_single` | Portfolio-level rug pull and community health assessment — scans every token via predictive_rug_pull (universal), enriches with token_rank_single where available (2,500–3,000 token index), produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 | `chainaware-rwa-investor-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap |
-| `chainaware-agent-trust-screener` | Haiku | `agents_trust_score_list` + `agents_trust_score_single` + `predictive_fraud` + `predictive_behaviour` | ERC-8004 agent discovery and trust screening — lists/ranks registered AI agents by 0–1000 trust score, returns trust_tier and trust_flags, flags wallet_verified=false as a hard warning, escalates to predictive_fraud/predictive_behaviour for behavioral second opinion |
+| `chainaware-agent-trust-screener` | Haiku | `agents_trust_score_list` + `agents_trust_score_single` | ERC-8004 agent discovery and trust screening — lists/ranks registered AI agents by 0–1000 trust score, returns trust_tier and trust_flags, flags wallet_verified=false as a hard warning |
 | `chainaware-token-audit-analyst` | Haiku | `run_token_audit` + `get_token_audit_result` | Deep multi-module token contract audit — ownership control, liquidity health, supply/mint risk, honeypot detection, reentrancy; async get-or-create pipeline; returns 0–100 risk score with module breakdown and verdict (APPROVED / CONDITIONAL / REJECTED) |
 
 ### Key Scoring Formulas

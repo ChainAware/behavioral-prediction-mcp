@@ -6,7 +6,7 @@
 
 **Status:** Public tools – Private backend
 
-**Access:** By request (API key)
+**Access:** By request (API key · x402 payment supported)
 
 **Server URL:** [https://prediction.mcp.chainaware.ai/sse]
 
@@ -81,7 +81,7 @@ Use this when your user wants a risk assessment or early‑warning on a blockcha
 
 | Name            | Type   | Required | Description                                                               |
 | --------------- | ------ | -------- | ------------------------------------------------------------------------- |
-| `apiKey`        | string | ✅        | API key for authentication                                               |
+| `apiKey`        | string | ✅*       | ChainAware API key — or omit when using x402 payments                    |
 | `network`       | string | ✅        | Blockchain network (`ETH`, `BNB`,`POLYGON`,`TON`,`BASE`, `TRON`, `HAQQ`) |
 | `walletAddress` | string | ✅        | The wallet address to evaluate                                           |
 
@@ -142,7 +142,7 @@ Use this when your user wants a risk assessment or early‑warning on a blockcha
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey`  
+        • `402 Payment Required` → x402 payment required — compatible clients settle automatically  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -167,7 +167,7 @@ Do NOT poll or wait for results after scheduling.
 
 | Name            | Type               | Required | Description                                                               |
 | --------------- | -----------------  | -------- | ------------------------------------------------------------------------- |
-| `apiKey`        | string             | ✅        | API key for authentication                                               |
+| `apiKey`        | string             | ✅*       | ChainAware API key — or omit when using x402 payments                    |
 | `network`       | string             | ✅        | Blockchain network (`ETH`, `BNB`,`POLYGON`,`TON`,`BASE`, `TRON`, `HAQQ`) |
 | `addresses`     | array[objects]     | ✅        | The list ofwallet address to evaluate                                    |
 
@@ -189,7 +189,7 @@ Do NOT poll or wait for results after scheduling.
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey`  
+        • `402 Payment Required` → x402 payment required — compatible clients settle automatically  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -221,7 +221,7 @@ Error cases:
 
 | Name            | Type   | Required           | Description                                                               |
 | --------------- | ------ | ------------------ | ------------------------------------------------------------------------- |
-| `apiKey`        | string | ✅                 | API key for authentication                                                |
+| `apiKey`        | string | ✅*                | ChainAware API key — or omit when using x402 payments                     |
 | `network`       | string | ✅                 | Blockchain network (`ETH`, `BNB`,`BASE`,`HAQQ`,`SOLANA`)                  |
 | `walletAddress` | string | ✅                 | The wallet address to evaluate                                            |
 
@@ -348,7 +348,7 @@ Error cases:
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey`  
+        • `402 Payment Required` → x402 payment required — compatible clients settle automatically  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -384,7 +384,7 @@ Error cases:
 
 | Name            | Type           | Required           | Description                                                               |
 | --------------- | -------------- | ------------------ | ------------------------------------------------------------------------- |
-| `apiKey`        | string         | ✅                 | API key for authentication                                                |
+| `apiKey`        | string         | ✅*               | ChainAware API key — or omit when using x402 payments                     |
 | `network`       | string         | ✅                 | Blockchain network (`ETH`, `BNB`,`BASE`,`HAQQ`,`SOLANA`)                  |
 | `addresses`     | array[objects] | ✅                 | The wallet address to evaluate                                            |
 
@@ -406,7 +406,7 @@ Error cases:
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey`  
+        • `402 Payment Required` → x402 payment required — compatible clients settle automatically  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -428,7 +428,7 @@ This AI‑powered engine forecasts which liquidity pools or contracts are likely
 
 | Name            | Type   | Required | Description                                              |
 | --------------- | ------ | -------- | -------------------------------------------------------  |
-| `apiKey`        | string | ✅        | API key for authentication                              |
+| `apiKey`        | string | ✅*       | ChainAware API key — or omit when using x402 payments   |
 | `network`       | string | ✅        | Blockchain network (`ETH`, `BNB`, `BASE`, `HAQQ`)       |
 | `walletAddress` | string | ✅        | Smart contract or liquidity pool address                |
 
@@ -533,7 +533,7 @@ This AI‑powered engine forecasts which liquidity pools or contracts are likely
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey`  
+        • `402 Payment Required` → x402 payment required — compatible clients settle automatically  
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 
@@ -557,7 +557,7 @@ AI-driven crypto credit/trust scoring for blockchain wallets. Combines fraud pro
 
 | Name            | Type   | Required | Description                                                               |
 | --------------- | ------ | -------- | ------------------------------------------------------------------------- |
-| `apiKey`        | string | ✅        | API key for authentication                                               |
+| `apiKey`        | string | ✅*       | ChainAware API key — or omit when using x402 payments                    |
 | `network`       | string | ✅        | Blockchain network (`ETH`)                                               |
 | `walletAddress` | string | ✅        | The wallet address to score                                              |
 
@@ -583,7 +583,7 @@ AI-driven crypto credit/trust scoring for blockchain wallets. Combines fraud pro
 
 Error cases:
 
-    • `401 Unauthorized` → invalid `apiKey`
+    • `401 Unauthorized` → invalid `apiKey` (not applicable when using x402 payments)
     • `400 Bad Request` → malformed `network` or `walletAddress`
     • `500 Internal Server Error` → temporary downstream failure
 
@@ -1143,8 +1143,8 @@ Never call this without both values present in context.
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey` 
-    • `403 Unauthorized` → invalid `signature` 
+    • `403 Unauthorized` → invalid `apiKey` (not applicable when using x402 payments)
+    • `403 Unauthorized` → invalid `signature`
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -1298,8 +1298,8 @@ Never call this without both values present in context.
 
 Error cases:
 
-    • `403 Unauthorized` → invalid `apiKey` 
-    • `403 Unauthorized` → invalid `signature` 
+    • `403 Unauthorized` → invalid `apiKey` (not applicable when using x402 payments)
+    • `403 Unauthorized` → invalid `signature`
     • `400 Bad Request` → malformed `network` or `walletAddress`  
     • `500 Internal Server Error` → temporary downstream failure  
 ---
@@ -1369,6 +1369,7 @@ Service Configuration:
 * 📐 JSON schemas conform to the **MCP specification**
 * 🚦 Rate limits may apply depending on usage tier
 * 🔑 **API key required** for production endpoints
+* 💳 **x402 payment supported** — pay-per-call via the [x402 protocol](https://x402.org) without a subscription API key; compatible x402 clients handle payment automatically on HTTP 402 responses
 
 ---
 
@@ -1504,7 +1505,7 @@ This repository includes **34 ready-to-use Claude Code subagents** in `.claude/a
 | `chainaware-gamefi-screener` | Web3 game and P2E wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers for matchmaking; outputs P2E reward eligibility |
 | `chainaware-portfolio-risk-advisor` | Portfolio-level rug pull and community health assessment — scans every token, produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 | `chainaware-rwa-investor-screener` | RWA investor suitability screening — assesses fraud risk, experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with investment cap |
-| `chainaware-agent-trust-screener` | ERC-8004 AI agent trust screening — lists and ranks registered agents by 0–1000 trust score, returns trust tier and flags, hard-warns on unverified wallets, escalates to behavioral checks for second opinion |
+| `chainaware-agent-trust-screener` | ERC-8004 AI agent trust screening — lists and ranks registered agents by 0–1000 trust score, returns trust tier and flags, hard-warns on unverified wallets |
 | `chainaware-token-audit-analyst` | Deep multi-module token contract audit — ownership, liquidity, supply/mint, honeypot detection, reentrancy; async pipeline with 0–100 risk score and per-module breakdown |
 
 ### Setup
@@ -1576,10 +1577,10 @@ Get a key at [https://chainaware.ai/pricing](https://chainaware.ai/pricing)
 
 ## 🔒 Access Policy
 
-The MCP server requires an API key for production usage.
-To request access:
+The MCP server supports two access methods:
 
-* You can subscribe to listed available plans via: https://chainaware.ai/pricing
+* **API key** — subscribe to a plan at https://chainaware.ai/pricing and pass the key via `X-API-Key` header
+* **x402 payments** — use any [x402-compatible](https://x402.org) MCP client for pay-per-call access with no subscription required; the server returns HTTP 402 with payment details and the client settles automatically
 
 ---
 

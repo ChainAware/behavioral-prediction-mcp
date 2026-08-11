@@ -12,7 +12,7 @@ Primary use case: DeFi lending protocols that need a fast, single-number creditw
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| `apiKey` | string | ✅ | API key for authentication (`CHAINAWARE_API_KEY` env var) |
+| `apiKey` | string | ✅* | ChainAware API key — or omit when using x402 payments |
 | `network` | string | ✅ | Blockchain network: `ETH` |
 | `walletAddress` | string | ✅ | The wallet address to score |
 

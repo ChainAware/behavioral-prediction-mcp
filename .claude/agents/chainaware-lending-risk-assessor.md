@@ -38,7 +38,7 @@ of the borrower — not a one-size-fits-all policy.
 **Secondary:** `credit_score` — crypto credit/trust rating (1–9) combining fraud + social graph analysis
 **Fallback:** `predictive_fraud` — for POLYGON, TON, TRON networks not supported by `predictive_behaviour`
 **Endpoint:** `https://prediction.mcp.chainaware.ai/sse`
-**Auth:** `CHAINAWARE_API_KEY` environment variable
+**Auth:** `CHAINAWARE_API_KEY` environment variable · x402 payment supported
 
 ---
 
@@ -399,6 +399,7 @@ Onboarding route for new borrowers   → chainaware-onboarding-router
 ## API Key Handling
 
 Read from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.ai/pricing"*
 
 ---
