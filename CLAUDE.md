@@ -84,10 +84,10 @@ behavioral-prediction-mcp/
 
 | Agent | Model | Tools Used | Use For |
 |---|---|---|---|
-| `chainaware-wallet-auditor` | Sonnet | `predictive_behaviour` | Full due diligence, complex analysis |
-| `chainaware-fraud-detector` | Sonnet | `predictive_fraud` | Fast fraud screening, batch checks |
-| `chainaware-rug-pull-detector` | Haiku | `predictive_rug_pull` | Contract/LP safety checks |
-| `chainaware-wallet-marketer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Personalized marketing messages |
+| `chainaware-wallet-auditor` | Sonnet | `predictive_behaviour` + `WebFetch` + `WebSearch` | Full due diligence, complex analysis |
+| `chainaware-fraud-detector` | Sonnet | `predictive_fraud` + batch tools + `WebSearch` | Fast fraud screening, batch checks |
+| `chainaware-rug-pull-detector` | Haiku | `predictive_rug_pull` + `WebSearch` | Contract/LP safety checks |
+| `chainaware-wallet-marketer` | Sonnet | `predictive_behaviour` | Personalized marketing messages |
 | `chainaware-reputation-scorer` | Haiku | `predictive_behaviour` | Reputation score 0–1000 |
 | `chainaware-aml-scorer` | Haiku | `predictive_fraud` | AML compliance scoring 0–100 |
 | `chainaware-trust-scorer` | Haiku | `predictive_fraud` | Simple trust score 0.00–1.00 |
@@ -96,23 +96,23 @@ behavioral-prediction-mcp/
 | `chainaware-wallet-ranker` | Haiku | `predictive_behaviour` | Wallet experience rank + leaderboard |
 | `chainaware-token-ranker` | Haiku | `token_rank_list` | Discover/rank tokens by holder community strength |
 | `chainaware-token-analyzer` | Haiku | `token_rank_single` + `predictive_fraud` | Single token deep-dive + top holders |
-| `chainaware-onboarding-router` | Haiku | `predictive_behaviour` + `predictive_fraud` | Route wallets to beginner/intermediate/skip onboarding |
-| `chainaware-whale-detector` | Haiku | `predictive_behaviour` + `predictive_fraud` | Classify wallets into whale tiers (Mega/Whale/Emerging) |
-| `chainaware-defi-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Personalized DeFi product recommendations by experience + risk tier |
+| `chainaware-onboarding-router` | Haiku | `predictive_behaviour` | Route wallets to beginner/intermediate/skip onboarding |
+| `chainaware-whale-detector` | Haiku | `predictive_behaviour` + batch tools | Classify wallets into whale tiers (Mega/Whale/Emerging) |
+| `chainaware-defi-advisor` | Haiku | `predictive_behaviour` | Personalized DeFi product recommendations by experience + risk tier |
 | `chainaware-airdrop-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Batch screen wallets for airdrop eligibility, filter bots/fraud, rank by reputation |
 | `chainaware-lending-risk-assessor` | Haiku | `predictive_fraud` + `predictive_behaviour` + `credit_score` | Borrower risk grade (A–F), collateral ratio, and interest rate tier for DeFi lending |
 | `chainaware-token-launch-auditor` | Haiku | `predictive_rug_pull` + `predictive_fraud` + `predictive_behaviour` | Pre-listing launch safety audit — composite LSS, APPROVED/CONDITIONAL/REJECTED verdict, badge copy |
-| `chainaware-agent-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Screens AI agent wallet + feeder wallet; returns Agent Trust Score 0–10 (0=fraud, 1=new, 2–10=reputation) |
+| `chainaware-agent-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` + `predictive_rug_pull` | Screens AI agent wallet + feeder wallet; returns Agent Trust Score 0–10 (0=fraud, 1=new, 2–10=reputation) |
 | `chainaware-cohort-analyzer` | Sonnet | `predictive_behaviour` + `predictive_fraud` | Segments a batch of wallets into behavioral cohorts (Power DeFi, NFT, Trader, Dormant, etc.) with per-cohort engagement strategies |
 | `chainaware-counterparty-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Real-time pre-transaction go/no-go verdict (Safe / Caution / Block) before a trade, transfer, or contract interaction |
 | `chainaware-governance-screener` | Haiku | `predictive_behaviour` + `predictive_fraud` | DAO voter screening — Sybil detection, governance tier (Core/Active/Participant/Observer), and voting weight multiplier |
 | `chainaware-sybil-detector` | Haiku | `predictive_behaviour` + `predictive_fraud` | Bulk Sybil attack detection for DAO votes — classifies voters as ELIGIBLE / REVIEW / EXCLUDE, detects coordinated fraud patterns, and produces reputation-weighted vote multipliers |
 | `chainaware-transaction-monitor` | Haiku | `predictive_fraud` + `predictive_rug_pull` + `predictive_behaviour` | Real-time transaction risk scoring for autonomous agents — composite score (0–100), per-address fraud signals, and pipeline action (ALLOW / FLAG / HOLD / BLOCK) |
 | `chainaware-lead-scorer` | Haiku | `predictive_behaviour` + `predictive_fraud` | Sales lead qualification — lead score (0–100), tier (Hot/Warm/Cold/Dead), conversion probability, and recommended outreach angle |
-| `chainaware-upsell-advisor` | Haiku | `predictive_behaviour` + `predictive_fraud` | Upsell path for existing users — upgrade readiness score, next product recommendation, conversion probability, trigger event, and ready-to-use upsell message |
+| `chainaware-upsell-advisor` | Haiku | `predictive_behaviour` | Upsell path for existing users — upgrade readiness score, next product recommendation, conversion probability, trigger event, and ready-to-use upsell message |
 | `chainaware-platform-greeter` | Haiku | `predictive_behaviour` + `predictive_fraud` | Contextual welcome message for a specific wallet on a specific platform — same wallet gets a different message on Aave vs 1inch vs OpenSea |
 | `chainaware-marketing-director` | Sonnet | `Agent` + `predictive_fraud` (orchestrator) | Full-cycle campaign orchestrator — segments audience, scores leads, detects whales, builds per-cohort message playbook, surfaces upsell opportunities, and routes new wallets; all messages tailored to a caller-supplied platform description |
-| `chainaware-compliance-screener` | Haiku | `Agent` + `predictive_fraud` (orchestrator) | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a structured Compliance Report with verdict (PASS / EDD / REJECT), risk rating, and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi) |
+| `chainaware-compliance-screener` | Haiku | `Agent` + `predictive_fraud` + `predictive_rug_pull` (orchestrator) | First-layer MiCA-aligned compliance screening — orchestrates fraud-detector, aml-scorer, transaction-monitor, and counterparty-screener into a structured Compliance Report with verdict (PASS / EDD / REJECT), risk rating, and explicit scope disclaimer (~70–75% MiCA coverage for pure DeFi) |
 | `chainaware-gamefi-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | Web3 game and P2E platform wallet screening — detects bot farms, cheaters, and farm wallets; classifies legitimate players into experience tiers (Casual/Active/Veteran/Pro) for matchmaking; outputs P2E reward eligibility and multiplier |
 | `chainaware-portfolio-risk-advisor` | Sonnet | `predictive_rug_pull` + `token_rank_single` | Portfolio-level rug pull and community health assessment — scans every token via predictive_rug_pull (universal), enriches with token_rank_single where available (2,500–3,000 token index), produces weighted Portfolio Risk Score, grade (A–F), concentration flags, and prioritized rebalancing plan |
 | `chainaware-rwa-investor-screener` | Haiku | `predictive_fraud` + `predictive_behaviour` | RWA investor suitability screening — assesses fraud risk, on-chain experience, and risk profile alignment against the RWA tier; returns QUALIFIED / CONDITIONAL / REFER_TO_KYC / DISQUALIFIED with recommended investment cap |
