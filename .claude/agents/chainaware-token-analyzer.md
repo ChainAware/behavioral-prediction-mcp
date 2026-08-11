@@ -175,6 +175,7 @@ Marketing to top holders    → chainaware-wallet-marketer  (convert top holders
 
 `token_rank_single` authenticates via the MCP server header configuration.
 `predictive_fraud` reads from `CHAINAWARE_API_KEY` environment variable.
+The MCP server also supports **x402 payments** — pay-per-use access without a subscription API key.
 If missing when fraud screening is requested:
 > *"Please set `CHAINAWARE_API_KEY` to enable holder fraud screening.
 > Get a key at https://chainaware.ai/pricing"*
