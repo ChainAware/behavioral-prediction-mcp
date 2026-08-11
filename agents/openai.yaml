@@ -264,28 +264,28 @@ subagents:
     display_name: "Wallet Auditor"
     description: "Full due diligence — deep behavioural analysis including fraud signals, intent, experience, and recommendations."
     model: claude-sonnet-4-6
-    tools: [predictive_behaviour]
+    tools: [predictive_behaviour, WebFetch, WebSearch]
     file: .claude/agents/chainaware-wallet-auditor.md
 
   - id: chainaware-fraud-detector
     display_name: "Fraud Detector"
     description: "Fast wallet fraud screening. Returns status, probability (0–1), and forensic AML flags."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud, predictive_fraud_batch, check_job_status, get_job_results]
+    tools: [predictive_fraud, predictive_fraud_batch, check_job_status, get_job_results, WebSearch]
     file: .claude/agents/chainaware-fraud-detector.md
 
   - id: chainaware-rug-pull-detector
     display_name: "Rug Pull Detector"
     description: "Smart contract and LP safety checks. Returns rug pull risk tier and deployer risk."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_rug_pull, predictive_fraud]
+    tools: [predictive_rug_pull, WebSearch]
     file: .claude/agents/chainaware-rug-pull-detector.md
 
   - id: chainaware-wallet-marketer
     display_name: "Wallet Marketer"
     description: "Generates a personalised marketing message (≤20 words) calibrated to the wallet's behaviour profile."
     model: claude-sonnet-4-6
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour]
     file: .claude/agents/chainaware-wallet-marketer.md
 
   - id: chainaware-reputation-scorer
@@ -334,21 +334,21 @@ subagents:
     display_name: "Onboarding Router"
     description: "Routes wallets to Beginner / Intermediate / Power User / Skip onboarding based on experience level."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour]
     file: .claude/agents/chainaware-onboarding-router.md
 
   - id: chainaware-whale-detector
     display_name: "Whale Detector"
     description: "Classifies wallets into Mega Whale / Whale / Emerging Whale / Not a Whale tiers."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud, predictive_behaviour_batch, check_job_status, get_job_results]
+    tools: [predictive_behaviour, predictive_behaviour_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-whale-detector.md
 
   - id: chainaware-defi-advisor
     display_name: "DeFi Advisor"
     description: "Personalised DeFi product recommendations by experience tier and risk appetite."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour]
     file: .claude/agents/chainaware-defi-advisor.md
 
   - id: chainaware-airdrop-screener
@@ -376,7 +376,7 @@ subagents:
     display_name: "AI Agent Screener"
     description: "Screens an AI agent's operational wallet and feeder wallet. Returns Agent Trust Score 0–10."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_fraud, predictive_behaviour]
+    tools: [predictive_fraud, predictive_behaviour, predictive_rug_pull]
     file: .claude/agents/chainaware-agent-screener.md
 
   - id: chainaware-cohort-analyzer
@@ -418,7 +418,7 @@ subagents:
     display_name: "Upsell Advisor"
     description: "Upsell path for existing users — upgrade readiness score, next product recommendation, trigger event, and ready-to-use upsell message."
     model: claude-haiku-4-5-20251001
-    tools: [predictive_behaviour, predictive_fraud]
+    tools: [predictive_behaviour]
     file: .claude/agents/chainaware-upsell-advisor.md
 
   - id: chainaware-lead-scorer
@@ -446,7 +446,7 @@ subagents:
     display_name: "Compliance Screener"
     description: "First-layer MiCA-aligned compliance screening — orchestrates fraud, AML, transaction, and counterparty checks into a Compliance Report with PASS / EDD / REJECT verdict (~70–75% MiCA coverage for pure DeFi)."
     model: claude-haiku-4-5-20251001
-    tools: [Agent, predictive_fraud, predictive_fraud_batch, check_job_status, get_job_results]
+    tools: [Agent, predictive_fraud, predictive_rug_pull, predictive_fraud_batch, check_job_status, get_job_results]
     file: .claude/agents/chainaware-compliance-screener.md
 
   - id: chainaware-gamefi-screener
@@ -502,7 +502,7 @@ dependencies:
   tools:
     - type: "mcp"
       value: "chainaware-behavioral-prediction"
-      description: "ChainAware Behavioral Prediction MCP — real-time fraud detection, wallet behavioral profiling, rug pull risk scoring, and token ranking via SSE."
+      description: "ChainAware Behavioral Prediction MCP — real-time fraud detection, wallet behavioral profiling, rug pull risk scoring, and token ranking via SSE. Supports API key auth and x402 payments."
       transport: "sse"
       url: "https://prediction.mcp.chainaware.ai/sse"
 
