@@ -72,7 +72,6 @@ behavioral-prediction-mcp/
 │   └── tools-token-rank-single.md
 ├── CLAUDE.md                # This file
 ├── SKILL.md                 # Skill definition (Claude, Codex, Cursor)
-├── SUBAGENT-IDEAS.md        # Backlog of subagent ideas with priorities
 └── README.md
 ```
 
@@ -189,10 +188,7 @@ behavioral-prediction-mcp/
 
 ---
 
-## Next Tasks (from SUBAGENT-IDEAS.md)
+## Pending
 
-All high-priority subagents have been built. See SUBAGENT-IDEAS.md for future ideas.
-
-Also pending:
 - Publish skill to OpenClaw ClawHub (`clawhub publish`)
 - Submit to OpenAI skill registry
