@@ -210,6 +210,16 @@ behavioral-prediction-mcp/
 
 ---
 
+### Learn Docs (official technical reference)
+- [Prediction MCP](https://chainaware.ai/learn/prediction-mcp/) — Tool schemas, authentication, integration guides, x402 payments
+- [Ready-made Agents](https://chainaware.ai/learn/ready-made-agents/) — 34 pre-built Claude Code subagents: frontmatter, tools, networks, usage
+- [Agent Trust Score](https://chainaware.ai/learn/agent-trust-score.html) — ERC-8004 behavioral trust scoring: tiers, formulas, feeder wallet tracing
+- [Token Audit](https://chainaware.ai/learn/token-audit/) — 11-module contract audit: modules, risk levels, networks, verdict scale
+- [Token Rank](https://chainaware.ai/learn/token-rank/) — Holder-quality scoring: how community strength is measured
+- [MiCA Compliance for DeFi](https://chainaware.ai/learn/compliance-for-defi/) — AML screening, MiCA obligations coverage, Travel Rule scope
+- [Growth Tech](https://chainaware.ai/learn/growth-tech/) — Growth agents, wallet-level personalisation, JS pixel integration
+- [Use Cases](https://chainaware.ai/learn/use-cases/aml-kyc-compliance.html) — AML/KYC, credit scoring, rug pull prevention, Sybil resistance, agent trust
+
 ## Pending
 
 - Publish skill to OpenClaw ClawHub (`clawhub publish`)

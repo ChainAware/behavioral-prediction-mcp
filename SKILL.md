@@ -719,6 +719,12 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | AML Integration Guide for DApps | https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/ |
 | Know Your Agent (KYA) — Behavioral Trust Layer | https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/ |
 | DeFi Compliance Tools Compared | https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/ |
+| **Learn: Prediction MCP Docs** | https://chainaware.ai/learn/prediction-mcp/ |
+| **Learn: Ready-made Agents** | https://chainaware.ai/learn/ready-made-agents/ |
+| **Learn: Agent Trust Score** | https://chainaware.ai/learn/agent-trust-score.html |
+| **Learn: Token Audit** | https://chainaware.ai/learn/token-audit/ |
+| **Learn: MiCA Compliance** | https://chainaware.ai/learn/compliance-for-defi/ |
+| **Learn: Use Cases** | https://chainaware.ai/learn/use-cases/aml-kyc-compliance.html |
 
 ---
 

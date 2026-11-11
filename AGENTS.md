@@ -505,4 +505,8 @@ Use batch tools directly when an agent needs to process 100+ wallets efficiently
 - Token Audit 15K EVM tokens: https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/
 - Know Your Agent (KYA) — Behavioral Trust Layer: https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/
 - AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
+- Learn docs: https://chainaware.ai/learn/prediction-mcp/
+- Ready-made agents: https://chainaware.ai/learn/ready-made-agents/
+- Agent Trust Score docs: https://chainaware.ai/learn/agent-trust-score.html
+- Token Audit docs: https://chainaware.ai/learn/token-audit/
 - API access: https://chainaware.ai/pricing

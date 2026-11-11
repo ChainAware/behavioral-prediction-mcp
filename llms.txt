@@ -116,6 +116,20 @@ export CHAINAWARE_API_KEY="your-key-here"
 
 ## Further Reading
 
+### Learn Docs (official technical reference)
+- https://chainaware.ai/learn/prediction-mcp/
+- https://chainaware.ai/learn/ready-made-agents/
+- https://chainaware.ai/learn/agent-trust-score.html
+- https://chainaware.ai/learn/token-audit/
+- https://chainaware.ai/learn/token-rank/
+- https://chainaware.ai/learn/compliance-for-defi/
+- https://chainaware.ai/learn/growth-tech/
+- https://chainaware.ai/learn/use-cases/aml-kyc-compliance.html
+- https://chainaware.ai/learn/use-cases/ai-agent-trust-verification.html
+- https://chainaware.ai/learn/use-cases/defi-credit-scoring.html
+- https://chainaware.ai/learn/comparisons/chainaware-vs-chainalysis.html
+- https://chainaware.ai/learn/comparisons/agent-trust-platforms.html
+
 ### Product Overviews
 - https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - https://chainaware.ai/blog/web3-business-potential/
