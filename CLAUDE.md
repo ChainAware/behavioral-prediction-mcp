@@ -14,8 +14,8 @@ This repository contains the **ChainAware Behavioral Prediction MCP** — an AI-
 - **Blog:** https://chainaware.ai/blog
 - **Learn:** https://chainaware.ai/learn
 - **Examples:** https://github.com/ChainAware/examples
-- **Fraud Detection Accuracy:** [98% backtesting verified](https://chainaware.ai/scam-db)
-- **Rug Pull Detection Accuracy:** [90.1% backtesting verified](https://chainaware.ai/resources/rugpull-verification)
+- **Fraud Detection Accuracy:** [95% backtesting verified](https://chainaware.ai/scam-db)
+- **Rug Pull Detection Accuracy:** [90% backtesting verified](https://chainaware.ai/resources/rugpull-verification)
 - **Featured in:** [CB Insights Fraud Prevention Market Map for the AI Era](https://www.cbinsights.com/research/report/the-fraud-prevention-market-map-for-the-ai-era/) (2026)
 - **Listed on:** [BNB Chain AI Landscape](https://x.com/BNBCHAIN/status/1947597551139500419) (2025)
 - **Listed on:** [BNB Chain Kickstart — Marketing Tools](https://www.bnbchain.org/en/programs/kickstart#services) (2025)
@@ -159,7 +159,7 @@ behavioral-prediction-mcp/
 - [AI Agent Trust Score](https://chainaware.ai/blog/agent-trust-score-agentic-commerce/) — `agents_trust_score_list` / `agents_trust_score_single`: ERC-8004 registry, 274k+ agents, trust tiers 0–1000, fleet-level fraud detection, DeFi access control
 - [Token Audit: 10,000 CoinGecko Token Results](https://chainaware.ai/blog/token-audit-10000-coingecko-results/) — Real-world study: 55% of top tokens HIGH RISK; 127 automated checks via `run_token_audit`
 - [Token Audit at Scale: 15,000 EVM Tokens](https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/) — Larger 2026 study: 57.7% HIGH RISK across CoinGecko + CoinMarketCap tokens; `run_token_audit` accuracy benchmark
-- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — Real-world `predictive_rug_pull` accuracy: 103,695 rug pull events across 20 weeks; 90.1% detection rate verified
+- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — Real-world `predictive_rug_pull` accuracy: 103,695 rug pull events across 20 weeks; 90% detection rate verified
 - [AML and Transaction Monitoring for DApps](https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/) — `aml_screener` integration patterns; VASP compliance, real-time screening, alert thresholds
 - [Wallet Forensics and AML Investigation Reports](https://chainaware.ai/blog/chainaware-investigation-wallet-forensics-aml-reports/) — Deep investigation workflow combining `predictive_fraud` + AML + behavioural scoring into structured compliance reports
 - [Share My Audit / Web3 Business Card](https://chainaware.ai/blog/chainaware-share-my-audit-guide/) — Consumer use case for `predictive_behaviour`: shareable wallet identity profile, trust passport
@@ -171,7 +171,7 @@ behavioral-prediction-mcp/
 - [MiCA Compliance DeFi Screener](https://chainaware.ai/blog/mica-compliance-defi-screener-chainaware/) — How ChainAware covers ~70–75% of DeFi MiCA obligations at pay-per-use pricing; positions compliance-screener vs Chainalysis/Elliptic; Travel Rule does not apply to pure DeFi
 - [Web3 Growth Platforms Compared 2026](https://chainaware.ai/blog/web3-growth-platforms-compared-2026/) — Three-stage funnel framework (Find / Understand / Convert); ChainAware is the only platform operating at Stage 3 (post-connection, in-DApp personalization); relevant to onboarding-router, wallet-marketer, whale-detector, marketing-director
 - [Web3 Analytics Tools for DApps Comparison 2026](https://chainaware.ai/blog/web3-analytics-tools-dapps-comparison-2026/) — Maps 10 analytics platforms across four job categories; ChainAware is the sole "predictive intelligence" platform vs attribution/product analytics tools; covers behavioral analytics, fraud detector, growth agents
-- [Web3 Fraud Detection for DApps](https://chainaware.ai/blog/web3-fraud-detection-for-dapps/) — `predictive_fraud` competitive positioning: why behavioral scoring beats transaction-pattern detection; 98% accuracy benchmark
+- [Web3 Fraud Detection for DApps](https://chainaware.ai/blog/web3-fraud-detection-for-dapps/) — `predictive_fraud` competitive positioning: why behavioral scoring beats transaction-pattern detection; 95% accuracy benchmark
 - [Web3 Rug Pull Detection Tools Compared](https://chainaware.ai/blog/best-web3-rug-pull-detection-tools-2026/) — `predictive_rug_pull` vs GoPlus, De.Fi, Token Sniffer; why behavioral holder analysis catches what code audits miss
 - [DeFi Credit Score Platforms Compared](https://chainaware.ai/blog/defi-credit-score-comparison/) — `credit_score` vs Providence, RociFi, TrueFi, Masa, Spectral; ChainAware is only platform integrating fraud probability into credit scoring
 - [DeFi Compliance Tools Comparison](https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/) — `chainaware-compliance-screener` vs Chainalysis, TRM Labs, Elliptic; 118 organic sessions/mo, highest-traffic comparison post

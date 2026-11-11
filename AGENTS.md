@@ -13,7 +13,7 @@ ChainAware Behavioral Prediction MCP (`https://prediction.mcp.chainaware.ai/sse`
 
 **Links:** [Website](https://chainaware.ai) · [Twitter](https://x.com/ChainAware/) · [LinkedIn](https://www.linkedin.com/company/chainaware) · [Blog](https://chainaware.ai/blog) · [Learn](https://chainaware.ai/learn) · [Examples](https://github.com/ChainAware/examples)
 
-**Accuracy:** [98% Fraud Detection](https://chainaware.ai/scam-db) · [90.1% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
+**Accuracy:** [95% Fraud Detection](https://chainaware.ai/scam-db) · [90% Rug Pull Detection](https://chainaware.ai/resources/rugpull-verification) — backtesting verified
 
 **Quick setup:**
 ```bash

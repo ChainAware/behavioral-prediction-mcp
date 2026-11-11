@@ -6,8 +6,8 @@
 Forecasts the probability that a wallet address will engage in fraudulent activity *before*
 any transaction takes place. Also performs AML (Anti-Money Laundering) checks.
 
-- ~98% accuracy on Ethereum
-- ~96% accuracy on BNB Smart Chain
+- ~95% accuracy on Ethereum
+- ~93% accuracy on BNB Smart Chain
 - Not rules-based blocklisting — AI trained on 1.3B+ behavioral data points
 
 ---

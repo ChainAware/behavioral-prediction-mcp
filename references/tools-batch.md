@@ -25,7 +25,7 @@ predictive_behaviour_batch  ──→  check_job_status  ──→  get_job_resu
 
 ## Tool 1: `predictive_fraud_batch`
 
-Schedule a batch fraud detection job for a list of wallet addresses (~98% accuracy). Returns immediately with a job handle; does not wait for results.
+Schedule a batch fraud detection job for a list of wallet addresses (~95% accuracy). Returns immediately with a job handle; does not wait for results.
 
 ### Supported Networks
 
