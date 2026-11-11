@@ -133,6 +133,11 @@ export CHAINAWARE_API_KEY="your-key-here"
 - https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/
 - https://chainaware.ai/blog/agent-trust-score-agentic-commerce/
 - https://chainaware.ai/blog/token-audit-10000-coingecko-results/
+- https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/
+- https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/
+- https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
+- https://chainaware.ai/blog/chainaware-investigation-wallet-forensics-aml-reports/
+- https://chainaware.ai/blog/chainaware-share-my-audit-guide/
 
 ### Analytics & Strategy
 - https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/
@@ -142,6 +147,13 @@ export CHAINAWARE_API_KEY="your-key-here"
 - https://chainaware.ai/blog/web3-growth-platforms-compared-2026/
 - https://chainaware.ai/blog/web3-analytics-tools-dapps-comparison-2026/
 - https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/
+- https://chainaware.ai/blog/web3-fraud-detection-for-dapps/
+- https://chainaware.ai/blog/best-web3-rug-pull-detection-tools-2026/
+- https://chainaware.ai/blog/defi-credit-score-comparison/
+- https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/
+- https://chainaware.ai/blog/web3-reputation-score-comparison-2026/
+- https://chainaware.ai/blog/blockchain-data-providers-ai-agents-wallet-data-2026/
+- https://chainaware.ai/blog/chainaware-32-claude-sub-agents-fraud-tech-growth-tech-agentic-economy/
 
 ### Developer Integration
 - https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/
@@ -149,3 +161,13 @@ export CHAINAWARE_API_KEY="your-key-here"
 - https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/
 - https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/
 - https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/
+
+### Agentic Commerce & KYA
+- https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/
+- https://chainaware.ai/blog/agentic-commerce-agent-trust-score/
+- https://chainaware.ai/blog/agent-trust-infrastructure-race-2026/
+- https://chainaware.ai/blog/erc-8004-trust-signals-what-a-registry-can-and-cannot-tell-you/
+- https://chainaware.ai/blog/agent-fraud-patterns-from-the-erc-8004-tracker/
+- https://chainaware.ai/blog/agentic-commerce-fraud-four-party-card-model/
+- https://chainaware.ai/blog/verifying-ai-agents-at-checkout-tokens-mandates-behavior/
+- https://chainaware.ai/blog/ai-adversary-web2-web3-security/
