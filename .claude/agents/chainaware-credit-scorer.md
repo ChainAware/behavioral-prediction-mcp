@@ -115,6 +115,7 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 ## Further Reading
 
 - Credit Score Guide: https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/
+- DeFi Credit Score Platforms Compared: https://chainaware.ai/blog/defi-credit-score-comparison/
 - Credit Scoring Agent Guide: https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing: https://chainaware.ai/pricing

@@ -213,6 +213,8 @@ If missing, respond:
 
 ## Further Reading
 
+- AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
+- Wallet Forensics & AML Reports: https://chainaware.ai/blog/chainaware-investigation-wallet-forensics-aml-reports/
 - AML & Web3 Security: https://chainaware.ai/blog/driving-web3-security-and-growth-key-takeaways-from-our-recent-x-space/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/#fraud-tech
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp

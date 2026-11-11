@@ -159,6 +159,8 @@ Never log, print, or expose the API key in output.
 ## Further Reading
 
 - Rug Pull vs Pump & Dump Guide: https://chainaware.ai/blog/pump-and-dump-vs-rug-pull/
+- $284M+ PancakeSwap V2 Accuracy Benchmark: https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/
+- Rug Pull Detection Tools Compared: https://chainaware.ai/blog/best-web3-rug-pull-detection-tools-2026/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/#fraud-tech
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
 - Pricing & API Access: https://chainaware.ai/pricing

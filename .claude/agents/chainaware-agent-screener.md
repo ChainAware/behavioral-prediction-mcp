@@ -352,6 +352,8 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 
 ## Further Reading
 
+- Know Your Agent (KYA) — Behavioral Trust Layer: https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/
+- Agent Fraud Patterns from ERC-8004 Tracker: https://chainaware.ai/blog/agent-fraud-patterns-from-the-erc-8004-tracker/
 - Prediction MCP for AI Agents: https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/
 - Why Personalization Is the Next Big Thing for AI Agents: https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/
 - Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/

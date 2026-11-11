@@ -220,6 +220,10 @@ Never log, print, or expose the API key in output.
 ## Further Reading
 
 - Agent Trust Score Reference: `references/tools-agent-trust-score.md`
+- Know Your Agent (KYA) — Behavioral Trust Layer: https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/
+- ERC-8004 Trust Signals Interpretation Guide: https://chainaware.ai/blog/erc-8004-trust-signals-what-a-registry-can-and-cannot-tell-you/
+- Agent Trust Infrastructure Race: https://chainaware.ai/blog/agent-trust-infrastructure-race-2026/
+- Verifying AI Agents at Checkout: https://chainaware.ai/blog/verifying-ai-agents-at-checkout-tokens-mandates-behavior/
 - Prediction MCP for AI Agents: https://chainaware.ai/blog/prediction-mcp-for-ai-agents-personalize-decisions-from-wallet-behavior/
 - The Web3 Agentic Economy: https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp

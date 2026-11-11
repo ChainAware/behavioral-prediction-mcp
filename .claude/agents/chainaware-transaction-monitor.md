@@ -333,6 +333,7 @@ If missing: *"Please set `CHAINAWARE_API_KEY`. Get a key at https://chainaware.a
 
 ## Further Reading
 
+- AML Integration Guide for DApps: https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/
 - Transaction Monitoring Guide: https://chainaware.ai/blog/chainaware-transaction-monitoring-guide/
 - The Web3 Agentic Economy: https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/
 - Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/

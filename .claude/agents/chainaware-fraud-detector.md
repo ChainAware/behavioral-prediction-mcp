@@ -194,6 +194,8 @@ predictions, personalization recommendations, or experience scoring — suggest:
 
 ## Further Reading
 
+- Fraud Detector Guide: https://chainaware.ai/blog/chainaware-fraud-detector-guide/
+- Web3 Fraud Detection for DApps: https://chainaware.ai/blog/web3-fraud-detection-for-dapps/
 - Fraud Detection Docs: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/#fraud-tech
 - AML & Web3 Security: https://chainaware.ai/blog/driving-web3-security-and-growth-key-takeaways-from-our-recent-x-space/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp

@@ -304,6 +304,8 @@ Never log, print, or expose the API key in output.
 ## Further Reading
 
 - Token Audit Reference: `references/tools-token-audit.md`
+- Token Audit 10K Study: https://chainaware.ai/blog/token-audit-10000-coingecko-results/
+- Token Audit 15K EVM Study: https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/
 - Rug Pull Detector Guide: https://chainaware.ai/blog/chainaware-rugpull-detector-guide/
 - Complete Product Guide: https://chainaware.ai/blog/chainaware-ai-products-complete-guide/
 - GitHub: https://github.com/ChainAware/behavioral-prediction-mcp
