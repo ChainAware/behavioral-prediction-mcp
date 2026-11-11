@@ -714,6 +714,11 @@ These subagents in `.claude/agents/` provide specialized autonomous execution:
 | AI-Powered Blockchain Analysis | https://chainaware.ai/blog/ai-powered-blockchain-analysis-machine-learning-for-crypto-security-2026/ |
 | Forensic vs AI-Based Crypto Analytics | https://chainaware.ai/blog/forensic-crypto-analytics-versus-ai-based-crypto-analytics/ |
 | Web3 Business Potential | https://chainaware.ai/blog/web3-business-potential/ |
+| Token Audit 15K EVM Tokens | https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/ |
+| $284M+ PancakeSwap V2 Rug Pull Benchmark | https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/ |
+| AML Integration Guide for DApps | https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/ |
+| Know Your Agent (KYA) — Behavioral Trust Layer | https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/ |
+| DeFi Compliance Tools Compared | https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/ |
 
 ---
 
