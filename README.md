@@ -1609,8 +1609,13 @@ The MCP server supports two access methods:
 - [Web3 Behavioral User Analytics Guide](https://chainaware.ai/blog/chainaware-web3-behavioral-user-analytics-guide/) — Using `predictive_behaviour` for user analytics and segmentation
 - [Credit Score Guide](https://chainaware.ai/blog/chainaware-credit-score-the-complete-guide-to-web3-credit-scoring-in-2026/) — Web3 credit scoring methodology and use in DeFi lending
 - [Credit Scoring Agent Guide](https://chainaware.ai/blog/chainaware-credit-scoring-agent-guide/) — How to build and use the ChainAware credit scoring agent
-- [Agent Trust Score for Agentic Commerce](https://chainaware.ai/blog/agent-trust-score-agentic-commerce/) — ERC-8004 agent screening across 274k+ registered agents: trust tiers, fleet-level fraud detection, and DeFi access control using `agents_trust_score_list` / `agents_trust_score_single`
+- [AI Agent Trust Score](https://chainaware.ai/blog/agent-trust-score-agentic-commerce/) — `agents_trust_score_list` / `agents_trust_score_single`: ERC-8004 registry, 274k+ agents, trust tiers 0–1000, fleet-level fraud detection, DeFi access control
 - [Token Audit: 10,000 CoinGecko Token Results](https://chainaware.ai/blog/token-audit-10000-coingecko-results/) — Real-world study: 55% of top tokens receive HIGH RISK verdict; 127 automated security checks via `run_token_audit`
+- [Token Audit at Scale: 15,000 EVM Tokens](https://chainaware.ai/blog/token-audit-15000-coingecko-coinmarketcap-2026/) — Larger 2026 study: 57.7% HIGH RISK across CoinGecko + CoinMarketCap tokens; `run_token_audit` accuracy benchmark
+- [$284M+ Rug Pulls on PancakeSwap V2](https://chainaware.ai/blog/rugpull-detector-v3-pancakev2-2026/) — Real-world `predictive_rug_pull` accuracy: 103,695 rug pull events across 20 weeks; 90.1% detection rate verified
+- [AML and Transaction Monitoring for DApps](https://chainaware.ai/blog/how-to-integrate-ai-based-aml-transaction-monitoring-dapps/) — `aml_screener` integration patterns; VASP compliance, real-time screening, alert thresholds
+- [Wallet Forensics and AML Investigation Reports](https://chainaware.ai/blog/chainaware-investigation-wallet-forensics-aml-reports/) — Deep investigation workflow combining `predictive_fraud` + AML + behavioural scoring into structured compliance reports
+- [Share My Audit / Web3 Business Card](https://chainaware.ai/blog/chainaware-share-my-audit-guide/) — Consumer use case for `predictive_behaviour`: shareable wallet identity profile, trust passport
 
 ### Analytics & Strategy
 - [Web3 User Segmentation & Behavioral Analytics for DApp Growth](https://chainaware.ai/blog/web3-user-segmentation-behavioral-analytics-for-dapp-growth-2026/) — Segmentation strategies for DApp retention and growth
@@ -1620,6 +1625,13 @@ The MCP server supports two access methods:
 - [Web3 Growth Platforms Compared 2026](https://chainaware.ai/blog/web3-growth-platforms-compared-2026/) — Three-stage funnel framework; ChainAware operates at Stage 3 (post-connection, in-DApp personalization)
 - [Web3 Analytics Tools for DApps Comparison 2026](https://chainaware.ai/blog/web3-analytics-tools-dapps-comparison-2026/) — Maps 10 analytics platforms across four job categories; ChainAware is the sole predictive intelligence platform
 - [Why Personalization Is the Next Big Thing for AI Agents](https://chainaware.ai/blog/why-personalization-is-the-next-big-thing-for-ai-agents/) — The case for wallet-level personalization in Web3
+- [Web3 Fraud Detection for DApps](https://chainaware.ai/blog/web3-fraud-detection-for-dapps/) — `predictive_fraud` competitive positioning: why behavioral scoring beats transaction-pattern detection; 98% accuracy benchmark
+- [Web3 Rug Pull Detection Tools Compared](https://chainaware.ai/blog/best-web3-rug-pull-detection-tools-2026/) — `predictive_rug_pull` vs GoPlus, De.Fi, Token Sniffer; why behavioral holder analysis catches what code audits miss
+- [DeFi Credit Score Platforms Compared](https://chainaware.ai/blog/defi-credit-score-comparison/) — `credit_score` vs Providence, RociFi, TrueFi, Masa, Spectral; ChainAware is only platform integrating fraud probability into credit scoring
+- [DeFi Compliance Tools Comparison](https://chainaware.ai/blog/defi-compliance-tools-protocols-comparison-2026/) — `chainaware-compliance-screener` vs Chainalysis, TRM Labs, Elliptic
+- [Web3 Reputation Score Comparison](https://chainaware.ai/blog/web3-reputation-score-comparison-2026/) — ChainAware vs Nomis, RubyScore, Ethos, Trusta Labs; positions `predictive_behaviour` reputation scoring
+- [Blockchain Data Providers for AI Agents](https://chainaware.ai/blog/blockchain-data-providers-ai-agents-wallet-data-2026/) — Where ChainAware (Tier 2: pre-computed intelligence) sits vs Moralis, Nansen, Dune, Alchemy (Tier 1: raw indexed data)
+- [ChainAware's 32 Claude Sub-Agents](https://chainaware.ai/blog/chainaware-32-claude-sub-agents-fraud-tech-growth-tech-agentic-economy/) — Full catalogue of all 32 sub-agents, their tools, scoring formulas, and use cases
 
 ### Developer Integration
 - [12 Blockchain Capabilities Any AI Agent Can Use — MCP Integration Guide](https://chainaware.ai/blog/12-blockchain-capabilities-any-ai-agent-can-use-mcp-integration-guide/) — All capabilities explained, with setup instructions for Claude, ChatGPT, Cursor, and multi-agent systems
@@ -1627,6 +1639,16 @@ The MCP server supports two access methods:
 - [Top 5 Ways Prediction MCP Will Turbocharge Your DeFi Platform](https://chainaware.ai/blog/top-5-ways-prediction-mcp-will-turbocharge-your-defi-platform/) — Lending, DEX, launchpad, governance, and personalization use cases
 - [DeFi Onboarding in 2026: Why 90% of Connected Wallets Never Transact and How AI Agents Fix It](https://chainaware.ai/blog/defi-onboarding-in-2026-why-90-of-connected-wallets-never-transact-and-how-ai-agents-fix-it/) — Onboarding conversion problem and AI-driven solutions
 - [The Web3 Agentic Economy: How AI Agents Are Replacing Human Teams in DeFi](https://chainaware.ai/blog/the-web3-agentic-economy-how-ai-agents-are-replacing-human-teams-in-defi/) — How autonomous AI agents are taking over DeFi operations and decision-making
+
+### Agentic Commerce & KYA (Know Your Agent)
+- [Know Your Agent (KYA): The Behavioral Trust Layer for AI Agents](https://chainaware.ai/blog/know-your-agent-kya-behavioral-trust-layer/) — Foundational KYA concept: why agent identity ≠ agent trust; behavioral trust layer for `agents_trust_score`
+- [The First Step in Agentic Commerce Is Trust](https://chainaware.ai/blog/agentic-commerce-agent-trust-score/) — Why trust verification must precede integration; ERC-8004 as the agentic commerce trust primitive
+- [The Agent Trust Infrastructure Race](https://chainaware.ai/blog/agent-trust-infrastructure-race-2026/) — Who is building the trust layer for AI agents; ChainAware's position in the emerging stack
+- [ERC-8004 Trust Signals: What the Registry Can and Cannot Tell You](https://chainaware.ai/blog/erc-8004-trust-signals-what-a-registry-can-and-cannot-tell-you/) — What on-chain registration proves vs what behavioral scoring adds; `agents_trust_score` interpretation guide
+- [Agent Fraud Patterns from the ERC-8004 Tracker](https://chainaware.ai/blog/agent-fraud-patterns-from-the-erc-8004-tracker/) — Live fraud pattern data from the weekly tracker; what `agents_trust_score` flags in practice
+- [Agentic Commerce Fraud and the Four-Party Card Model](https://chainaware.ai/blog/agentic-commerce-fraud-four-party-card-model/) — Liability attribution when AI agents transact; fraud patterns in autonomous payment flows
+- [Verifying AI Agents at Checkout](https://chainaware.ai/blog/verifying-ai-agents-at-checkout-tokens-mandates-behavior/) — Tokens, mandates, and behavioral evidence; `chainaware-agent-trust-screener` use case
+- [Your Security Stack Was Built for Human Attackers](https://chainaware.ai/blog/ai-adversary-web2-web3-security/) — Why Web2/Web3 security tools fail against AI adversaries; behavioral trust as the new perimeter
 
 ---
 
